@@ -1,0 +1,24 @@
+name: Keep Backend Alive
+
+on:
+  schedule:
+    # Runs every 10 minutes
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Ping Backend
+        run: |
+          curl -f https://my-website-backend-1mcf.onrender.com/api/notifications || exit 1
+      
+      - name: Log Success
+        if: success()
+        run: echo "Backend is alive at $(date)"
+      
+      - name: Log Failure
+        if: failure()
+        run: echo "Backend ping failed at $(date)"

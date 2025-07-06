@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rudra | AI & Cybersecurity</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3K5YH21G5B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    
+    gtag('config', 'G-3K5YH21G5B');
+  </script>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" href="logo.png" type="image/png" />
+  <style>
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      position: relative;
+    }
+    .content-wrapper {
+      width: 100%;
+      overflow-x: hidden;
+      position: relative;
+    }
+    /* Logo glow effect */
+    .logo-container img {
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+      transition: all 0.3s ease;
+    }
+    .logo-container:hover img {
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
+    }
+    /* Add dynamic background pattern */
+    .bg-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.05) 2%, transparent 0%),
+        radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.05) 2%, transparent 0%);
+      background-size: 100px 100px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* Add floating animation */
+    .float-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+    /* Add gradient text effect */
+    .gradient-text {
+      background: linear-gradient(45deg, #3B82F6, #8B5CF6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* Add card hover effect */
+    .hover-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .typing-indicator span {
+      width: 8px;
+      height: 8px;
+      background: #9CA3AF;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+    .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+    #notification-panel-content.notification-panel-collapsed {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      pointer-events: none;
+    }
+    #notification-panel-content.notification-panel-expanded {
+      max-height: 500px; /* or whatever fits your content */
+      opacity: 1;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      pointer-events: auto;
+    }
+    #toggle-notifications .fa-chevron-down {
+      transition: transform 0.3s;
+    }
+    #toggle-notifications.expanded .fa-chevron-down {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body class="text-black relative" style="background-image: url('bigg.png'); background-size: cover; background-position: center; background-attachment: fixed;">
+  <div class="bg-pattern"></div>
+  <div class="content-wrapper">
+    <!-- Leafy overlay on top -->
+    <div class="leafy-overlay"></div>
+
+    <!-- Navbar -->
+    <header id="navbar" class="sticky top-0 z-50 bg-cover bg-center bg-opacity-80 px-6 py-2 flex justify-between items-center rounded-b-lg transition-transform duration-300" style="background: linear-gradient(to right, #0f172a 0%, #1e293b 50%, #0f172a 100%); backdrop-filter: blur(10px);">
+      <a href="#" class="logo-container">
+        <img src="logo.png" alt="Logo" class="w-10 h-10 hover:translate-x-[-200%] transition-transform duration-500">
+        <span class="logo-message absolute -top-8 left-0 bg-black/80 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none">
+          Catch me if you can! 🐒
+        </span>
+      </a>
+      <div class="menu-container relative hidden sm:block">
+        <button id="hamburger" class="text-white text-3xl focus:outline-none transition-opacity duration-300 hover:text-blue-400">
+          &#9776;
+        </button>
+        <nav id="menu" class="absolute right-0 top-0 flex space-x-6 text-white font-semibold transition-all duration-300 transform translate-x-full opacity-0" style="font-family: 'Poppins', sans-serif;">
+          <a href="#home" class="hover:text-blue-400 transition-all duration-300">Home</a>
+          <a href="#about" class="hover:text-blue-400 transition-all duration-300">About</a>
+          <a href="#projects" class="hover:text-blue-400 transition-all duration-300">Projects</a>
+          <a href="#extension" class="hover:text-blue-400 transition-all duration-300">Extension</a>
+          <a href="#contact" class="hover:text-blue-400 transition-all duration-300">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Notification Panel -->
+    <div id="notification-section" class="bg-gradient-to-r from-gray-900/95 to-black/95 backdrop-blur-sm py-3 px-6 text-white relative border-b border-white/10">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="relative">
+              <i class="fas fa-bell text-blue-400 text-lg"></i>
+            </div>
+            <div id="notification-panel-content" class="notification-panel-collapsed transition-all duration-300 overflow-hidden">
+              <div class="notification-content flex items-center flex-wrap gap-2">
+                <span class="font-medium text-gray-300">Latest Updates:</span>
+                <div id="active-notifications" class="notification-list"></div>
+                <div id="ai-notifications" class="flex items-center flex-wrap gap-2"></div>
+              </div>
+            </div>
+            <span id="notification-count" style="display:none"></span>
+          </div>
+          <div class="flex items-center space-x-4">
+            <button id="toggle-notifications" class="text-gray-400 hover:text-white transition-colors duration-300">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <button id="clear-notifications" class="text-gray-400 hover:text-white transition-colors duration-300">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center text-center px-4 sm:px-6 fade-in-blur relative bg-cover bg-center rounded-lg my-0" style="background-image: url('hero_background.jpg'); background-size: cover; background-position: center;">
+      <div class="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-transparent"></div>
+      <div class="z-10 relative w-full max-w-4xl mx-auto">
+        <div class="mb-4 sm:mb-8">
+          <span class="px-3 py-1 sm:px-4 sm:py-2 bg-blue-500/20 text-blue-300 rounded-full text-xs sm:text-sm font-mono">AI & Cybersecurity Enthusiast</span>
+        </div>
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 text-white drop-shadow-lg animate-float">
+          Hi, I'm <span id="typing" class="text-blue-400 font-mono"></span>
+        </h1>
+        <p class="text-lg sm:text-xl md:text-2xl text-white font-medium drop-shadow-lg mb-8 max-w-2xl mx-auto px-4">
+          Building intelligent systems and securing digital frontiers through AI and Cybersecurity
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <a href="#projects" class="btn-primary bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700">
+            <i class="fas fa-code mr-2"></i>View Projects
+          </a>
+          <a href="#contact" class="btn-secondary border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-black">
+            <i class="fas fa-envelope mr-2"></i>Get in Touch
+          </a>
+        </div>
+      </div>
+      <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+        <div class="scroll-indicator animate-bounce">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" width="32" height="32">
+            <path d="M12 16l-6-6h12z" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="py-12 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-black text-white">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-16">
+          <span class="text-blue-400">[</span> Skills & Expertise <span class="text-blue-400">]</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div class="skill-card group hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+            <div class="skill-icon text-5xl mb-4 float-animation">🤖</div>
+            <h3 class="text-xl font-semibold mb-4 gradient-text">AI & Machine Learning</h3>
+            <ul class="text-gray-300 space-y-3">
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 group-hover/item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-blue-400 transition-colors">Deep Learning</span>
+                <span class="ml-auto text-sm text-gray-500">90%</span>
+              </li>
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 group-hover:item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-blue-400 transition-colors">Computer Vision</span>
+                <span class="ml-auto text-sm text-gray-500">85%</span>
+              </li>
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 group-hover:item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-blue-400 transition-colors">Natural Language Processing</span>
+                <span class="ml-auto text-sm text-gray-500">80%</span>
+              </li>
+            </ul>
+          </div>
+          <div class="skill-card group hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+            <div class="skill-icon text-5xl mb-4 float-animation">🔒</div>
+            <h3 class="text-xl font-semibold mb-4 gradient-text">Cybersecurity</h3>
+            <ul class="text-gray-300 space-y-3">
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-2 group-hover/item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-green-400 transition-colors">Ethical Hacking</span>
+                <span class="ml-auto text-sm text-gray-500">95%</span>
+              </li>
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-2 group-hover:item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-green-400 transition-colors">Penetration Testing</span>
+                <span class="ml-auto text-sm text-gray-500">90%</span>
+              </li>
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-2 group-hover:item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-green-400 transition-colors">Network Security</span>
+                <span class="ml-auto text-sm text-gray-500">85%</span>
+              </li>
+            </ul>
+          </div>
+          <div class="skill-card group hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+            <div class="skill-icon text-5xl mb-4 float-animation">💻</div>
+            <h3 class="text-xl font-semibold mb-4 gradient-text">Web Development</h3>
+            <ul class="text-gray-300 space-y-3">
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 group-hover:item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-purple-400 transition-colors">Full Stack Development</span>
+                <span class="ml-auto text-sm text-gray-500">85%</span>
+              </li>
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 group-hover:item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-purple-400 transition-colors">API Design</span>
+                <span class="ml-auto text-sm text-gray-500">90%</span>
+              </li>
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 group-hover:item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-purple-400 transition-colors">Security Implementation</span>
+                <span class="ml-auto text-sm text-gray-500">95%</span>
+              </li>
+            </ul>
+          </div>
+          <div class="skill-card group hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+            <div class="skill-icon text-5xl mb-4 float-animation">📊</div>
+            <h3 class="text-xl font-semibold mb-4 gradient-text">Data Science</h3>
+            <ul class="text-gray-300 space-y-3">
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 group-hover:item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-yellow-400 transition-colors">Data Analysis</span>
+                <span class="ml-auto text-sm text-gray-500">90%</span>
+              </li>
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 group-hover:item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-yellow-400 transition-colors">Statistical Modeling</span>
+                <span class="ml-auto text-sm text-gray-500">85%</span>
+              </li>
+              <li class="flex items-center group/item">
+                <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 group-hover:item:scale-150 transition-transform"></span>
+                <span class="group-hover/item:text-yellow-400 transition-colors">Data Visualization</span>
+                <span class="ml-auto text-sm text-gray-500">80%</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-12 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-black to-gray-900 text-white">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-16">
+          <span class="text-blue-400">[</span> What People Say <span class="text-blue-400">]</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <!-- Testimonial 1 -->
+          <div class="hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-xl">👨‍💻</div>
+              <div class="ml-4">
+                <h4 class="font-semibold">Andrew Ng</h4>
+                <p class="text-sm text-gray-400">AI Pioneer & Educator</p>
+              </div>
+            </div>
+            <p class="text-gray-300">"AI is the new electricity. Just as electricity transformed almost everything 100 years ago, today I actually have a hard time thinking of an industry that I don't think AI will transform in the next several years."</p>
+          </div>
+          
+          <!-- Testimonial 2 -->
+          <div class="hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center text-xl">👩‍🔬</div>
+              <div class="ml-4">
+                <h4 class="font-semibold">Geoffrey Hinton</h4>
+                <p class="text-sm text-gray-400">Deep Learning Pioneer</p>
+              </div>
+            </div>
+            <p class="text-gray-300">"I think people need to understand that deep learning is making a lot of things, behind the scenes, much better. Deep learning is already working in your smartphone and working in Google and working in Facebook."</p>
+          </div>
+          
+          <!-- Testimonial 3 -->
+          <div class="hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-xl">👨‍🔒</div>
+              <div class="ml-4">
+                <h4 class="font-semibold">Bruce Schneier</h4>
+                <p class="text-sm text-gray-400">Security Technologist</p>
+              </div>
+            </div>
+            <p class="text-gray-300">"Security is not a product, but a process. It's more than designing secure protocols; it's about designing the entire system so that the security protocols make sense."</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="py-12 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-black text-white">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-16">
+          <span class="text-blue-400">[</span> Achievements <span class="text-blue-400">]</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          <!-- Debate Competition -->
+          <div class="hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-150 transition-transform duration-500"></div>
+            <div class="relative z-10">
+              <div class="text-4xl mb-4 float-animation">🏆</div>
+              <h3 class="text-xl font-semibold mb-2 gradient-text">AI Debate Champion</h3>
+              <p class="text-gray-300 mb-4">Won first place in a competitive debate supporting the advancement and ethical implementation of Artificial Intelligence.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">Public Speaking</span>
+                <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">AI Ethics</span>
+                <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Critical Thinking</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Academic Excellence -->
+          <div class="hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-150 transition-transform duration-500"></div>
+            <div class="relative z-10">
+              <div class="text-4xl mb-4 float-animation">🎓</div>
+              <h3 class="text-xl font-semibold mb-2 gradient-text">Academic Excellence</h3>
+              <p class="text-gray-300 mb-4">Maintaining outstanding academic performance in Data Science & AI at IIT Guwahati.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Data Science</span>
+                <span class="px-3 py-1 bg-teal-500/20 text-teal-300 rounded-full text-sm">Machine Learning</span>
+                <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">Research</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Recognition -->
+          <div class="hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-150 transition-transform duration-500"></div>
+            <div class="relative z-10">
+              <div class="text-4xl mb-4 float-animation">🚀</div>
+              <h3 class="text-xl font-semibold mb-2 gradient-text">Project Recognition</h3>
+              <p class="text-gray-300 mb-4">Developed innovative projects in AI and Cybersecurity that have gained recognition in the tech community.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm">Innovation</span>
+                <span class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm">Problem Solving</span>
+                <span class="px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-sm">Technical Skills</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Community Impact -->
+          <div class="hover-card bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-500/20 to-red-500/20 rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-150 transition-transform duration-500"></div>
+            <div class="relative z-10">
+              <div class="text-4xl mb-4 float-animation">🌟</div>
+              <h3 class="text-xl font-semibold mb-2 gradient-text">Community Impact</h3>
+              <p class="text-gray-300 mb-4">Contributing to the tech community through knowledge sharing and mentorship.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-sm">Mentorship</span>
+                <span class="px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-sm">Leadership</span>
+                <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">Community</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-12 sm:py-20 px-4 sm:px-6 fade-in-blur rounded-lg my-4 relative overflow-hidden" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+      <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+      <div class="max-w-6xl mx-auto relative z-10">
+        <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-16 text-white">
+          <span class="text-blue-400">[</span> About Me <span class="text-blue-400">]</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
+          <div class="bg-white/5 backdrop-blur-lg p-8 rounded-xl border border-white/10">
+            <p class="text-lg text-gray-300 mb-6">
+              I'm a BSc Data Science & AI student from IIT Guwahati, passionate about exploring the intersection of artificial intelligence and cybersecurity. My journey involves building intelligent systems while ensuring they're secure and ethical.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <span class="tag bg-blue-500/20 text-blue-300">Python</span>
+              <span class="tag bg-purple-500/20 text-purple-300">Numpy</span>
+              <span class="tag bg-green-500/20 text-green-300">Kali Linux</span>
+              <span class="tag bg-green-500/20 text-magents-300">  R  </span>
+              <span class="tag bg-red-500/20 text-red-300">Web Security</span>
+              <span class="tag bg-yellow-500/20 text-yellow-300">Data Analysis</span>
+              <span class="tag bg-blue-500/20 text-blue-300">C/C++</span>
+              <span class="tag bg-indigo-500/20 text-indigo-300">React</span>
+              <span class="tag bg-pink-500/20 text-pink-300">Node.js</span>
+              <span class="tag bg-cyan-500/20 text-cyan-300">SQL</span>
+              <span class="tag bg-orange-500/20 text-orange-300">Git</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="w-full h-64 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300 p-6">
+              <div class="text-white text-center">
+                <div class="text-4xl mb-4">🎓</div>
+                <h4 class="text-xl font-bold">IIT Guwahati</h4>
+                <p class="text-sm opacity-80">BSc Data Science & AI</p>
+              </div>
+            </div>
+            <div class="w-full h-64 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300 p-6">
+              <div class="text-white text-center">
+                <div class="text-4xl mb-4">📚</div>
+                <h4 class="text-xl font-bold">Cotton University</h4>
+                <p class="text-sm opacity-80">Intermediate (Science)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-12 sm:py-20 px-4 sm:px-6 fade-in-blur text-white rounded-lg my-4" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-16">
+          <span class="text-blue-400">[</span> Projects <span class="text-blue-400">]</span>
+        </h2>
+        <p class="text-center text-gray-400 mb-8">* Some projects are currently on hold</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          <div class="project-card group">
+            <div class="absolute inset-0 bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-xl"></div>
+            <div class="relative z-10 p-8">
+              <h3 class="text-2xl font-semibold mb-4"> Fit Circuit</h3>
+              <p class="text-gray-300 mb-6">AI-powered fitness assistant that generates personalized circuit routes for walking or cycling to help users burn targeted calories.</p>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="tag bg-green-500/20 text-green-300">React</span>
+                <span class="tag bg-blue-500/20 text-blue-300">Node.js</span>
+                <span class="tag bg-purple-500/20 text-purple-300">Google Maps API</span>
+                <span class="tag bg-yellow-500/20 text-yellow-300">OpenAI</span>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="text-sm text-green-400">🌍 Map-based routes</span>
+                <span class="text-sm text-green-400">��‍♂️ Walking/Cycling</span>
+                <span class="text-sm text-green-400">🔥 Calorie tracking</span>
+                <span class="text-sm text-green-400">🧠 AI recommendations</span>
+              </div>
+              <a href="#" class="btn-primary bg-green-500/20 text-green-300 hover:bg-green-500/30">
+                View Project
+              </a>
+            </div>
+          </div>
+          <div class="project-card group">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl"></div>
+            <div class="relative z-10 p-8">
+              <h3 class="text-2xl font-semibold mb-4">Vehicle Classifier</h3>
+              <p class="text-gray-300 mb-6">Advanced deep learning model that classifies 7 types of vehicles using computer vision techniques.</p>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="tag bg-blue-500/20 text-blue-300">Python</span>
+                <span class="tag bg-green-500/20 text-green-300">TensorFlow</span>
+                <span class="tag bg-purple-500/20 text-purple-300">Computer Vision</span>
+              </div>
+              <a href="#" class="btn-primary bg-blue-500/20 text-blue-300 hover:bg-blue-500/30">
+                View Project
+              </a>
+            </div>
+          </div>
+          <div class="project-card group">
+            <div class="absolute inset-0 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-xl"></div>
+            <div class="relative z-10 p-8">
+              <h3 class="text-2xl font-semibold mb-4">Cyber Recon Toolkit</h3>
+              <p class="text-gray-300 mb-6">Comprehensive Kali Linux-based CLI tool for ethical hacking, OSINT, and reconnaissance.</p>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="tag bg-red-500/20 text-red-300">Python</span>
+                <span class="tag bg-orange-500/20 text-orange-300">Kali Linux</span>
+                <span class="tag bg-yellow-500/20 text-yellow-300">Cybersecurity</span>
+              </div>
+              <a href="#" class="btn-primary bg-red-500/20 text-red-300 hover:bg-red-500/30">
+                View Project
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Extension Section -->
+    <section id="extension" class="py-16 px-6 fade-in-blur rounded-lg my-4 relative overflow-hidden" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+      <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+      <div class="max-w-6xl mx-auto relative z-10">
+        <h2 class="text-4xl font-bold text-center mb-8 text-white">Chrome Extension</h2>
+        <div class="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-xl shadow-2xl border border-white border-opacity-20">
+          <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="flex-1">
+              <h3 class="text-2xl font-semibold text-white mb-4">Website Prank Master</h3>
+              <p class="text-gray-300 text-lg mb-6">
+                A hilarious Chrome extension that adds unexpected but funny twists to websites. Perfect for harmless pranks and lighthearted fun!
+              </p>
+              <div class="flex flex-wrap gap-3 mb-6">
+                <span class="tag bg-blue-500 bg-opacity-20 text-blue-200">Chrome Extension</span>
+                <span class="tag bg-purple-500 bg-opacity-20 text-purple-200">JavaScript</span>
+                <span class="tag bg-pink-500 bg-opacity-20 text-pink-200">Fun Project</span>
+              </div>
+              <a href="https://github.com/10Rudra01/Chrome-Extension" target="_blank" class="btn-primary bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+                <i class="fab fa-github mr-2"></i>View on GitHub
+              </a>
+            </div>
+            <div class="flex-1 flex justify-center">
+              <div class="w-64 h-64 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                <div class="p-4 text-white text-center">
+                  <div class="text-4xl mb-4">🎭</div>
+                  <h4 class="text-xl font-bold">Prank Master</h4>
+                  <p class="text-sm opacity-80">Add some fun to browsing!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Chat Section -->
+    <section id="ai-chat" class="py-12 sm:py-20 px-4 sm:px-6 fade-in-blur rounded-lg my-4" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-8">
+          <div class="inline-block mb-4">
+            <div class="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-4 transform hover:scale-110 transition-transform duration-300">
+              <i class="fas fa-robot text-3xl text-white"></i>
+            </div>
+          </div>
+          <h2 class="text-4xl font-bold text-white mb-4 relative inline-block">
+            <span class="gradient-text">AI Assistant</span>
+            <div class="absolute -top-2 -right-2 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+          </h2>
+          <p class="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
+            Your intelligent companion for exploring AI, coding, and tech insights. 
+            <span class="text-blue-400 font-medium">Ask me anything!</span>
+          </p>
+          <div class="flex justify-center gap-4 mt-6">
+            <span class="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-full text-sm flex items-center">
+              <i class="fas fa-bolt mr-2"></i>Real-time Responses
+            </span>
+            <span class="px-4 py-2 bg-purple-500/20 text-purple-300 rounded-full text-sm flex items-center">
+              <i class="fas fa-brain mr-2"></i>Advanced AI
+            </span>
+            <span class="px-4 py-2 bg-green-500/20 text-green-300 rounded-full text-sm flex items-center">
+              <i class="fas fa-shield-alt mr-2"></i>Secure Chat
+            </span>
+          </div>
+        </div>
+
+        <div class="bg-white/5 backdrop-blur-lg p-6 sm:p-8 rounded-xl border border-white/10">
+          <!-- AI Assistant Header -->
+          <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+            <div class="flex items-center space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                <i class="fas fa-robot text-2xl text-white"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold text-white">Rudra's AI</h3>
+                <p class="text-sm text-gray-400">Powered by Advanced Language Models</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Online</span>
+              <button class="p-2 text-gray-400 hover:text-white transition-colors">
+                <i class="fas fa-cog"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Chat Features -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+            <div class="hover-card bg-white/5 p-4 rounded-lg text-center cursor-pointer group" onclick="document.getElementById('chat-input').value = 'Tell me about AI'; document.getElementById('send-button').click();">
+              <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">💡</div>
+              <p class="text-sm text-gray-300">Ask Questions</p>
+            </div>
+            <div class="hover-card bg-white/5 p-4 rounded-lg text-center cursor-pointer group" onclick="document.getElementById('chat-input').value = 'Help me with coding'; document.getElementById('send-button').click();">
+              <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">📝</div>
+              <p class="text-sm text-gray-300">Code Help</p>
+            </div>
+            <div class="hover-card bg-white/5 p-4 rounded-lg text-center cursor-pointer group" onclick="document.getElementById('chat-input').value = 'Research topics'; document.getElementById('send-button').click();">
+              <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🔍</div>
+              <p class="text-sm text-gray-300">Research</p>
+            </div>
+            <div class="hover-card bg-white/5 p-4 rounded-lg text-center cursor-pointer group" onclick="document.getElementById('chat-input').value = 'Give me project ideas'; document.getElementById('send-button').click();">
+              <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🎯</div>
+              <p class="text-sm text-gray-300">Project Ideas</p>
+            </div>
+          </div>
+
+          <!-- Chat Box -->
+          <div id="chat-box" class="h-[400px] overflow-y-auto mb-4 p-4 bg-black/20 rounded-lg">
+            <div class="space-y-4" id="chat-messages">
+              <!-- Welcome Message -->
+              <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-robot text-sm text-white"></i>
+                </div>
+                <div class="flex-1">
+                  <div class="bg-white/10 backdrop-blur-sm rounded-2xl rounded-tl-none p-4 text-white">
+                    <div class="flex items-center space-x-2 mb-2">
+                      <span class="font-semibold text-blue-400">Rudra's AI</span>
+                      <span class="px-2 py-0.5 bg-green-500/20 text-green-300 rounded-full text-xs">Online</span>
+                    </div>
+                    <p class="text-gray-200 mb-3">👋 Hi there! I'm your AI assistant, ready to help you explore:</p>
+                    <div class="grid grid-cols-2 gap-2 mb-3">
+                      <div class="bg-white/5 rounded-lg p-2 flex items-center space-x-2">
+                        <i class="fas fa-code text-blue-400"></i>
+                        <span class="text-sm">Coding Help</span>
+                      </div>
+                      <div class="bg-white/5 rounded-lg p-2 flex items-center space-x-2">
+                        <i class="fas fa-brain text-purple-400"></i>
+                        <span class="text-sm">AI Insights</span>
+                      </div>
+                      <div class="bg-white/5 rounded-lg p-2 flex items-center space-x-2">
+                        <i class="fas fa-lightbulb text-yellow-400"></i>
+                        <span class="text-sm">Project Ideas</span>
+                      </div>
+                      <div class="bg-white/5 rounded-lg p-2 flex items-center space-x-2">
+                        <i class="fas fa-shield-alt text-green-400"></i>
+                        <span class="text-sm">Tech Security</span>
+                      </div>
+                    </div>
+                    <p class="text-gray-300 text-sm">What would you like to explore today? 🚀</p>
+                  </div>
+                  <div class="text-xs text-gray-500 mt-1">Just now</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Area -->
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div class="flex-1 relative">
+              <input type="text" id="chat-input" placeholder="Type your message..." class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500">
+              <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <i class="fas fa-paper-plane"></i>
+              </div>
+            </div>
+            <button id="send-button" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 whitespace-nowrap flex items-center justify-center space-x-2">
+              <span>Send</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="mt-4 flex flex-wrap gap-2">
+            <button onclick="document.getElementById('chat-input').value = 'Tell me about AI'; document.getElementById('send-button').click();" class="px-3 py-1 bg-white/5 text-gray-300 rounded-full text-sm hover:bg-white/10 transition-colors flex items-center space-x-1">
+              <i class="fas fa-robot text-blue-400"></i>
+              <span>Tell me about AI</span>
+            </button>
+            <button onclick="document.getElementById('chat-input').value = 'Help with coding'; document.getElementById('send-button').click();" class="px-3 py-1 bg-white/5 text-gray-300 rounded-full text-sm hover:bg-white/10 transition-colors flex items-center space-x-1">
+              <i class="fas fa-code text-purple-400"></i>
+              <span>Help with coding</span>
+            </button>
+            <button onclick="document.getElementById('chat-input').value = 'Project ideas'; document.getElementById('send-button').click();" class="px-3 py-1 bg-white/5 text-gray-300 rounded-full text-sm hover:bg-white/10 transition-colors flex items-center space-x-1">
+              <i class="fas fa-lightbulb text-yellow-400"></i>
+              <span>Project ideas</span>
+            </button>
+            <button onclick="document.getElementById('chat-input').value = 'Research topics'; document.getElementById('send-button').click();" class="px-3 py-1 bg-white/5 text-gray-300 rounded-full text-sm hover:bg-white/10 transition-colors flex items-center space-x-1">
+              <i class="fas fa-search text-green-400"></i>
+              <span>Research topics</span>
+            </button>
+          </div>
+
+          <!-- AI Model Footer -->
+          <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-center">
+            <div class="flex items-center space-x-2 text-sm text-gray-400">
+              <i class="fas fa-microchip"></i>
+              <span>Powered by</span>
+              <span class="font-semibold text-blue-400">DeepSeek R1</span>
+              <span class="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded-full">v1.0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-12 sm:py-20 px-4 sm:px-6 fade-in-blur rounded-lg my-4" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-16 text-white">
+          <span class="text-blue-400">[</span> Contact Me <span class="text-blue-400">]</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Contact Form -->
+          <div class="bg-white/5 backdrop-blur-lg p-6 sm:p-8 rounded-xl border border-white/10">
+            <h3 class="text-xl font-semibold text-white mb-6">Send a Message</h3>
+            <form id="contact-form" class="space-y-4 sm:space-y-6" onsubmit="return sendEmail(event)">
+              <div class="space-y-4">
+                <div class="relative">
+                  <input type="text" name="user_name" placeholder="    Your Name" required class="w-full p-3 sm:p-4 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none input-icon">
+                    <i class="fas fa-user text-gray-400"></i>
+                  </div>
+                </div>
+                <div class="relative">
+                  <input type="email" name="user_email" placeholder="    Your Email" required class="w-full p-3 sm:p-4 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none input-icon">
+                    <i class="fas fa-envelope text-gray-400"></i>
+                  </div>
+                </div>
+                <div class="relative">
+                  <textarea name="message" rows="5" placeholder="    Your Message" required class="w-full p-3 sm:p-4 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"></textarea>
+                  <div class="absolute top-3 left-3 flex items-start pointer-events-none input-icon">
+                    <i class="fas fa-comment text-gray-400"></i>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 sm:py-4 px-6 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center space-x-2">
+                <span>Send Message</span>
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </form>
+          </div>
+
+          <!-- Contact Info -->
+          <div class="space-y-6">
+            <div class="bg-white/5 backdrop-blur-lg p-6 sm:p-8 rounded-xl border border-white/10">
+              <h3 class="text-xl font-semibold text-white mb-6">Get in Touch</h3>
+              <div class="space-y-4">
+                <div class="flex items-center space-x-4 group">
+                  <div class="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i class="fas fa-envelope text-blue-400"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-400">Email</p>
+                    <a href="mailto:Rudrarajjha2004@gmail.com" class="text-white hover:text-blue-400 transition-colors">Rudrarajjha2004@gmail.com</a>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-4 group">
+                  <div class="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i class="fas fa-map-marker-alt text-green-400"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-400">Location</p>
+                    <p class="text-white">Guwahati, Assam, India</p>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-4 group">
+                  <div class="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i class="fas fa-clock text-purple-400"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-400">Response Time</p>
+                    <p class="text-white">Usually within 24 hours</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Social Links -->
+            <div class="bg-white/5 backdrop-blur-lg p-6 sm:p-8 rounded-xl border border-white/10">
+              <h3 class="text-xl font-semibold text-white mb-6">Connect With Me</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <a href="https://github.com/10Rudra01" target="_blank" class="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group">
+                  <i class="fab fa-github text-2xl text-gray-400 group-hover:text-white transition-colors"></i>
+                  <span class="text-white">GitHub</span>
+                </a>
+                <a href="https://linkedin.com/in/rudra-jha-35aa0a263" target="_blank" class="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group">
+                  <i class="fab fa-linkedin text-2xl text-gray-400 group-hover:text-white transition-colors"></i>
+                  <span class="text-white">LinkedIn</span>
+                </a>
+                <a href="https://twitter.com/RudraRaj00" target="_blank" class="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group">
+                  <i class="fab fa-twitter text-2xl text-gray-400 group-hover:text-white transition-colors"></i>
+                  <span class="text-white">Twitter</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group">
+                  <i class="fab fa-instagram text-2xl text-gray-400 group-hover:text-white transition-colors"></i>
+                  <span class="text-white">Instagram</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center bg-gray-900 text-gray-400">
+      <div class="max-w-6xl mx-auto px-6">
+        <p>&copy; 2025 Rudra • Built with 🧠 & 🐒</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="notification.js"></script>
+  <script src="ai-chat.js"></script>
+  <script src="script.js"></script>
+  <script src="contact.js"></script>
+
+  <!-- Add a notification with a link -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      addNotification('🚀 New Project: AI-Powered Fitness Assistant', '#projects');
+      addNotification('📚 Latest Blog: Understanding Neural Networks', '#blog');
+    });
+  </script>
+
+  <script>
+    // Add this to your existing scripts
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = document.querySelectorAll('input, textarea');
+      
+      inputs.forEach(input => {
+        const icon = input.parentElement.querySelector('.input-icon');
+        
+        // Function to handle icon visibility
+        const handleIconVisibility = () => {
+          if (!icon) return; // Prevents error if icon is null
+          if (input.value.length > 0 || document.activeElement === input) {
+            icon.style.opacity = '0';
+          } else {
+            icon.style.opacity = '1';
+          }
+        };
+
+        // Add event listeners
+        input.addEventListener('input', handleIconVisibility);
+        input.addEventListener('focus', handleIconVisibility);
+        input.addEventListener('blur', handleIconVisibility);
+      });
+    });
+  </script>
+
+  <script>
+    // Add this to your existing scripts
+    function sendEmail(e) {
+      e.preventDefault();
+      const form = document.getElementById('contact-form');
+      const button = form.querySelector('button[type="submit"]');
+      const originalButtonText = button.innerHTML;
+
+      // Show loading state
+      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      button.disabled = true;
+
+      // Get form data
+      const name = form.user_name.value;
+      const email = form.user_email.value;
+      const message = form.message.value;
+
+      // Send to backend
+      fetch(window.API_BASE_URL + '/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, message })
+      })
+        .then(async (response) => {
+          const data = await response.json();
+          if (response.ok) {
+            button.innerHTML = '<i class="fas fa-check"></i> Message Sent Successfully!';
+            button.classList.remove('from-blue-500', 'to-blue-600', 'hover:from-blue-600', 'hover:to-blue-700');
+            button.classList.add('from-green-500', 'to-green-600');
+            form.reset();
+            setTimeout(() => {
+              button.innerHTML = originalButtonText;
+              button.classList.remove('from-green-500', 'to-green-600');
+              button.classList.add('from-blue-500', 'to-blue-600', 'hover:from-blue-600', 'hover:to-blue-700');
+              button.disabled = false;
+            }, 3000);
+          } else {
+            button.innerHTML = '<i class="fas fa-times"></i> Failed to send!';
+            button.classList.remove('from-blue-500', 'to-blue-600', 'hover:from-blue-600', 'hover:to-blue-700');
+            button.classList.add('from-red-500', 'to-red-600');
+            setTimeout(() => {
+              button.innerHTML = originalButtonText;
+              button.classList.remove('from-red-500', 'to-red-600');
+              button.classList.add('from-blue-500', 'to-blue-600', 'hover:from-blue-600', 'hover:to-blue-700');
+              button.disabled = false;
+            }, 3000);
+          }
+        })
+        .catch((error) => {
+          console.error('Error sending message:', error);
+          button.innerHTML = '<i class="fas fa-times"></i> Failed to send!';
+          button.classList.remove('from-blue-500', 'to-blue-600', 'hover:from-blue-600', 'hover:to-blue-700');
+          button.classList.add('from-red-500', 'to-red-600');
+          setTimeout(() => {
+            button.innerHTML = originalButtonText;
+            button.classList.remove('from-red-500', 'to-red-600');
+            button.classList.add('from-blue-500', 'to-blue-600', 'hover:from-blue-600', 'hover:to-blue-700');
+            button.disabled = false;
+          }, 3000);
+        });
+      return false;
+    }
+  </script>
+
+  <script>
+    // Show welcome modal on first load (per session)
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!sessionStorage.getItem('welcomeShown')) {
+        document.getElementById('welcomeModal').classList.remove('hidden');
+        sessionStorage.setItem('welcomeShown', 'true');
+      }
+      document.getElementById('closeWelcome').onclick = closeWelcomeModal;
+    });
+    function closeWelcomeModal() {
+      document.getElementById('welcomeModal').classList.add('hidden');
+    }
+  </script>
+
+  <div id="welcomeModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+    <div class="bg-gradient-to-br from-gray-900 to-black rounded-xl max-w-2xl w-full mx-4 border border-white/10 shadow-2xl">
+      <div class="flex items-center p-8">
+        <div class="w-2/3 pr-6">
+          <h3 class="text-2xl font-bold mb-2 text-white">Welcome to My Portfolio!</h3>
+          <p class="mb-4 text-gray-300">
+            Hello, explorer!<br>
+            This site is a journey through my work in AI, Cybersecurity, and creative technology.<br>
+            <span class='text-blue-400'>Tip:</span> Use the navigation bar to explore different sections.
+          </p>
+        </div>
+        <div class="w-1/3 text-center">
+          <button id="closeWelcome" class="btn-primary bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 px-6 py-3 text-lg font-bold">Enter Portfolio</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggleBtn = document.getElementById('toggle-notifications');
+      const panel = document.getElementById('notification-panel-content');
+
+      // Start collapsed
+      panel.classList.add('notification-panel-collapsed');
+      panel.classList.remove('notification-panel-expanded');
+      toggleBtn.classList.remove('expanded');
+
+      toggleBtn.addEventListener('click', function() {
+        if (panel.classList.contains('notification-panel-collapsed')) {
+          panel.classList.remove('notification-panel-collapsed');
+          panel.classList.add('notification-panel-expanded');
+          toggleBtn.classList.add('expanded');
+        } else {
+          panel.classList.add('notification-panel-collapsed');
+          panel.classList.remove('notification-panel-expanded');
+          toggleBtn.classList.remove('expanded');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

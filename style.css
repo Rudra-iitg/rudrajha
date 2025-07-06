@@ -1,0 +1,770 @@
+/* Base Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  line-height: 1.6;
+}
+
+/* Typography */
+.font-mono {
+  font-family: 'SF Mono', 'Roboto Mono', monospace;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in-blur {
+  opacity: 0;
+  filter: blur(5px);
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+}
+
+.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* Cards */
+.skill-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.skill-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.project-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Tags */
+.tag {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.tag:hover {
+  transform: scale(1.05);
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Social Icons */
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+  color: #60a5fa;
+}
+
+/* Grid Pattern */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .skill-card, .project-card {
+    padding: 1.5rem;
+  }
+  
+  .tag {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  .btn-primary, .btn-secondary {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.fade-in-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.leafy-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'><path fill='rgba(0,0,0,0.05)' d='M0,0 C25,20 75,0 100,20 L100,0 L0,0 Z'/></svg>") repeat-x;
+  z-index: 1;
+  pointer-events: none;
+}
+#monkey-rope {
+  transition: transform 0.3s ease-out;
+}
+
+#monkey {
+  will-change: transform;
+  transition: transform 0.3s ease-out;
+}
+
+/* Hook styles */
+.hook {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  background-color: #4a4a4a;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hook-bar {
+  width: 0.25rem;
+  height: 1.5rem;
+  background-color: #6b6b6b;
+  border-radius: 0.125rem;
+  position: absolute;
+  top: -0.75rem;
+}
+
+/* Rope styles 
+.rope {
+  width: 0.25rem;
+  background: repeating-linear-gradient(
+    to bottom,
+    #a0a0a0,
+    #a0a0a0 5px,
+    #c0c0c0 5px,
+    #c0c0c0 10px
+  );
+  height: 100%;
+}
+Rope wave animation 
+@keyframes rope-wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(2deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-rope-wave {
+  animation: rope-wave 2s infinite ease-in-out;
+}
+
+ Monkey styles 
+#monkey {
+  will-change: transform;
+  transition: transform 0.3s ease-out;
+}*/
+
+/* Add this to your CSS file */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+#typing {
+  display: inline-block;
+  border-right: 2px solid white;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: typing 4s steps(20, end), blink 0.5s step-end infinite;
+}
+
+/* Add this to your CSS file */
+.scroll-indicator {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+/* Hide the menu by default */
+.menu-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+#menu {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  background: transparent;
+  height: 100%;
+}
+
+#menu.visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Hamburger button styles */
+#hamburger {
+  cursor: pointer;
+  transition: opacity 0.6s ease;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 1rem;
+}
+
+#hamburger.hidden {
+  opacity: 0;
+}
+
+#menu a {
+  padding: 0 1rem;
+  white-space: nowrap;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Skill Cards */
+.skill-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Grid Pattern */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Scroll Indicator Animation */
+.animate-bounce {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Text Float Animation */
+.animate-float {
+  animation: textFloat 3s ease-in-out infinite;
+}
+
+@keyframes textFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Monkey Easter Egg */
+@keyframes swing {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  75% {
+    transform: rotate(-15deg);
+  }
+}
+
+@keyframes monkeySwing {
+  0% {
+    transform: translateX(-100%) rotate(0deg);
+  }
+  25% {
+    transform: translateX(25%) rotate(90deg);
+  }
+  50% {
+    transform: translateX(50%) rotate(180deg);
+  }
+  75% {
+    transform: translateX(75%) rotate(270deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(360deg);
+  }
+}
+
+#monkeyVine {
+  animation: swing 2s ease-in-out infinite;
+}
+
+#monkey {
+  animation: monkeySwing 3s ease-in-out forwards;
+}
+
+#monkeyEasterEgg {
+  transition: opacity 0.5s ease;
+}
+
+#monkeyEasterEgg.hidden {
+  opacity: 0;
+}
+
+/* Sleeping Monkey Animation */
+@keyframes snore {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.05) translateY(-2px);
+  }
+}
+
+@keyframes drool {
+  0%, 100% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+  50% {
+    transform: scaleY(1.2);
+    opacity: 1;
+  }
+}
+
+#sleepingMonkey {
+  animation: snore 2s ease-in-out infinite;
+  text-decoration: none;
+  display: block;
+  position: relative;
+}
+
+#sleepingMonkey:hover {
+  animation: snore 1s ease-in-out infinite;
+}
+
+#sleepingMonkey:hover .monkey-eyes {
+  transform: rotate(0deg) !important;
+  height: 2px;
+  top: calc(1/3 - 1px);
+}
+
+#sleepingMonkey:hover .monkey-drool {
+  animation: drool 1s ease-in-out infinite;
+}
+
+.monkey-drool {
+  opacity: 0;
+  transform-origin: top;
+}
+
+/* Fix link styling */
+#sleepingMonkey a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Monkey Message */
+.monkey-message {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#sleepingMonkey:hover ~ .monkey-message {
+  opacity: 1;
+}
+
+/* Ensure the message doesn't interfere with the slide animation */
+.monkey-message {
+  pointer-events: none;
+  z-index: 51;
+}
+
+/* Navbar Logo Animation */
+.logo-container {
+  position: relative;
+  display: inline-block;
+}
+
+.logo-container:hover .logo-message {
+  opacity: 1;
+}
+
+.logo-message {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 51;
+}
+
+/* Ensure smooth transition for the logo */
+.logo-container img {
+  transition: transform 0.5s ease-out;
+}
+
+.logo-container:hover img {
+  transform: translateX(-200%);
+}
+
+/* AI Chat Styles */
+#chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: rgba(26, 26, 46, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+#chat-header {
+    padding: 15px;
+    background: linear-gradient(to right, #2563eb, #4f46e5);
+    color: white;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    display: flex;
+    gap: 10px;
+    max-width: 80%;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.user-message {
+    margin-left: auto;
+    flex-direction: row-reverse;
+}
+
+.message-content {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 12px;
+    color: white;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.user-message .message-content {
+    background: linear-gradient(to right, #2563eb, #4f46e5);
+}
+
+.message-icon {
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+#chat-input-container {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    gap: 10px;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 14px;
+}
+
+#chat-input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+#send-button {
+    padding: 10px 20px;
+    background: linear-gradient(to right, #2563eb, #4f46e5);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#send-button:hover {
+    transform: translateY(-1px);
+}
+
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 10px;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: typing 1s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Minimize/Maximize button */
+#chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(to right, #2563eb, #4f46e5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    border: none;
+    transition: transform 0.3s;
+}
+
+#chat-toggle:hover {
+    transform: scale(1.1);
+}
+
+.chat-hidden {
+    transform: translateY(calc(100% + 20px));
+}
+
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.notification-card {
+  display: flex;
+  align-items: center;
+  background: rgba(30, 41, 59, 0.7);
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.15);
+  padding: 1rem 1.5rem;
+  border-left: 4px solid #3B82F6;
+  backdrop-filter: blur(8px);
+  transition: box-shadow 0.2s;
+}
+
+.notification-card:hover {
+  box-shadow: 0 8px 32px 0 rgba(59,130,246,0.25);
+}
+
+.notification-icon {
+  color: #3B82F6;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.notification-text {
+  color: #e0e0e0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+.animate-fade-in {
+  animation: fade-in 0.6s cubic-bezier(.4,0,.2,1);
+}/* Updated: Sat Jul  5 19:12:42 IST 2025 */
+/* Force deployment: Sat Jul  5 19:25:03 IST 2025 */
