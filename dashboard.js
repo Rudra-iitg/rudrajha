@@ -1,4 +1,4 @@
-class CyberDashboard {
+class NeuralDefenseGame {
     constructor(containerId) {
         this.container = document.getElementById(containerId);
         if (!this.container) return;
@@ -7,16 +7,22 @@ class CyberDashboard {
         this.ctx = this.canvas.getContext('2d');
         this.container.appendChild(this.canvas);
         
-        this.logContainer = document.createElement('div');
-        this.logContainer.className = 'dashboard-logs';
-        this.container.appendChild(this.logContainer);
+        // Game State
+        this.mode = 'AUTO'; 
+        this.score = 0;
+        this.gameOver = false;
+        this.frames = 0;
         
-        this.logs = [];
-        this.maxLogs = 12;
-        this.nodes = [];
-        this.threats = [];
-        this.mouse = { x: 0, y: 0, active: false };
-        this.scanLine = 0;
+        // Entities
+        this.player = { x: 0, y: 0, targetX: 0, width: 40, height: 40, color: '#00FF99' };
+        this.bullets = [];
+        this.enemies = [];
+        this.particles = [];
+        this.glitches = [];
+        
+        // UI Elements
+        this.statusEl = document.getElementById('game-status');
+        this.scoreEl = document.getElementById('game-score');
         
         this.init();
     }
@@ -27,160 +33,313 @@ class CyberDashboard {
         
         this.container.addEventListener('mousemove', (e) => {
             const rect = this.canvas.getBoundingClientRect();
-            this.mouse.x = e.clientX - rect.left;
-            this.mouse.y = e.clientY - rect.top;
-            this.mouse.active = true;
-        });
-
-        this.container.addEventListener('mouseleave', () => {
-            this.mouse.active = false;
-        });
-
-        // Generate static nodes
-        for(let i = 0; i < 15; i++) {
-            this.nodes.push({
-                x: Math.random() * 100, // percentage
-                y: Math.random() * 100,
-                val: Math.random(),
-                label: 'NODE_' + Math.floor(Math.random() * 999)
-            });
-        }
-        
-        this.animate();
-        setInterval(() => this.addLog(), 600);
-        setInterval(() => this.addThreat(), 2000);
-    }
-
-    resize() {
-        this.canvas.width = this.container.clientWidth;
-        this.canvas.height = this.container.clientHeight;
-    }
-
-    addLog() {
-        const status = ['SUCCESS', 'WARNING', 'CRITICAL', 'INFO'];
-        const actions = ['BYPASS', 'ENCRYPT', 'HANDSHAKE', 'TRACE', 'PING'];
-        const targets = ['UPLINK', 'FIREWALL', 'DATABASE', 'KERNEL', 'PROXY'];
-        
-        const s = status[Math.floor(Math.random() * status.length)];
-        const a = actions[Math.floor(Math.random() * actions.length)];
-        const t = targets[Math.floor(Math.random() * targets.length)];
-        
-        const log = `[${s}] ${a} :: ${t} _ ${Math.random().toString(16).slice(2, 8).toUpperCase()}`;
-        this.logs.unshift({ text: log, type: s });
-        if (this.logs.length > this.maxLogs) this.logs.pop();
-        this.updateLogDisplay();
-    }
-
-    updateLogDisplay() {
-        this.logContainer.innerHTML = this.logs.map((log, i) => {
-            const color = log.type === 'CRITICAL' ? '#FF3366' : (log.type === 'WARNING' ? '#FFFF00' : '#00FF99');
-            return `<div style="color: ${color}; opacity: ${1 - i*0.08}; font-size: 0.75rem; margin-bottom: 2px;">> ${log.text}</div>`;
-        }).join('');
-    }
-
-    addThreat() {
-        this.threats.push({
-            x: Math.random() * this.canvas.width,
-            y: Math.random() * this.canvas.height,
-            life: 1.0,
-            size: 0
-        });
-    }
-
-    drawTacticalElement(x, y, color) {
-        this.ctx.strokeStyle = color;
-        this.ctx.lineWidth = 1;
-        
-        // Crosshair
-        const s = 15;
-        this.ctx.beginPath();
-        this.ctx.moveTo(x - s, y); this.ctx.lineTo(x + s, y);
-        this.ctx.moveTo(x, y - s); this.ctx.lineTo(x, y + s);
-        this.ctx.stroke();
-        
-        // Corners
-        const c = 5;
-        this.ctx.beginPath();
-        this.ctx.moveTo(x-s, y-s+c); this.ctx.lineTo(x-s, y-s); this.ctx.lineTo(x-s+c, y-s);
-        this.ctx.moveTo(x+s, y-s+c); this.ctx.lineTo(x+s, y-s); this.ctx.lineTo(x+s-c, y-s);
-        this.ctx.moveTo(x-s, y+s-c); this.ctx.lineTo(x-s, y+s); this.ctx.lineTo(x-s+c, y+s);
-        this.ctx.moveTo(x+s, y+s-c); this.ctx.lineTo(x+s, y+s); this.ctx.lineTo(x+s-c, y+s);
-        this.ctx.stroke();
-    }
-
-    draw() {
-        this.ctx.fillStyle = 'rgba(10, 10, 10, 0.15)';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Scan line
-        this.scanLine = (this.scanLine + 2) % this.canvas.height;
-        this.ctx.strokeStyle = 'rgba(0, 255, 153, 0.1)';
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, this.scanLine);
-        this.ctx.lineTo(this.canvas.width, this.scanLine);
-        this.ctx.stroke();
-
-        // Grid nodes
-        this.nodes.forEach(n => {
-            const px = (n.x / 100) * this.canvas.width;
-            const py = (n.y / 100) * this.canvas.height;
-            const flicker = Math.random() > 0.9 ? 1 : 0.3;
-            
-            this.ctx.fillStyle = `rgba(0, 255, 153, ${0.2 * flicker})`;
-            this.ctx.fillRect(px - 1, py - 1, 3, 3);
-            
-            if (Math.random() > 0.99) {
-                this.ctx.font = '8px monospace';
-                this.ctx.fillText(n.label, px + 5, py + 5);
+            this.player.targetX = e.clientX - rect.left;
+            if (this.mode === 'MANUAL' && !this.gameOver) {
+                // Smooth movement even in manual
+                this.player.x += (this.player.targetX - this.player.x) * 0.3;
             }
         });
 
-        // Mouse Interactivity
-        if (this.mouse.active) {
-            // Radar circle
-            this.ctx.beginPath();
-            this.ctx.arc(this.mouse.x, this.mouse.y, 60, 0, Math.PI * 2);
-            this.ctx.strokeStyle = 'rgba(0, 255, 153, 0.3)';
-            this.ctx.setLineDash([5, 5]);
-            this.ctx.stroke();
-            this.ctx.setLineDash([]);
-            
-            this.drawTacticalElement(this.mouse.x, this.mouse.y, 'rgba(0, 255, 153, 0.8)');
-            
-            // Coordinates
-            this.ctx.fillStyle = '#00FF99';
-            this.ctx.font = '10px monospace';
-            this.ctx.fillText(`LOC: ${Math.floor(this.mouse.x)},${Math.floor(this.mouse.y)}`, this.mouse.x + 20, this.mouse.y - 20);
-        }
-
-        // Threats
-        this.threats.forEach((t, i) => {
-            t.life -= 0.01;
-            t.size += 1;
-            
-            this.ctx.strokeStyle = `rgba(255, 51, 102, ${t.life})`;
-            this.ctx.beginPath();
-            this.ctx.arc(t.x, t.y, t.size, 0, Math.PI * 2);
-            this.ctx.stroke();
-            
-            this.drawTacticalElement(t.x, t.y, `rgba(255, 51, 102, ${t.life})`);
-            
-            if (t.life <= 0) this.threats.splice(i, 1);
+        this.container.addEventListener('mousedown', () => {
+            if (this.gameOver) {
+                this.resetGame();
+            } else if (this.mode === 'AUTO') {
+                this.mode = 'MANUAL';
+                this.statusEl.textContent = "STATUS: MANUAL_OVERRIDE";
+                this.statusEl.style.color = "#FF3366";
+                this.spawnParticles(this.player.x, this.player.y, 30, '#00FF99');
+                this.glitchEffect();
+            } else {
+                this.shoot();
+            }
         });
 
-        // Matrix Glitch Effect
-        if (Math.random() > 0.98) {
-            this.ctx.fillStyle = 'rgba(0, 255, 153, 0.1)';
-            this.ctx.fillRect(0, Math.random() * this.canvas.height, this.canvas.width, 2);
+        this.resetGame();
+        this.loop();
+    }
+
+    resize() {
+        if (!this.container) return;
+        this.canvas.width = this.container.clientWidth;
+        this.canvas.height = this.container.clientHeight;
+        this.player.y = this.canvas.height - 80;
+        this.player.x = this.canvas.width / 2;
+    }
+
+    resetGame() {
+        this.score = 0;
+        this.enemies = [];
+        this.bullets = [];
+        this.particles = [];
+        this.gameOver = false;
+        this.frames = 0;
+        if (this.scoreEl) this.scoreEl.textContent = "THREATS_NEUTRALIZED: 0";
+    }
+
+    glitchEffect() {
+        for(let i=0; i<5; i++) {
+            this.glitches.push({
+                y: Math.random() * this.canvas.height,
+                h: Math.random() * 20 + 5,
+                life: 1.0,
+                offset: (Math.random() - 0.5) * 50
+            });
         }
     }
 
-    animate() {
+    shoot() {
+        // Dual cannons
+        [-15, 15].forEach(offset => {
+            this.bullets.push({
+                x: this.player.x + offset,
+                y: this.player.y - 10,
+                vx: 0,
+                vy: -18,
+                color: '#00FF99',
+                size: 3
+            });
+        });
+        this.spawnParticles(this.player.x, this.player.y, 5, '#00FF99');
+    }
+
+    spawnEnemy() {
+        const types = [
+            { name: 'PACKET', color: '#FF3366', size: 25, hp: 1, speed: 2 },
+            { name: 'WORM', color: '#FFFF00', size: 35, hp: 3, speed: 1.2 },
+            { name: 'LOGIC_BOMB', color: '#7000FF', size: 45, hp: 5, speed: 0.8 }
+        ];
+        const type = types[Math.floor(Math.random() * (this.score > 20 ? 3 : (this.score > 10 ? 2 : 1)))];
+        
+        this.enemies.push({
+            ...type,
+            x: Math.random() * (this.canvas.width - 100) + 50,
+            y: -50,
+            rot: 0,
+            rotSpeed: (Math.random() - 0.5) * 0.1
+        });
+    }
+
+    spawnParticles(x, y, count, color) {
+        for(let i=0; i<count; i++) {
+            this.particles.push({
+                x, y,
+                vx: (Math.random() - 0.5) * 12,
+                vy: (Math.random() - 0.5) * 12,
+                life: 1.0,
+                decay: Math.random() * 0.05 + 0.02,
+                color,
+                size: Math.random() * 3 + 1
+            });
+        }
+    }
+
+    update() {
+        this.frames++;
+
+        if (this.mode === 'AUTO' && !this.gameOver) {
+            if (this.enemies.length > 0) {
+                const target = this.enemies.sort((a,b) => b.y - a.y)[0];
+                this.player.x += (target.x - this.player.x) * 0.15;
+                if (Math.abs(target.x - this.player.x) < 30 && this.frames % 12 === 0) this.shoot();
+            } else {
+                this.player.x += (this.canvas.width/2 + Math.sin(this.frames*0.05)*100 - this.player.x) * 0.05;
+            }
+        }
+
+        if (this.frames % Math.max(20, 60 - Math.floor(this.score/2)) === 0 && !this.gameOver) {
+            this.spawnEnemy();
+        }
+
+        this.bullets.forEach((b, i) => {
+            b.y += b.vy;
+            if (b.y < -50) this.bullets.splice(i, 1);
+        });
+
+        this.enemies.forEach((e, i) => {
+            e.y += e.speed;
+            e.rot += e.rotSpeed;
+
+            this.bullets.forEach((b, j) => {
+                const dx = b.x - e.x;
+                const dy = b.y - e.y;
+                if (Math.sqrt(dx*dx + dy*dy) < e.size) {
+                    this.bullets.splice(j, 1);
+                    e.hp--;
+                    this.spawnParticles(e.x, e.y, 8, e.color);
+                    this.glitchEffect();
+                    
+                    if (e.hp <= 0) {
+                        this.enemies.splice(i, 1);
+                        this.spawnParticles(e.x, e.y, 25, e.color);
+                        this.score += e.name === 'LOGIC_BOMB' ? 5 : (e.name === 'WORM' ? 2 : 1);
+                        if (this.scoreEl) this.scoreEl.textContent = `THREATS_NEUTRALIZED: ${this.score}`;
+                    }
+                }
+            });
+
+            if (e.y > this.canvas.height + 50) {
+                if (this.mode === 'MANUAL') this.gameOver = true;
+                this.enemies.splice(i, 1);
+            }
+        });
+
+        this.particles.forEach((p, i) => {
+            p.x += p.vx; p.y += p.vy;
+            p.life -= p.decay;
+            if (p.life <= 0) this.particles.splice(i, 1);
+        });
+
+        this.glitches.forEach((g, i) => {
+            g.life -= 0.1;
+            if (g.life <= 0) this.glitches.splice(i, 1);
+        });
+    }
+
+    draw() {
+        this.ctx.fillStyle = '#0a0a0a';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Grid with perspective feel
+        this.ctx.strokeStyle = 'rgba(0, 255, 153, 0.05)';
+        for(let i=0; i<this.canvas.width; i+=40) {
+            this.ctx.beginPath(); this.ctx.moveTo(i, 0); this.ctx.lineTo(i, this.canvas.height); this.ctx.stroke();
+        }
+        const gridOffset = (this.frames * 2) % 40;
+        for(let i=gridOffset; i<this.canvas.height; i+=40) {
+            this.ctx.beginPath(); this.ctx.moveTo(0, i); this.ctx.lineTo(this.canvas.width, i); this.ctx.stroke();
+        }
+
+        // Glitch Lines
+        this.glitches.forEach(g => {
+            this.ctx.fillStyle = `rgba(0, 255, 153, ${g.life * 0.2})`;
+            this.ctx.fillRect(0, g.y, this.canvas.width, g.h);
+        });
+
+        // Player - Advanced Design
+        if (!this.gameOver) {
+            this.ctx.save();
+            this.ctx.translate(this.player.x, this.player.y);
+            
+            // Engine Glow
+            const engineY = 20 + Math.sin(this.frames * 0.5) * 5;
+            const grad = this.ctx.createRadialGradient(0, engineY, 0, 0, engineY, 30);
+            grad.addColorStop(0, 'rgba(0, 255, 153, 0.8)');
+            grad.addColorStop(1, 'transparent');
+            this.ctx.fillStyle = grad;
+            this.ctx.beginPath(); this.ctx.arc(0, engineY, 20, 0, Math.PI*2); this.ctx.fill();
+
+            // Ship Body
+            this.ctx.strokeStyle = '#00FF99';
+            this.ctx.lineWidth = 3;
+            this.ctx.shadowBlur = 15;
+            this.ctx.shadowColor = '#00FF99';
+            
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, -30); // Nose
+            this.ctx.lineTo(-20, 10); // Wing L
+            this.ctx.lineTo(-10, 10);
+            this.ctx.lineTo(-15, 25); // Tail L
+            this.ctx.lineTo(15, 25);  // Tail R
+            this.ctx.lineTo(10, 10);
+            this.ctx.lineTo(20, 10);  // Wing R
+            this.ctx.closePath();
+            this.ctx.stroke();
+            
+            // Cockpit
+            this.ctx.fillStyle = '#fff';
+            this.ctx.fillRect(-3, -10, 6, 15);
+            
+            this.ctx.restore();
+        }
+
+        // Bullets
+        this.bullets.forEach(b => {
+            this.ctx.fillStyle = b.color;
+            this.ctx.shadowBlur = 10;
+            this.ctx.shadowColor = b.color;
+            this.ctx.fillRect(b.x - 2, b.y, 4, 15);
+        });
+
+        // Enemies - Detailed Assets
+        this.enemies.forEach(e => {
+            this.ctx.save();
+            this.ctx.translate(e.x, e.y);
+            this.ctx.rotate(e.rot);
+            
+            this.ctx.strokeStyle = e.color;
+            this.ctx.lineWidth = 2;
+            this.ctx.shadowBlur = 15;
+            this.ctx.shadowColor = e.color;
+
+            if (e.name === 'PACKET') {
+                this.ctx.strokeRect(-e.size/2, -e.size/2, e.size, e.size);
+                this.ctx.strokeRect(-e.size/4, -e.size/4, e.size/2, e.size/2);
+            } else if (e.name === 'WORM') {
+                this.ctx.beginPath();
+                for(let i=0; i<6; i++) {
+                    const ang = (i / 6) * Math.PI * 2;
+                    this.ctx.lineTo(Math.cos(ang) * e.size, Math.sin(ang) * e.size);
+                }
+                this.ctx.closePath();
+                this.ctx.stroke();
+            } else {
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, e.size/2, 0, Math.PI*2);
+                this.ctx.moveTo(-e.size/2, 0); this.ctx.lineTo(e.size/2, 0);
+                this.ctx.moveTo(0, -e.size/2); this.ctx.lineTo(0, e.size/2);
+                this.ctx.stroke();
+            }
+            this.ctx.restore();
+        });
+
+        // Particles
+        this.particles.forEach(p => {
+            this.ctx.globalAlpha = p.life;
+            this.ctx.fillStyle = p.color;
+            this.ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+        this.ctx.globalAlpha = 1;
+
+        // HUD Scanlines
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        for(let i=0; i<this.canvas.height; i+=4) {
+            this.ctx.fillRect(0, i, this.canvas.width, 1);
+        }
+
+        // Overlays
+        this.ctx.textAlign = 'center';
+        if (this.mode === 'AUTO') {
+            this.ctx.fillStyle = 'rgba(0, 255, 153, 0.8)';
+            this.ctx.font = '700 18px Space Grotesk';
+            this.ctx.fillText("AI_PILOT // SYSTEM_DEFENSE_ACTIVE", this.canvas.width/2, this.canvas.height - 120);
+            this.ctx.font = '400 14px monospace';
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            this.ctx.fillText("[ CLICK TO TAKE CONTROL ]", this.canvas.width/2, this.canvas.height - 95);
+        }
+
+        if (this.gameOver) {
+            this.ctx.fillStyle = 'rgba(10,10,10,0.85)';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.strokeStyle = '#FF3366';
+            this.ctx.lineWidth = 4;
+            this.ctx.strokeRect(50, this.canvas.height/2 - 60, this.canvas.width-100, 120);
+            
+            this.ctx.fillStyle = '#FF3366';
+            this.ctx.font = '800 40px Syne';
+            this.ctx.fillText("CRITICAL FAILURE", this.canvas.width/2, this.canvas.height/2 - 10);
+            this.ctx.fillStyle = '#FFFFFF';
+            this.ctx.font = '700 16px Space Grotesk';
+            this.ctx.fillText("NETWORK BREACHED // CLICK TO REBOOT", this.canvas.width/2, this.canvas.height/2 + 30);
+        }
+    }
+
+    loop() {
+        this.update();
         this.draw();
-        requestAnimationFrame(() => this.animate());
+        requestAnimationFrame(() => this.loop());
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new CyberDashboard('cyber-dashboard');
+    new NeuralDefenseGame('cyber-dashboard');
 });

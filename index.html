@@ -4,22 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RUDRA | NEO-BRUTALIST PORTFOLIO</title>
-    <link rel="stylesheet" href="style.css?v=1.1">
+    <link rel="stylesheet" href="style.css?v=1.4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* Critical Styles to prevent flash of unstyled content */
         body { background-color: #0a0a0a; color: white; margin: 0; }
-        .fluid-bg {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
-            background: linear-gradient(-45deg, #0a0a0a, #1a0b2e, #001f18, #1f000a);
-            background-size: 400% 400%;
-            animation: gradientWave 15s ease infinite;
-        }
-        @keyframes gradientWave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
     </style>
     
     <!-- GSAP CDN -->
@@ -30,9 +18,34 @@
     <div class="fluid-bg"></div>
     <div class="noise-overlay"></div>
     
-    <!-- Background Shapes -->
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
+    <!-- Hazard Ribbon SVG -->
+    <div class="hazard-ribbon-container">
+        <svg viewBox="0 0 800 800" preserveAspectRatio="xMinYMin meet">
+            <defs>
+                <path id="ribbonCurve" d="M -200,450 L 450,-200" />
+                <pattern id="hazardStripes" patternUnits="userSpaceOnUse" width="40" height="40" patternTransform="rotate(45)">
+                    <rect width="20" height="40" fill="#FFD700" />
+                    <rect x="20" width="20" height="40" fill="#DAA520" />
+                </pattern>
+                <filter id="ribbonShadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+                    <feOffset dx="4" dy="6" result="offsetblur"/>
+                    <feComponentTransfer><feFuncA type="linear" slope="0.6"/></feComponentTransfer>
+                    <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+            </defs>
+            <g filter="url(#ribbonShadow)">
+                <use href="#ribbonCurve" stroke="black" stroke-width="90" fill="none" />
+                <use href="#ribbonCurve" stroke="url(#hazardStripes)" stroke-width="70" fill="none" />
+            </g>
+            <text dy="16" fill="black" font-family="Impact, Charcoal, sans-serif" font-weight="900" font-size="52" letter-spacing="2" style="text-shadow: 1px 1px 0px rgba(255,255,255,0.3);">
+                <textPath href="#ribbonCurve" startOffset="100%" spacing="auto">
+                    <animate attributeName="startOffset" from="100%" to="-100%" dur="10s" repeatCount="indefinite" />
+                    ☢ CAUTION: NEURAL LEAK ☢ SYSTEM FAILURE ☢ BIO-DIGITAL HAZARD ☢
+                </textPath>
+            </text>
+        </svg>
+    </div>
 
     <!-- Navigation -->
     <nav class="nav-fixed">
@@ -85,53 +98,86 @@
             <h2 class="reveal-text" style="font-size: 4rem; text-align: right;">SELECTED WORKS</h2>
         </div>
 
-        <!-- Project 1 -->
-        <div class="col-6 block" style="min-height: 400px; display: flex; flex-direction: column; justify-content: space-between;">
+        <!-- Project 1: Live Blueprint -->
+        <div class="col-6 block project-blueprint" style="min-height: 450px;">
+            <div class="index-number">01</div>
+            <!-- Measurement Lines -->
+            <div class="measure-line" style="top: 0; left: 50%; width: 1px; height: 100%;"></div>
+            <div class="measure-line" style="top: 50%; left: 0; width: 100%; height: 1px;"></div>
+            
+            <div class="blueprint-header">
+                <span style="font-family: var(--font-mono); color: var(--color-secondary);">SCHEMATIC: FIT_CIRCUIT</span>
+                <span style="font-family: var(--font-mono); color: var(--color-secondary); animation: pulse 1s infinite;">[ LIVE_FEED ]</span>
+            </div>
             <div>
-                <span class="pill" style="border-color: var(--color-secondary); color: var(--color-secondary);">AI CORE</span>
                 <h3>FIT CIRCUIT</h3>
-                <p style="margin-top: 1rem; font-size: 1.1rem; opacity: 0.8;">
+                <p style="margin-top: 1rem; font-size: 1rem; opacity: 0.8; font-family: var(--font-mono);">
                     AI-powered fitness assistant generating personalized routes. 
                     Uses Graph Theory for path optimization and ML for calorie prediction.
                 </p>
+                <div class="blueprint-specs">
+                    > OPTIMIZATION: GRAPH_THEORY<br>
+                    > LATENCY: 42ms<br>
+                    > ACCURACY: 98.2%
+                </div>
             </div>
             <div style="margin-top: 2rem;">
                 <span class="pill">REACT</span>
                 <span class="pill">NODE.JS</span>
-                <span class="pill">OPENAI</span>
-                <span class="pill">MAPS API</span>
+                <span class="pill">MAPS_API</span>
             </div>
         </div>
 
-        <!-- Project 2 -->
-        <div class="col-6 block" style="min-height: 400px; background: rgba(0,0,0,0.5);">
+        <!-- Project 2: Live Blueprint -->
+        <div class="col-6 block project-blueprint" style="min-height: 450px;">
+            <div class="index-number">02</div>
+            <!-- Measurement Lines -->
+            <div class="measure-line" style="top: 0; left: 30%; width: 1px; height: 100%;"></div>
+            <div class="measure-line" style="top: 70%; left: 0; width: 100%; height: 1px;"></div>
+
+            <div class="blueprint-header">
+                <span style="font-family: var(--font-mono); color: var(--color-tertiary);">SCHEMATIC: VEHICLE_CV</span>
+                <span style="font-family: var(--font-mono); color: var(--color-tertiary);">SECURE_CORE</span>
+            </div>
             <div>
-                <span class="pill" style="border-color: var(--color-tertiary); color: var(--color-tertiary);">DEEP LEARNING</span>
                 <h3>VEHICLE CLASSIFIER</h3>
-                <p style="margin-top: 1rem; font-size: 1.1rem; opacity: 0.8;">
+                <p style="margin-top: 1rem; font-size: 1rem; opacity: 0.8; font-family: var(--font-mono);">
                     High-precision computer vision model capable of classifying 7 distinct vehicle types in real-time video feeds.
                 </p>
+                <div class="blueprint-specs" style="border-color: var(--color-tertiary); color: var(--color-tertiary);">
+                    > ENGINE: TENSORFLOW<br>
+                    > FPS: 60 (STABLE)<br>
+                    > CLASSES: 7_DETECTED
+                </div>
             </div>
             <div style="margin-top: 2rem;">
                 <span class="pill">PYTHON</span>
-                <span class="pill">TENSORFLOW</span>
                 <span class="pill">OPENCV</span>
                 <span class="pill">KERAS</span>
             </div>
         </div>
 
-        <!-- Project 3 -->
-        <div class="col-12 block" style="background: linear-gradient(90deg, #111, #222);">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <!-- Project 3: Wide Blueprint -->
+        <div class="col-12 block project-blueprint" style="background-color: #0d0d0d; min-height: 300px;">
+            <div class="index-number">03</div>
+            <div class="blueprint-header">
+                <span style="font-family: var(--font-mono); color: var(--color-primary);">SCHEMATIC: RECON_KIT</span>
+                <span style="font-family: var(--font-mono); color: var(--color-primary);">ENCRYPTED_OSINT</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;">
                 <div style="max-width: 600px;">
-                    <span class="pill" style="border-color: var(--color-primary); color: var(--color-primary);">SECURITY</span>
                     <h3>CYBER RECON TOOLKIT</h3>
-                    <p style="margin-top: 1rem; font-size: 1.1rem; opacity: 0.8;">
+                    <p style="margin-top: 1rem; font-size: 1rem; opacity: 0.8; font-family: var(--font-mono);">
                         Comprehensive CLI tool for OSINT and ethical hacking reconnaissance. Automated vulnerability scanning and network mapping.
                     </p>
+                    <div class="blueprint-specs" style="border-color: var(--color-primary); color: var(--color-primary);">
+                        > ENV: KALI_LINUX<br>
+                        > PROTOCOLS: TCP/UDP/OSINT<br>
+                        > STATUS: DEPLOYED
+                    </div>
                 </div>
                 <div style="margin-top: 1rem;">
-                    <span class="pill">KALI LINUX</span>
+                    <span class="pill">LINUX</span>
                     <span class="pill">PYTHON</span>
                     <span class="pill">BASH</span>
                     <span class="pill">NETWORKING</span>
@@ -144,164 +190,126 @@
             <h2 class="reveal-text" style="font-size: 4rem; text-align: left;">NEURAL EXTENSIONS</h2>
         </div>
 
-        <!-- Extension 1: Prank -->
-        <div class="col-6 block extension-card" style="min-height: 450px; border-left: 5px solid var(--color-primary); background: rgba(255, 51, 102, 0.03);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <span class="pill" style="border-color: var(--color-primary); color: var(--color-primary);">AGENT_CHAOS</span>
-                <i class="fas fa-skull" style="font-size: 2.5rem; color: var(--color-primary); animation: pulse 2s infinite;"></i>
+        <!-- Extension 1: Module Style -->
+        <div class="col-6 plugin-slot" style="min-height: 450px;">
+            <div class="slot-header">
+                <div class="status-light"></div>
+                <span>MODULE_ID: AGENT_CHAOS</span>
+                <span style="margin-left: auto; opacity: 0.5;">CHROME_EXT</span>
             </div>
-            <h3 style="font-size: 2.5rem; margin: 1.5rem 0 1rem 0;">PRANK_CORE</h3>
-            <p style="font-size: 1.1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
-                Browser deployment for psychological operations. Triggers high-impact manifestations on link interaction.
-            </p>
-            <div style="margin-top: auto;">
-                <div class="pill">CHROME API</div>
-                <div class="pill">INJECTION</div>
-                <div class="pill">DOM_MANIP</div>
-                <br><br>
+            <div>
+                <i class="fas fa-skull" style="font-size: 3rem; color: var(--color-primary); margin-bottom: 1.5rem;"></i>
+                <h3 style="font-size: 2.5rem; margin-bottom: 1rem;">PRANK_CORE</h3>
+                <p style="font-size: 1.1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                    A specialized browser deployment designed for psychological operations. Once activated, clicking any link triggers a high-impact skull manifestation.
+                </p>
                 <a href="https://github.com/10Rudra01" class="social-3d-link github" style="width: auto; height: auto; padding: 1rem 2rem; font-size: 1rem;">
-                    <i class="fab fa-github"></i> ACCESS SOURCE
+                    <i class="fab fa-github"></i> SOURCE
                 </a>
             </div>
         </div>
 
-        <!-- Extension 2: PDF Tool -->
-        <div class="col-6 block extension-card" style="min-height: 450px; border-left: 5px solid #00F0FF; background: rgba(0, 240, 255, 0.03);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <span class="pill" style="border-color: #00F0FF; color: #00F0FF;">DATA_EXTRACTOR</span>
-                <i class="fas fa-file-pdf" style="font-size: 2.5rem; color: #00F0FF;"></i>
+        <!-- Extension 2: Module Style -->
+        <div class="col-6 plugin-slot" style="min-height: 450px;">
+             <div class="slot-header">
+                <div class="status-light"></div>
+                <span>MODULE_ID: DATA_EXTRACTOR</span>
+                <span style="margin-left: auto; opacity: 0.5;">CHROME_EXT</span>
             </div>
-            <h3 style="font-size: 2.5rem; margin: 1.5rem 0 1rem 0;">PDF_STRAT TOOL</h3>
-            <p style="font-size: 1.1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
-                Visual documentation engine. Captures sequential screenshots and compiles high-fidelity PDF dossiers.
-            </p>
-            <div style="margin-top: auto;">
-                <div class="pill">JS-PDF</div>
-                <div class="pill">ASYNC_CAPTURE</div>
-                <div class="pill">COMPRESSION</div>
-                <br><br>
+            <div>
+                <i class="fas fa-file-pdf" style="font-size: 3rem; color: #00F0FF; margin-bottom: 1.5rem;"></i>
+                <h3 style="font-size: 2.5rem; margin-bottom: 1rem;">PDF_STRAT</h3>
+                <p style="font-size: 1.1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                    High-speed visual documentation engine. Captures rapid-fire sequential screenshots and compiles them into a unified PDF dossier automatically.
+                </p>
                 <a href="https://github.com/10Rudra01" class="social-3d-link github" style="width: auto; height: auto; padding: 1rem 2rem; font-size: 1rem; box-shadow: 8px 8px 0px #00F0FF;">
-                    <i class="fab fa-github"></i> ACCESS SOURCE
+                    <i class="fab fa-github"></i> SOURCE
                 </a>
-            </div>
-        </div>
-
-        <!-- Tools Header -->
-        <div class="col-12 block" id="tools" style="border: none; background: transparent; margin-top: 4rem;">
-            <h2 class="reveal-text" style="font-size: 4rem; text-align: right;">TERMINAL_TOOLS</h2>
-        </div>
-
-        <!-- Tool 3: Timenow CLI -->
-        <div class="col-12 block extension-card" style="background: linear-gradient(90deg, rgba(255, 255, 0, 0.02), transparent); border-right: 5px solid var(--color-accent);">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                <div style="max-width: 700px;">
-                    <span class="pill" style="border-color: var(--color-accent); color: var(--color-accent);">TIME_PROTOCOL</span>
-                    <h3 style="font-size: 3rem; margin: 1rem 0;">TIMENOW CLI</h3>
-                    <p style="font-size: 1.2rem; opacity: 0.8; line-height: 1.6;">
-                        Global temporal synchronization tool. Retrieves real-time local date and time for any coordinate or place name via an optimized CLI interface. Built for speed and precision.
-                    </p>
-                </div>
-                <div style="text-align: right; margin-top: 2rem;">
-                    <div style="margin-bottom: 2rem;">
-                        <span class="pill">NODE.JS</span>
-                        <span class="pill">CHALK</span>
-                        <span class="pill">AXIOS</span>
-                    </div>
-                    <a href="https://github.com/10Rudra01" class="social-3d-link github" style="width: auto; height: auto; padding: 1.5rem 3rem; font-size: 1.2rem; box-shadow: 10px 10px 0px var(--color-accent); display: inline-flex;">
-                        <i class="fab fa-github"></i>&nbsp; VIEW ON GITHUB
-                    </a>
-                </div>
             </div>
         </div>
 
         <!-- AI Systems Header -->
         <div class="col-12 block" id="ai-systems" style="border: none; background: transparent; margin-top: 4rem;">
-            <h2 class="reveal-text" style="font-size: 4rem; text-align: left;">AI_SYSTEMS</h2>
+            <h2 class="reveal-text" style="font-size: 4rem; text-align: right;">AI_LAB_PROTOCOLS</h2>
         </div>
 
-        <!-- Project: Embedded Classifier -->
-        <div class="col-12 block extension-card" style="background: linear-gradient(135deg, rgba(112, 0, 255, 0.05), transparent); border-left: 5px solid var(--color-tertiary); position: relative; overflow: hidden;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;">
-                <div style="max-width: 800px; z-index: 2;">
-                    <span class="pill" style="border-color: var(--color-tertiary); color: var(--color-tertiary);">LLM_INTEGRATION</span>
-                    <h3 style="font-size: 3.5rem; margin: 1rem 0;">EMBEDDED_CLASSIFIER</h3>
-                    <p style="font-size: 1.2rem; opacity: 0.9; line-height: 1.6; margin-bottom: 2rem;">
-                        This project transforms natural language into high‑dimensional vectors using the <strong>Embedding Gemma</strong> model running locally via <strong>Ollama</strong>. It features real-time visualization and interactive exploration of semantic relationships.
-                    </p>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; font-family: monospace; font-size: 0.9rem;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-project-diagram" style="color: var(--color-tertiary);"></i>
-                            <span>Visual t‑SNE map of embeddings</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-th" style="color: var(--color-tertiary);"></i>
-                            <span>Similarity matrix (Cosine)</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-plus-circle" style="color: var(--color-tertiary);"></i>
-                            <span>Dynamic data point injection</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-tv" style="color: var(--color-tertiary);"></i>
-                            <span>Retro CRT thematic UI</span>
-                        </div>
+        <!-- AI System: HUD Style -->
+        <div class="col-12 block research-hud" style="min-height: 500px; padding: 0;">
+            <div class="hud-scanline"></div>
+            <div style="padding: 3rem; position: relative; z-index: 2;">
+                <div style="display: flex; gap: 4rem; flex-wrap: wrap; align-items: center;">
+                    <div style="flex: 2; min-width: 300px;">
+                        <span class="pill" style="border-color: var(--color-tertiary); color: var(--color-tertiary); background: transparent;">EXP_001: EMBEDDED_CLASSIFIER</span>
+                        <h3 style="font-size: 3.5rem; margin: 1.5rem 0; color: #fff; text-shadow: 0 0 10px var(--color-tertiary);">SEMANTIC_VECTOR_ENGINE</h3>
+                        <p style="font-size: 1.2rem; opacity: 0.9; line-height: 1.8; margin-bottom: 2rem; font-family: var(--font-mono);">
+                            Transforms natural language into high‑dimensional vectors using <strong>Embedding Gemma</strong> locally via <strong>Ollama</strong>. 
+                            Features real-time t-SNE visualization and cosine similarity matrices.
+                        </p>
+                        <a href="https://github.com/10Rudra01" class="social-3d-link github" style="width: auto; height: auto; padding: 1.2rem 2.5rem; font-size: 1.1rem; box-shadow: 8px 8px 0px var(--color-tertiary);">
+                            <i class="fab fa-github"></i> ACCESS LAB DATA
+                        </a>
                     </div>
-
-                    <a href="https://github.com/10Rudra01" class="social-3d-link github" style="width: auto; height: auto; padding: 1.5rem 3rem; font-size: 1.2rem; box-shadow: 10px 10px 0px var(--color-tertiary); display: inline-flex;">
-                        <i class="fab fa-github"></i>&nbsp; ACCESS AI CORE
-                    </a>
-                </div>
-
-                <div style="flex: 1; min-width: 300px; display: flex; justify-content: center; align-items: center; position: relative;">
-                    <!-- Decorative AI Neural Network Graphic -->
-                    <div style="width: 200px; height: 200px; border: 2px dashed var(--color-tertiary); border-radius: 50%; display: flex; justify-content: center; align-items: center; animation: float 6s ease-in-out infinite;">
-                        <i class="fas fa-brain" style="font-size: 5rem; color: var(--color-tertiary); filter: drop-shadow(0 0 15px var(--color-tertiary));"></i>
+                    <div style="flex: 1; display: flex; justify-content: center;">
+                         <div style="width: 250px; height: 250px; border: 1px dashed var(--color-tertiary); border-radius: 50%; display: flex; justify-content: center; align-items: center; position: relative; animation: pulse 4s infinite;">
+                            <i class="fas fa-brain" style="font-size: 6rem; color: var(--color-tertiary); filter: drop-shadow(0 0 20px var(--color-tertiary));"></i>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- About / Skills Section -->
-        <div class="col-12" id="about" style="height: 5vh;"></div>
+        <!-- Tools Header -->
+        <div class="col-12 block" id="tools" style="border: none; background: transparent; margin-top: 4rem;">
+            <h2 class="reveal-text" style="font-size: 4rem; text-align: left;">TERMINAL_TOOLS</h2>
+        </div>
 
+        <!-- Tool: Terminal Window Style -->
+        <div class="col-12 terminal-window" style="min-height: 400px;">
+            <div class="term-bar">
+                <div class="term-btn term-close"></div>
+                <div class="term-btn term-min"></div>
+                <div class="term-btn term-max"></div>
+                <span style="font-size: 0.8rem; color: #666; margin-left: auto;">user@rudra-dev: ~/tools/timenow-cli</span>
+            </div>
+            <div class="term-content">
+                <div style="margin-bottom: 2rem; font-size: 1.1rem; line-height: 1.5;">
+                    <div class="cmd-prompt">./timenow --location "Tokyo"</div>
+                    <div style="color: var(--color-secondary); margin-top: 0.5rem;">> FETCHING_TEMPORAL_DATA...</div>
+                    <div style="color: #fff; margin-top: 0.5rem;">> CURRENT_TIME: 03:45:12 AM (JST)</div>
+                    <div style="color: #666; margin-top: 0.5rem;">> LAT: 35.6762 / LON: 139.6503</div>
+                    <br>
+                    <div class="cmd-prompt">cat description.txt <span class="cursor"></span></div>
+                </div>
+                <h3 style="color: var(--color-accent); font-size: 2rem; margin-bottom: 1rem;">TIMENOW CLI</h3>
+                <p style="opacity: 0.8; max-width: 800px; margin-bottom: 2rem;">
+                    Global temporal synchronization tool. Retrieves real-time local date and time for any location via optimized CLI.
+                </p>
+                <a href="https://github.com/10Rudra01" class="social-3d-link github" style="width: auto; height: auto; padding: 0.8rem 1.5rem; font-size: 0.9rem; box-shadow: 6px 6px 0px var(--color-accent); border-color: var(--color-accent); color: var(--color-accent);">
+                    <i class="fab fa-github"></i> VIEW_SOURCE
+                </a>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="col-12" id="about" style="height: 5vh;"></div>
         <div class="col-4 block skill-matrix-container" style="background: var(--color-bg); border: 2px solid var(--color-text); position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 1.5rem;">
             <div class="matrix-scan"></div>
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 0.5rem;">
                 <h3 style="margin: 0; font-size: 1.2rem;">SKILL_MATRIX.SYS</h3>
                 <span class="pill" style="font-size: 0.6rem; border-color: var(--color-secondary); color: var(--color-secondary);">ACTIVE</span>
             </div>
-            
             <div class="skills-grid">
                 <div class="skill-item">
-                    <div class="skill-info"><span>PYTHON / C++ / JS</span><span>95%</span></div>
+                    <div class="skill-info"><span>PYTHON / JS</span><span>95%</span></div>
                     <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 95%; background: var(--color-primary);"></div></div>
                 </div>
                 <div class="skill-item">
-                    <div class="skill-info"><span>PYTORCH / TENSORFLOW</span><span>88%</span></div>
+                    <div class="skill-info"><span>AI / ML</span><span>88%</span></div>
                     <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 88%; background: var(--color-secondary);"></div></div>
                 </div>
                 <div class="skill-item">
-                    <div class="skill-info"><span>REACT / NODE.JS</span><span>92%</span></div>
-                    <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 92%; background: var(--color-tertiary);"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>LINUX / BASH</span><span>90%</span></div>
+                    <div class="skill-info"><span>CYBERSEC</span><span>90%</span></div>
                     <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 90%; background: var(--color-accent); color: black;"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>SQL / NO-SQL</span><span>85%</span></div>
-                    <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 85%; background: #00F0FF;"></div></div>
-                </div>
-            </div>
-
-            <div style="margin-top: auto; font-family: monospace; font-size: 0.7rem; opacity: 0.6;">
-                <div style="display: flex; justify-content: space-between;">
-                    <span>THREAT_LEVEL: LOW</span>
-                    <span>CORE_TEMP: 42°C</span>
-                </div>
-                <div style="width: 100%; height: 2px; background: rgba(255,255,255,0.1); margin-top: 5px;">
-                    <div style="width: 40%; height: 100%; background: var(--color-secondary); animation: pulse 2s infinite;"></div>
                 </div>
             </div>
         </div>
@@ -310,210 +318,54 @@
             <h3>THE OPERATIVE</h3>
             <p style="font-size: 1.5rem; line-height: 1.6; margin-top: 1rem;">
                 I operate at the intersection of <strong>Data Science</strong> and <strong>Cybersecurity</strong>. 
-                My mission is to build systems that are not only intelligent but resilient.
-                <br><br>
-                Currently scaling my knowledge at <strong>IIT Guwahati</strong> while building tools for the open web.
+                Currently scaling my knowledge at <strong>IIT Guwahati</strong>.
             </p>
         </div>
 
         <!-- Contact Section -->
         <div class="col-12" id="contact" style="padding: 8rem 0; border-top: 1px solid rgba(255,255,255,0.1);">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;">
-                
-                <!-- Left Column: Form -->
                 <div style="display: flex; flex-direction: column; gap: 2rem;">
-                    <div style="text-align: left;">
-                        <h2 style="font-size: clamp(3rem, 8vw, 6rem); color: var(--color-accent); margin-bottom: 0.5rem; line-height: 0.8;">LET'S<br>TALK</h2>
-                        <p style="font-size: 1.2rem; opacity: 0.8;">Ready to build the impossible?</p>
+                    <h2 style="font-size: clamp(3rem, 8vw, 6rem); color: var(--color-accent); line-height: 0.8;">LET'S<br>TALK</h2>
+                    <div class="terminal-container" style="width: 100%;">
+                        <div class="terminal-header"><div class="terminal-buttons"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><div class="terminal-title">contact@rudra.dev</div></div>
+                        <div class="terminal-body" style="min-height: 380px;"><form id="terminal-contact-form">
+                            <div class="input-line"><span class="prompt">rudra@dev:~$</span> <span class="command">init contact</span></div>
+                            <div class="input-line"><label>>> NAME</label><input type="text" required></div>
+                            <div class="input-line"><label>>> EMAIL</label><input type="email" required></div>
+                            <div class="input-line"><label>>> MESSAGE</label><textarea required rows="3"></textarea></div>
+                            <button type="submit" class="terminal-submit">EXECUTE TRANSMISSION <span class="cursor"></span></button>
+                        </form></div>
                     </div>
-
-                    <div class="terminal-container" style="margin: 0; width: 100%;">
-                        <div class="terminal-header">
-                            <div class="terminal-buttons">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <div class="terminal-title">contact@rudra.dev</div>
-                        </div>
-                        <div class="terminal-body" style="min-height: 380px;">
-                            <form id="terminal-contact-form">
-                                <div class="input-line">
-                                    <span class="prompt">rudra@dev:~$</span> <span class="command">init contact</span>
-                                </div>
-                                <div class="input-line">
-                                    <label for="name">>> NAME</label>
-                                    <input type="text" id="name" name="user_name" required placeholder="Who are you?">
-                                </div>
-                                <div class="input-line">
-                                    <label for="email">>> EMAIL</label>
-                                    <input type="email" id="email" name="user_email" required placeholder="How do I reach you?">
-                                </div>
-                                <div class="input-line">
-                                    <label for="message">>> MESSAGE</label>
-                                    <textarea id="message" name="message" required rows="3" placeholder="Type your transmission..."></textarea>
-                                </div>
-                                <div class="input-line" style="margin-top: 1rem;">
-                                    <button type="submit" class="terminal-submit">
-                                        EXECUTE TRANSMISSION <span class="cursor"></span>
-                                    </button>
-                                </div>
-                            </form>
-                            <div id="terminal-output"></div>
-                        </div>
-                    </div>
-
-                    <div style="display: flex; gap: 2rem; margin-top: 1rem;">
-                        <a href="https://github.com/10Rudra01" class="social-3d-link github" title="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="https://linkedin.com/in/rudra-jha-35aa0a263" class="social-3d-link linkedin" title="LinkedIn">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="https://twitter.com/RudraRaj00" class="social-3d-link x-twitter" title="X (Twitter)">
-                            <i class="fab fa-x-twitter"></i>
-                        </a>
+                    <div style="display: flex; gap: 2rem;">
+                        <a href="#" class="social-3d-link github"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-3d-link linkedin"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-3d-link x-twitter"><i class="fab fa-x-twitter"></i></a>
                     </div>
                 </div>
-
-                <!-- Right Column: Interactive Dashboard -->
                 <div style="display: flex; flex-direction: column; gap: 2rem; height: 100%;">
-                    <div style="text-align: right;">
-                        <h2 style="font-size: 1.5rem; color: var(--color-secondary); opacity: 0.8;">// LIVE_MONITOR</h2>
-                        <p style="font-size: 0.9rem; opacity: 0.6; font-family: monospace;">REAL-TIME NETWORK ANALYSIS</p>
-                    </div>
-
-                    <div style="flex: 1; border: 2px solid var(--color-secondary); background: rgba(0,0,0,0.8); position: relative; min-height: 550px; display: flex; flex-direction: column; box-shadow: 0 0 30px rgba(0, 255, 153, 0.1);">
-                        <div style="background: var(--color-secondary); color: black; padding: 0.5rem 1rem; font-weight: bold; font-family: monospace; font-size: 0.8rem; display: flex; justify-content: space-between;">
-                            <span>STATUS: ACTIVE</span>
-                            <span>ENCRYPTION: AES-256</span>
-                        </div>
-                        <div id="cyber-dashboard" style="flex: 1; position: relative; overflow: hidden; width: 100%;">
-                            <!-- Canvas injected by JS -->
-                        </div>
+                    <div style="text-align: right;"><h2 style="font-size: 1.5rem; color: var(--color-secondary);">// NEURAL_DEFENSE_GRID</h2></div>
+                    <div style="flex: 1; border: 2px solid var(--color-secondary); background: #000; position: relative; min-height: 550px; display: flex; flex-direction: column;">
+                        <div style="background: var(--color-secondary); color: black; padding: 0.5rem; font-weight: bold; display: flex; justify-content: space-between;"><span id="game-status">STATUS: AUTO_PILOT</span><span id="game-score">SCORE: 0</span></div>
+                        <div id="cyber-dashboard" style="flex: 1; position: relative; overflow: hidden; width: 100%;"></div>
                     </div>
                 </div>
             </div>
         </div>
-
     </main>
 
-    <!-- AI Chat Container (Preserved structure, restyled via CSS) -->
-    <div id="chat-container" style="position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px; z-index: 1000; display: flex; flex-direction: column; display: none;">
-        <div id="chat-header" style="padding: 15px; font-weight: bold; display: flex; justify-content: space-between;">
-            <span>AI TERMINAL</span>
-            <button id="minimize-chat" style="background: none; border: none; font-weight: bold; cursor: pointer;">_</button>
-        </div>
-        <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 15px; background: #111; color: #0f0; font-family: monospace;">
-            <div class="message"><div class="message-content">System initialized. Waiting for input...</div></div>
-        </div>
-        <div id="chat-input-container" style="padding: 10px; background: #222; display: flex;">
-            <input type="text" id="chat-input" placeholder="Enter command..." style="flex: 1; padding: 10px; background: #000; color: #0f0; border: 1px solid #333; font-family: monospace;">
-            <button id="send-button" style="padding: 10px; background: #333; color: #fff; border: none; cursor: pointer;">></button>
-        </div>
-    </div>
+    <button id="chat-toggle" style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--color-primary); border-radius: 50%; border: none; font-size: 24px; cursor: pointer; z-index: 1001;"><i class="fas fa-robot"></i></button>
 
-    <!-- Toggle Chat Button -->
-    <button id="chat-toggle" style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--color-primary); border-radius: 50%; border: none; font-size: 24px; cursor: pointer; z-index: 1001; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-        <i class="fas fa-robot"></i>
-    </button>
-
-    <script src="config.js"></script>
-    <script src="contact.js"></script>
-    <script src="ai-chat.js"></script>
     <script src="dashboard.js"></script>
     <script>
         gsap.registerPlugin(ScrollTrigger);
-
-        // Hero Text Entrance
-        gsap.from("h1", {
-            duration: 1.8,
-            y: 150,
-            skewY: 10,
-            opacity: 0,
-            stagger: 0.3,
-            ease: "power4.out"
-        });
-
-        // Block Entrance
+        gsap.from("h1", { duration: 1.8, y: 150, skewY: 10, opacity: 0, stagger: 0.3, ease: "power4.out" });
         gsap.utils.toArray('.block').forEach(block => {
-            gsap.from(block, {
-                scrollTrigger: {
-                    trigger: block,
-                    start: "top 90%",
-                    toggleActions: "play none none reverse"
-                },
-                duration: 1,
-                y: 60,
-                opacity: 0,
-                ease: "power3.out"
-            });
+            gsap.from(block, { scrollTrigger: { trigger: block, start: "top 90%" }, duration: 1, y: 60, opacity: 0, ease: "power3.out" });
         });
-
-        // Text Reveal Scrubbing
-        gsap.utils.toArray('.reveal-text').forEach(text => {
-            gsap.from(text, {
-                scrollTrigger: {
-                    trigger: text,
-                    start: "top 95%",
-                    end: "top 50%",
-                    scrub: 1
-                },
-                x: -100,
-                opacity: 0,
-                skewX: -20,
-                duration: 1
-            });
-        });
-
-        // Marquee / Ticker Animation
         const ticker = document.querySelector('.ticker-content');
-        gsap.to(ticker, {
-            xPercent: -50,
-            repeat: -1,
-            duration: 20,
-            ease: "none"
-        });
-
-        // Speed up ticker on scroll
-        ScrollTrigger.create({
-            trigger: "body",
-            start: "top top",
-            end: "bottom bottom",
-            onUpdate: (self) => {
-                gsap.to(ticker, {
-                    timeScale: self.getVelocity() / 100 + 1,
-                    duration: 0.5
-                });
-            }
-        });
-
-        // Parallax Shapes
-        gsap.to(".shape-1", {
-            scrollTrigger: { scrub: 1 },
-            y: -200,
-            rotation: 180
-        });
-        gsap.to(".shape-2", {
-            scrollTrigger: { scrub: 1 },
-            y: 200,
-            rotation: -180
-        });
-
-        // Chat Toggle Logic
-        const chatContainer = document.getElementById('chat-container');
-        const chatToggle = document.getElementById('chat-toggle');
-        const minimizeChat = document.getElementById('minimize-chat');
-
-        chatToggle.addEventListener('click', () => {
-            chatContainer.style.display = 'flex';
-            chatToggle.style.display = 'none';
-        });
-
-        minimizeChat.addEventListener('click', () => {
-            chatContainer.style.display = 'none';
-            chatToggle.style.display = 'block';
-        });
+        gsap.to(ticker, { xPercent: -50, repeat: -1, duration: 20, ease: "none" });
+        gsap.to(".hazard-ribbon-container", { scrollTrigger: { trigger: "body", start: "top top", end: "500px top", scrub: true }, opacity: 0, y: -100, scale: 0.8 });
     </script>
 </body>
 </html>
