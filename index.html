@@ -64,18 +64,22 @@
 
         <div class="col-8 block" style="display: flex; align-items: flex-end; justify-content: space-between;">
             <div>
-                <h2>FULL STACK + ML</h2>
+                <h2 class="reveal-text">FULL STACK + ML</h2>
                 <p>Building intelligent systems that are secure by design.</p>
             </div>
             <a href="#contact" class="btn-mega">INITIATE</a>
         </div>
 
-        <!-- Spacer -->
-        <div class="col-12" style="height: 5vh;"></div>
+        <!-- Marquee Section -->
+        <div class="col-12" style="overflow: hidden; white-space: nowrap; border-top: 2px solid var(--color-text); border-bottom: 2px solid var(--color-text); padding: 1rem 0; margin: 4rem 0; background: var(--color-secondary); color: black;">
+            <div class="ticker-content" style="display: inline-block; font-family: var(--font-display); font-weight: 900; font-size: 3rem; text-transform: uppercase;">
+                AI & CYBERSECURITY • NEURAL NETWORKS • PENETRATION TESTING • DATA SCIENCE • AI & CYBERSECURITY • NEURAL NETWORKS • PENETRATION TESTING • DATA SCIENCE • 
+            </div>
+        </div>
 
         <!-- Projects Header -->
         <div class="col-12 block" id="projects" style="border: none; background: transparent;">
-            <h2 style="font-size: 4rem; text-align: right;">SELECTED WORKS</h2>
+            <h2 class="reveal-text" style="font-size: 4rem; text-align: right;">SELECTED WORKS</h2>
         </div>
 
         <!-- Project 1 -->
@@ -195,27 +199,81 @@
     <script src="config.js"></script>
     <script src="ai-chat.js"></script>
     <script>
-        // Simple GSAP Animations for the new layout
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Text Entrance
         gsap.from("h1", {
-            duration: 1.5,
-            y: 100,
+            duration: 1.8,
+            y: 150,
+            skewY: 10,
             opacity: 0,
-            stagger: 0.2,
+            stagger: 0.3,
             ease: "power4.out"
         });
 
+        // Block Entrance
         gsap.utils.toArray('.block').forEach(block => {
             gsap.from(block, {
                 scrollTrigger: {
                     trigger: block,
-                    start: "top 85%",
+                    start: "top 90%",
                     toggleActions: "play none none reverse"
                 },
-                duration: 0.8,
-                y: 50,
+                duration: 1,
+                y: 60,
                 opacity: 0,
                 ease: "power3.out"
             });
+        });
+
+        // Text Reveal Scrubbing
+        gsap.utils.toArray('.reveal-text').forEach(text => {
+            gsap.from(text, {
+                scrollTrigger: {
+                    trigger: text,
+                    start: "top 95%",
+                    end: "top 50%",
+                    scrub: 1
+                },
+                x: -100,
+                opacity: 0,
+                skewX: -20,
+                duration: 1
+            });
+        });
+
+        // Marquee / Ticker Animation
+        const ticker = document.querySelector('.ticker-content');
+        gsap.to(ticker, {
+            xPercent: -50,
+            repeat: -1,
+            duration: 20,
+            ease: "none"
+        });
+
+        // Speed up ticker on scroll
+        ScrollTrigger.create({
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self) => {
+                gsap.to(ticker, {
+                    timeScale: self.getVelocity() / 100 + 1,
+                    duration: 0.5
+                });
+            }
+        });
+
+        // Parallax Shapes
+        gsap.to(".shape-1", {
+            scrollTrigger: { scrub: 1 },
+            y: -200,
+            rotation: 180
+        });
+        gsap.to(".shape-2", {
+            scrollTrigger: { scrub: 1 },
+            y: 200,
+            rotation: -180
         });
 
         // Chat Toggle Logic
