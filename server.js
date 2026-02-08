@@ -23,7 +23,11 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
-    let filePath = '.' + req.url;
+    // Parse the URL to remove query strings
+    const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+    let pathname = parsedUrl.pathname;
+    
+    let filePath = '.' + pathname;
     if (filePath === './') {
         filePath = './index.html';
     }
