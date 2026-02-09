@@ -41,3 +41,9 @@ build/
 # Temporary files
 *.tmp
 *.temp
+
+# Dependencies
+node_modules/
+
+# Secrets
+firebase-service-account.json

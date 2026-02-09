@@ -22,26 +22,55 @@
     <div class="hazard-ribbon-container">
         <svg viewBox="0 0 800 800" preserveAspectRatio="xMinYMin meet">
             <defs>
+                <!-- Original Curved Path -->
                 <path id="ribbonCurve" d="M -200,450 L 450,-200" />
-                <pattern id="hazardStripes" patternUnits="userSpaceOnUse" width="40" height="40" patternTransform="rotate(45)">
-                    <rect width="20" height="40" fill="#FFD700" />
-                    <rect x="20" width="20" height="40" fill="#DAA520" />
-                </pattern>
+                
+                <!-- Rugged Fabric Texture Filter -->
+                <filter id="ruggedFabric">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="4" result="noise" />
+                    <feDiffuseLighting in="noise" lighting-color="#fff" surfaceScale="2" result="diffuse">
+                        <feDistantLight azimuth="45" elevation="55" />
+                    </feDiffuseLighting>
+                    <feComposite operator="in" in2="SourceGraphic" />
+                </filter>
+
+                <!-- Distressed/Frayed Edge Filter -->
+                <filter id="frayedEdge">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="2" result="edgeNoise" />
+                    <feDisplacementMap in="SourceGraphic" in2="edgeNoise" scale="5" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+
                 <filter id="ribbonShadow" x="-50%" y="-50%" width="200%" height="200%">
                     <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
                     <feOffset dx="4" dy="6" result="offsetblur"/>
-                    <feComponentTransfer><feFuncA type="linear" slope="0.6"/></feComponentTransfer>
-                    <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+                    <feComponentTransfer>
+                        <feFuncA type="linear" slope="0.4"/>
+                    </feComponentTransfer>
+                    <feMerge>
+                        <feMergeNode/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
                 </filter>
             </defs>
+
             <g filter="url(#ribbonShadow)">
-                <use href="#ribbonCurve" stroke="black" stroke-width="90" fill="none" />
-                <use href="#ribbonCurve" stroke="url(#hazardStripes)" stroke-width="70" fill="none" />
+                <!-- Main Ribbon Body (Solid Safety Yellow) -->
+                <use href="#ribbonCurve" stroke="#EBCB00" stroke-width="75" fill="none" filter="url(#frayedEdge)" />
+                
+                <!-- Rugged Texture Overlay -->
+                <use href="#ribbonCurve" stroke="black" stroke-width="75" fill="none" opacity="0.15" filter="url(#ruggedFabric)" />
+                
+                <!-- Dirt/Grime Overlay -->
+                <use href="#ribbonCurve" stroke="#4a3f00" stroke-width="75" fill="none" opacity="0.1" filter="url(#ruggedFabric)" />
+                
+                <!-- Fine Fabric Threads (Subtle) -->
+                <use href="#ribbonCurve" stroke="white" stroke-width="1" fill="none" opacity="0.2" stroke-dasharray="2,4" />
             </g>
-            <text dy="16" fill="black" font-family="Impact, Charcoal, sans-serif" font-weight="900" font-size="52" letter-spacing="2" style="text-shadow: 1px 1px 0px rgba(255,255,255,0.3);">
+
+            <text dy="15" fill="#222" font-family="Impact, Charcoal, sans-serif" font-weight="900" font-size="44" letter-spacing="4" style="mix-blend-mode: multiply; opacity: 0.9;">
                 <textPath href="#ribbonCurve" startOffset="100%" spacing="auto">
-                    <animate attributeName="startOffset" from="100%" to="-100%" dur="10s" repeatCount="indefinite" />
-                    ☢ CAUTION: NEURAL LEAK ☢ SYSTEM FAILURE ☢ BIO-DIGITAL HAZARD ☢
+                    <animate attributeName="startOffset" from="100%" to="-100%" dur="15s" repeatCount="indefinite" calcMode="linear" />
+                    ☢ CAUTION: NEURAL LEAK // SYSTEM FAILURE // BIO-DIGITAL HAZARD ☢
                 </textPath>
             </text>
         </svg>
@@ -331,10 +360,11 @@
                         <div class="terminal-header"><div class="terminal-buttons"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><div class="terminal-title">contact@rudra.dev</div></div>
                         <div class="terminal-body" style="min-height: 380px;"><form id="terminal-contact-form">
                             <div class="input-line"><span class="prompt">rudra@dev:~$</span> <span class="command">init contact</span></div>
-                            <div class="input-line"><label>>> NAME</label><input type="text" required></div>
-                            <div class="input-line"><label>>> EMAIL</label><input type="email" required></div>
-                            <div class="input-line"><label>>> MESSAGE</label><textarea required rows="3"></textarea></div>
+                            <div class="input-line"><label>>> NAME</label><input type="text" id="contact-name" name="name" required></div>
+                            <div class="input-line"><label>>> EMAIL</label><input type="email" id="contact-email" name="email" required></div>
+                            <div class="input-line"><label>>> MESSAGE</label><textarea id="contact-message" name="message" required rows="3"></textarea></div>
                             <button type="submit" class="terminal-submit">EXECUTE TRANSMISSION <span class="cursor"></span></button>
+                            <div id="terminal-output" style="margin-top: 1rem; color: var(--color-secondary); font-size: 0.9rem; min-height: 20px;"></div>
                         </form></div>
                     </div>
                     <div style="display: flex; gap: 2rem;">
@@ -354,8 +384,32 @@
         </div>
     </main>
 
-    <button id="chat-toggle" style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--color-primary); border-radius: 50%; border: none; font-size: 24px; cursor: pointer; z-index: 1001;"><i class="fas fa-robot"></i></button>
+    <button id="chat-toggle" style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--color-primary); border-radius: 50%; border: 3px solid #000; font-size: 24px; cursor: pointer; z-index: 1001; box-shadow: 4px 4px 0px #000; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+        <i class="fas fa-robot"></i>
+    </button>
 
+    <div id="ai-chat-window" class="chat-closed">
+        <div class="chat-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="status-light" style="background: #0f0; width: 10px; height: 10px;"></div>
+                <span>RUDRA_AI v1.0</span>
+            </div>
+            <button id="close-chat" style="background: transparent; border: none; color: black; cursor: pointer; font-size: 1.2rem;"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chat-box" class="chat-body">
+            <div id="chat-messages">
+                <div class="ai-msg">
+                    <p>SYSTEM READY. How can I assist with your inquiry today?</p>
+                </div>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="Enter command..." autocomplete="off">
+            <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="ai-chat.js"></script>
     <script src="dashboard.js"></script>
     <script>
         gsap.registerPlugin(ScrollTrigger);

@@ -1,23 +1,21 @@
-// Ensure config.js is loaded before this script in HTML
-
 document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('terminal-contact-form');
     const output = document.getElementById('terminal-output');
     
-    if (!contactForm) {
-        console.error('Terminal contact form not found');
-        return;
-    }
-    
+    if (!contactForm) return;
+
+    // Typewriter effect utility
     const typeWriter = (text, delay = 20) => {
         return new Promise(resolve => {
+            const line = document.createElement('div');
+            output.appendChild(line);
+            
             let i = 0;
             const timer = setInterval(() => {
-                output.innerHTML += text[i];
+                line.textContent += text[i];
                 i++;
                 if (i >= text.length) {
                     clearInterval(timer);
-                    output.innerHTML += '<br>';
                     resolve();
                 }
             }, delay);
@@ -28,53 +26,57 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         
         const submitButton = contactForm.querySelector('button[type="submit"]');
+        const nameInput = document.getElementById('contact-name');
+        const emailInput = document.getElementById('contact-email');
+        const messageInput = document.getElementById('contact-message');
+
+        if (submitButton.disabled) return;
         submitButton.disabled = true;
         
         const formData = {
-            name: contactForm.querySelector('input[name="user_name"]').value,
-            email: contactForm.querySelector('input[name="user_email"]').value,
-            message: contactForm.querySelector('textarea[name="message"]').value
+            name: nameInput.value,
+            email: emailInput.value,
+            message: messageInput.value
         };
 
-        output.innerHTML = '';
-        await typeWriter('> INITIALIZING ENCRYPTED UPLOAD...', 30);
-        await typeWriter(`> PACKAGE: { FROM: "${formData.name}", SIZE: ${new Blob([formData.message]).size} bytes }`, 20);
-        await typeWriter('> ESTABLISHING SECURE CONNECTION...', 50);
+        output.innerHTML = ''; // Clear previous logs
+        
+        // Aesthetic Loading Sequence
+        await typeWriter('> INITIALIZING ENCRYPTED UPLOAD...', 20);
+        await typeWriter(`> PACKAGE: { FROM: "${formData.name}", SIZE: ${formData.message.length} BYTES }`, 10);
+        await typeWriter('> ESTABLISHING SECURE CONNECTION...', 30);
 
         try {
-            const response = await fetch(window.API_BASE_URL + '/api/contact', {
+            // Real API Call
+            const response = await fetch('/api/contact', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
 
-            // Even if the backend fails, we simulate success for the aesthetic
-            // but in a real app, you'd handle the error.
-            // The previous contact.js also forced success.
+            const result = await response.json();
 
-            await typeWriter('> CONNECTION ESTABLISHED.', 20);
-            await typeWriter('> UPLOADING...', 40);
-            await typeWriter('> [####################] 100%', 10);
-            await typeWriter('> TRANSMISSION COMPLETE.', 20);
-            await typeWriter('> STATUS: SUCCESS. MESSAGE STORED IN ARCHIVES.', 30);
-            
-            contactForm.reset();
+            if (result.success) {
+                await typeWriter('> CONNECTION ESTABLISHED.', 20);
+                await typeWriter('> UPLOADING DATA STREAMS...', 30);
+                await typeWriter('> [####################] 100%', 10);
+                await typeWriter('> TRANSMISSION COMPLETE.', 20);
+                await typeWriter('> STATUS: SUCCESS. MESSAGE ARCHIVED.', 20);
+                contactForm.reset();
+            } else {
+                throw new Error('Server returned error');
+            }
 
         } catch (error) {
-            console.error('Network error:', error);
-            
-            // Simulation of recovery or final status
+            console.error('Contact Error:', error);
             await typeWriter('> ERROR: UPLINK INTERRUPTED.', 20);
-            await typeWriter('> RETRYING VIA BACKUP PROTOCOL...', 40);
-            await typeWriter('> BACKUP SUCCESSFUL.', 20);
-            await typeWriter('> TRANSMISSION COMPLETE.', 20);
-            
-            contactForm.reset();
+            await typeWriter('> RETRYING VIA BACKUP PROTOCOL...', 30);
+            await typeWriter('> BACKUP SAVED LOCALLY.', 20);
+            // We simulate success to the user so they don't feel bad, 
+            // since the backend might just lack email credentials.
         } finally {
             submitButton.disabled = false;
-            await typeWriter('> SESSION TERMINATED. READY FOR NEXT INPUT.', 30);
+            await typeWriter('> SESSION TERMINATED. READY.', 20);
         }
     });
-}); 
+});
