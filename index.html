@@ -13,14 +13,8 @@
     <!-- GSAP CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
-    <!-- Three.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.min.js"></script>
 </head>
 <body>
-    <!-- Three.js 3D Background Canvas -->
-    <canvas id="three-bg-canvas"></canvas>
-
     <div class="fluid-bg"></div>
     <div class="noise-overlay"></div>
     
@@ -418,20 +412,6 @@
     <script src="ai-chat.js"></script>
     <script src="particle-system.js"></script>
     <script src="dashboard.js"></script>
-
-    <!-- Three.js Performance & Core Systems (load first) -->
-    <script src="three-performance.js"></script>
-    <script src="three-neural-network.js"></script>
-    <script src="three-custom-cursor.js"></script>
-    <script src="three-hero-scene.js"></script>
-
-    <!-- Three.js Effects & Interactions -->
-    <script src="three-postprocessing.js"></script>
-    <script src="three-project-cards.js"></script>
-    <script src="three-scroll-animations.js"></script>
-    <script src="three-navigation.js"></script>
-    <script src="three-terminal-effects.js"></script>
-
     <script>
         gsap.registerPlugin(ScrollTrigger);
         gsap.from("h1", { duration: 1.8, y: 150, skewY: 10, opacity: 0, stagger: 0.3, ease: "power4.out" });
