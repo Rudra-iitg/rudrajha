@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rudra | AI Engineer · Data Scientist · Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08080f;
+      --card: rgba(255, 255, 255, 0.06);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-border-hover: rgba(110, 106, 240, 0.4);
+      --primary: #6e6af0;
+      --secondary: #7df9ff;
+      --text: #f0f0f5;
+      --muted: #8888aa;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+      --radius: 18px;
+      --blur: blur(24px);
+      --max-width: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    ::selection { background: rgba(110, 106, 240, 0.25); }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .gradient-breath {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 20% 20%, rgba(110, 106, 240, 0.18), transparent 35%),
+                  radial-gradient(circle at 80% 30%, rgba(125, 249, 255, 0.16), transparent 36%),
+                  radial-gradient(circle at 50% 80%, rgba(155, 89, 182, 0.16), transparent 38%);
+      animation: drift 30s ease-in-out infinite alternate;
+      z-index: -3;
+    }
+
+    @keyframes drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(10px, -12px, 0) scale(1.02); }
+      100% { transform: translate3d(-12px, 10px, 0) scale(1); }
+    }
+
+    .orb {
+      position: fixed;
+      width: 360px;
+      height: 360px;
+      filter: blur(80px);
+      opacity: 0.12;
+      z-index: -2;
+    }
+    .orb.one { background: #6e6af0; top: 10%; left: 8%; animation: float1 18s ease-in-out infinite alternate; }
+    .orb.two { background: #7df9ff; top: 60%; right: 12%; animation: float2 25s ease-in-out infinite alternate; }
+    .orb.three { background: #9b59b6; top: 30%; left: 70%; animation: float3 32s ease-in-out infinite alternate; }
+    @keyframes float1 { from { transform: translate3d(0,0,0); } to { transform: translate3d(30px,-20px,0); } }
+    @keyframes float2 { from { transform: translate3d(0,0,0); } to { transform: translate3d(-25px,30px,0); } }
+    @keyframes float3 { from { transform: translate3d(0,0,0); } to { transform: translate3d(35px,15px,0); } }
+
+    #cursor-blob {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(110,106,240,0.16), rgba(125,249,255,0.08), transparent 70%);
+      filter: blur(50px);
+      opacity: 0.45;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(20px);
+      background: rgba(8, 8, 15, 0.6);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .nav-links a {
+      color: inherit;
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 6px;
+      transition: color 0.2s ease;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+      border-radius: 999px;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active::after { transform: scaleX(1); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 6px;
+    }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 60px 20px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      min-height: 90vh;
+      display: grid;
+      align-items: center;
+      padding-top: 60px;
+    }
+    .eyebrow {
+      color: var(--secondary);
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(44px, 10vw, 72px);
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+    .typewriter {
+      font-size: 22px;
+      color: var(--primary);
+      min-height: 30px;
+      font-weight: 600;
+    }
+    .bio {
+      color: var(--muted);
+      max-width: 620px;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+    .cta-row {
+      display: flex;
+      gap: 14px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      backdrop-filter: blur(16px);
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn.primary {
+      border-color: rgba(110, 106, 240, 0.5);
+      background: linear-gradient(120deg, rgba(110, 106, 240, 0.38), rgba(125, 249, 255, 0.25));
+      box-shadow: 0 10px 35px rgba(110, 106, 240, 0.35);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--card-border-hover);
+      box-shadow: 0 10px 40px rgba(110, 106, 240, 0.35);
+    }
+
+    section {
+      margin-top: 60px;
+      position: relative;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .section-title {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .glass-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    }
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.06) 50%, transparent 80%);
+      transform: translateX(-120%);
+      transition: transform 0.6s ease;
+      pointer-events: none;
+    }
+    .glass-card:hover::before {
+      transform: translateX(120%);
+    }
+    .glass-card:hover {
+      border-color: var(--card-border-hover);
+      box-shadow: 0 16px 48px rgba(110, 106, 240, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .project-card {
+      display: grid;
+      gap: 12px;
+    }
+    .project-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .title {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-weight: 700;
+      margin: 6px 0 4px;
+      font-size: 20px;
+    }
+    .desc {
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font-size: 12px;
+    }
+    .metrics {
+      font-family: 'JetBrains Mono', monospace;
+      color: #9ca0bd;
+      font-size: 12px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .links {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      text-decoration: none;
+      transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .icon-btn:hover {
+      border-color: var(--card-border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(110, 106, 240, 0.25);
+    }
+
+    .featured {
+      grid-column: 1 / -1;
+      padding: 26px;
+      border: 1px solid rgba(110, 106, 240, 0.45);
+      background: linear-gradient(135deg, rgba(110, 106, 240, 0.18), rgba(8, 8, 15, 0.75));
+    }
+    .badge.featured-pill {
+      background: linear-gradient(90deg, rgba(110, 106, 240, 0.8), rgba(125, 249, 255, 0.7));
+      color: #0d0d15;
+      border: none;
+      font-weight: 700;
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    .status {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(125, 249, 255, 0.1);
+      border: 1px solid rgba(125, 249, 255, 0.35);
+      color: var(--text);
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(110, 106, 240, 0.45); }
+      50% { box-shadow: 0 0 0 10px rgba(110, 106, 240, 0); }
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .lab-card {
+      display: grid;
+      gap: 12px;
+    }
+
+    .terminal {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #d6d8f5;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    }
+
+    .skills {
+      display: grid;
+      gap: 12px;
+    }
+    .skill {
+      display: grid;
+      gap: 6px;
+    }
+    .skill-label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .bar {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .bar-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgba(110, 106, 240, 0.9), rgba(125, 249, 255, 0.85));
+      box-shadow: 0 0 18px rgba(125, 249, 255, 0.4);
+      transition: width 1s ease;
+    }
+
+    .about-text {
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 12px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .input:focus {
+      border-color: var(--card-border-hover);
+      box-shadow: 0 10px 30px rgba(110, 106, 240, 0.25);
+    }
+    textarea.input { resize: vertical; min-height: 120px; }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 40px 0 20px;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 860px) {
+      .nav-links {
+        position: absolute;
+        top: 64px;
+        right: 20px;
+        background: rgba(8, 8, 15, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 12px;
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        backdrop-filter: blur(18px);
+      }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .hero { padding-top: 20px; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="gradient-breath"></div>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <div class="orb three"></div>
+  <div id="cursor-blob"></div>
+
+  <nav>
+    <div class="nav-inner">
+      <div class="brand">Rudra</div>
+      <div class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="nav-links" id="nav-links">
+        <a href="#home" class="active">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#extensions">Extensions</a>
+        <a href="#ai-lab">AI Lab</a>
+        <a href="#tools">Tools</a>
+        <a href="#skills">Skills</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section id="home" class="hero fade-up">
+      <div>
+        <div class="eyebrow">AI Engineer · Data Scientist · Builder</div>
+        <h1>RUDRA</h1>
+        <div class="typewriter" id="typewriter"></div>
+        <p class="bio">
+          BSc Data Science &amp; AI @ IIT Guwahati — building intelligent systems at the intersection of neural networks &amp; security.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="#projects">View Projects</a>
+          <a class="btn" href="https://github.com/rudra-iitg" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="fade-up">
+      <div class="section-header">
+        <h2 class="section-title">Projects</h2>
+        <div class="section-subtitle">Glassmorphic showcase</div>
+      </div>
+      <div class="projects-grid">
+        <article class="glass-card project-card featured">
+          <div class="project-top">
+            <div class="badge featured-pill">FEATURED</div>
+            <div class="status">ACTIVE BUILD</div>
+          </div>
+          <div class="title">Jiano — Native macOS AI Workstation</div>
+          <div class="desc">A premium native macOS application built with SwiftUI and SwiftData. Connects to 11+ AI providers through a single glassmorphic interface with real-time comparison, semantic vector search, t-SNE embeddings, encrypted S3 backups, and a full code assistant.</div>
+          <div class="pills">
+            <span class="pill">SwiftUI</span>
+            <span class="pill">SwiftData</span>
+            <span class="pill">Swift</span>
+            <span class="pill">Anthropic</span>
+            <span class="pill">OpenAI</span>
+            <span class="pill">Ollama</span>
+            <span class="pill">AWS S3</span>
+            <span class="pill">macOS</span>
+          </div>
+          <div class="metrics">11 Providers · Vision Support · AES-256 Encrypted · MVVM Architecture</div>
+          <div class="links">
+            <a class="icon-btn" href="https://github.com/rudra-iitg/OpusNative" aria-label="GitHub" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="glass-card project-card">
+          <div class="project-top">
+            <div class="badge">#02</div>
+          </div>
+          <div class="title">Fit Circuit</div>
+          <div class="desc">AI-powered fitness assistant with graph theory path optimization and ML calorie prediction.</div>
+          <div class="pills">
+            <span class="pill">React</span>
+            <span class="pill">Node.js</span>
+            <span class="pill">Maps API</span>
+          </div>
+          <div class="metrics">Latency 42ms · Accuracy 98.2%</div>
+          <div class="links">
+            <a class="icon-btn" href="https://github.com/rudra-iitg" aria-label="GitHub" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="glass-card project-card">
+          <div class="project-top">
+            <div class="badge">#03</div>
+          </div>
+          <div class="title">Vehicle Classifier</div>
+          <div class="desc">Computer vision model classifying 7 vehicle types in real-time video.</div>
+          <div class="pills">
+            <span class="pill">Python</span>
+            <span class="pill">OpenCV</span>
+            <span class="pill">Keras</span>
+            <span class="pill">TensorFlow</span>
+          </div>
+          <div class="metrics">60 FPS · 7 Classes · Real-time</div>
+        </article>
+
+        <article class="glass-card project-card">
+          <div class="project-top">
+            <div class="badge">#04</div>
+          </div>
+          <div class="title">Cyber Recon Toolkit</div>
+          <div class="desc">CLI tool for OSINT &amp; ethical hacking — automated vulnerability scanning and network mapping.</div>
+          <div class="pills">
+            <span class="pill">Python</span>
+            <span class="pill">Bash</span>
+            <span class="pill">Linux</span>
+            <span class="pill">Networking</span>
+          </div>
+          <div class="metrics">Kali Linux · TCP/UDP/OSINT</div>
+        </article>
+
+        <article class="glass-card project-card">
+          <div class="project-top">
+            <div class="badge">#05</div>
+          </div>
+          <div class="title">Semantic Vector Engine</div>
+          <div class="desc">Transforms natural language into high-dimensional vectors using Gemma locally via Ollama with t-SNE visualization.</div>
+          <div class="pills">
+            <span class="pill">Python</span>
+            <span class="pill">Ollama</span>
+            <span class="pill">Gemma</span>
+            <span class="pill">t-SNE</span>
+          </div>
+          <div class="metrics">Real-time · Cosine Similarity · Local</div>
+          <div class="links">
+            <a class="icon-btn" href="https://github.com/rudra-iitg" aria-label="GitHub" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="extensions" class="fade-up">
+      <div class="section-header">
+        <h2 class="section-title">Extensions</h2>
+        <div class="section-subtitle">Chrome extensions</div>
+      </div>
+      <div class="two-col">
+        <article class="glass-card">
+          <div class="project-top">
+            <div class="badge">PRANK CORE</div>
+          </div>
+          <div class="title">Browser prank ops</div>
+          <div class="desc">Clicking any link triggers a high-impact skull animation. Psychological operations tool.</div>
+          <div class="pills">
+            <span class="pill">Chrome Extension</span>
+            <span class="pill">JS</span>
+          </div>
+        </article>
+        <article class="glass-card">
+          <div class="project-top">
+            <div class="badge">PDF STRAT</div>
+          </div>
+          <div class="title">Rapid capture</div>
+          <div class="desc">Rapid-fire sequential screenshot capture, auto-compiles into a unified PDF dossier.</div>
+          <div class="pills">
+            <span class="pill">Chrome Extension</span>
+            <span class="pill">JS</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="ai-lab" class="fade-up">
+      <div class="section-header">
+        <h2 class="section-title">AI Lab Experiments</h2>
+        <div class="section-subtitle">Research and prototypes</div>
+      </div>
+      <article class="glass-card lab-card">
+        <div class="title">Semantic Vector Engine</div>
+        <div class="desc">Transforms text into high-dimensional vectors via Gemma locally through Ollama. Includes real-time t-SNE visualization and cosine similarity matrices for exploratory analysis.</div>
+        <div class="pills">
+          <span class="pill">Python</span>
+          <span class="pill">Ollama</span>
+          <span class="pill">Gemma</span>
+          <span class="pill">t-SNE</span>
+        </div>
+        <div class="links">
+          <a class="icon-btn" href="https://github.com/rudra-iitg" aria-label="GitHub" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          </a>
+        </div>
+      </article>
+    </section>
+
+    <section id="tools" class="fade-up">
+      <div class="section-header">
+        <h2 class="section-title">Terminal Tools</h2>
+        <div class="section-subtitle">Precision utilities</div>
+      </div>
+      <article class="glass-card lab-card">
+        <div class="title">TimeNow CLI</div>
+        <div class="desc">Global temporal synchronization tool. Retrieves real-time local date/time for any location via CLI.</div>
+        <div class="terminal">
+          $ timenow --location "Tokyo"<br>
+          &gt; 03:45:12 AM JST | 35.67°N 139.65°E
+        </div>
+        <div class="pills">
+          <span class="pill">Python</span>
+          <span class="pill">CLI</span>
+        </div>
+        <div class="links">
+          <a class="icon-btn" href="https://github.com/rudra-iitg" aria-label="GitHub" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          </a>
+        </div>
+      </article>
+    </section>
+
+    <section id="skills" class="fade-up">
+      <div class="section-header">
+        <h2 class="section-title">Skills</h2>
+        <div class="section-subtitle">Animated proficiency</div>
+      </div>
+      <article class="glass-card">
+        <div class="skills">
+          <div class="skill" data-skill="95">
+            <div class="skill-label"><span>Python / JS</span><span>95%</span></div>
+            <div class="bar"><div class="bar-fill"></div></div>
+          </div>
+          <div class="skill" data-skill="88">
+            <div class="skill-label"><span>AI / ML</span><span>88%</span></div>
+            <div class="bar"><div class="bar-fill"></div></div>
+          </div>
+          <div class="skill" data-skill="90">
+            <div class="skill-label"><span>Cybersecurity</span><span>90%</span></div>
+            <div class="bar"><div class="bar-fill"></div></div>
+          </div>
+          <div class="skill" data-skill="80">
+            <div class="skill-label"><span>C++</span><span>80%</span></div>
+            <div class="bar"><div class="bar-fill"></div></div>
+          </div>
+          <div class="skill" data-skill="85">
+            <div class="skill-label"><span>Data Science</span><span>85%</span></div>
+            <div class="bar"><div class="bar-fill"></div></div>
+          </div>
+          <div class="skill" data-skill="75">
+            <div class="skill-label"><span>Swift / macOS</span><span>75%</span></div>
+            <div class="bar"><div class="bar-fill"></div></div>
+          </div>
+          <div class="skill" data-skill="78">
+            <div class="skill-label"><span>Systems Programming</span><span>78%</span></div>
+            <div class="bar"><div class="bar-fill"></div></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section id="about" class="fade-up">
+      <div class="section-header">
+        <h2 class="section-title">About</h2>
+        <div class="section-subtitle">Origin story</div>
+      </div>
+      <article class="glass-card">
+        <p class="about-text">
+          I'm Rudra — a Data Science &amp; AI student at IIT Guwahati operating at the intersection of neural networks and security. I build native macOS apps, deploy local LLMs, write systems code in C++, and explore AI research. Currently seeking internship opportunities in AI/ML and systems engineering.
+        </p>
+      </article>
+    </section>
+
+    <section id="contact" class="fade-up">
+      <div class="section-header">
+        <h2 class="section-title">Contact</h2>
+        <div class="section-subtitle">Let's collaborate</div>
+      </div>
+      <article class="glass-card">
+        <form class="contact-form">
+          <input class="input" type="text" placeholder="Name" aria-label="Name">
+          <input class="input" type="email" placeholder="Email" aria-label="Email">
+          <textarea class="input" placeholder="Message" aria-label="Message"></textarea>
+          <button class="btn primary" type="button">Send Message</button>
+        </form>
+        <div style="margin-top:12px; text-align:center; color: var(--muted); font-size:13px;">
+          contact@rudra.dev ·
+          <a href="https://github.com/rudra-iitg" target="_blank" rel="noopener" style="color: var(--text); text-decoration: none;">GitHub</a>
+        </div>
+      </article>
+    </section>
+
+    <div class="footer">© 2025 Rudra · Built with intent</div>
+  </main>
+
+  <script>
+    // Typewriter effect
+    const roles = ["AI Engineer", "Data Scientist", "Builder", "macOS Developer", "Cybersecurity"];
+    const typeEl = document.getElementById('typewriter');
+    let roleIndex = 0, charIndex = 0, deleting = false;
+    function typeLoop() {
+      const current = roles[roleIndex];
+      const displayed = deleting ? current.slice(0, charIndex--) : current.slice(0, ++charIndex);
+      typeEl.textContent = displayed;
+      if (!deleting && charIndex === current.length) {
+        setTimeout(() => { deleting = true; }, 1200);
+      } else if (deleting && charIndex === 0) {
+        deleting = false;
+        roleIndex = (roleIndex + 1) % roles.length;
+      }
+      const speed = deleting ? 60 : 120;
+      setTimeout(typeLoop, speed);
+    }
+    typeLoop();
+
+    // Cursor glow lerp
+    const blob = document.getElementById('cursor-blob');
+    let targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
+    let currentX = targetX, currentY = targetY;
+    document.addEventListener('mousemove', (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    });
+    function animateBlob() {
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+      blob.style.transform = `translate(${currentX - 250}px, ${currentY - 250}px)`;
+      requestAnimationFrame(animateBlob);
+    }
+    animateBlob();
+
+    // Intersection Observer for fade-in & skills
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          if (entry.target.classList.contains('skill')) {
+            const fill = entry.target.querySelector('.bar-fill');
+            fill.style.width = `${entry.target.dataset.skill}%`;
+          }
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.fade-up, .skill').forEach(el => observer.observe(el));
+
+    // Navbar active link highlighting
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href').slice(1) === entry.target.id));
+        }
+      });
+    }, { threshold: 0.5 });
+    sections.forEach(section => navObserver.observe(section));
+
+    // Mobile nav
+    const hamburger = document.getElementById('hamburger');
+    const navLinkContainer = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinkContainer.classList.toggle('open');
+    });
+    navLinks.forEach(link => link.addEventListener('click', () => navLinkContainer.classList.remove('open')));
+  </script>
+</body>
+</html>
