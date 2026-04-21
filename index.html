@@ -168,15 +168,31 @@ section{padding:80px 0}
 .mini-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted2)}
 
 /* HOBBIES */
-.hobbies-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.hobby-card{padding:26px 22px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;cursor:default}
+.hobbies-shell{position:relative}
+.hobbies-rail{
+  display:flex;gap:14px;overflow-x:auto;padding:6px 6px 12px;
+  scroll-snap-type:x mandatory;scrollbar-color:rgba(124,120,245,0.4) transparent;
+}
+.hobbies-rail::-webkit-scrollbar{height:8px}
+.hobbies-rail::-webkit-scrollbar-track{background:transparent}
+.hobbies-rail::-webkit-scrollbar-thumb{background:linear-gradient(90deg,rgba(124,120,245,0.45),rgba(94,240,255,0.4));border-radius:999px}
+.hobbies-shell::before,.hobbies-shell::after{
+  content:'';position:absolute;top:0;bottom:0;width:46px;pointer-events:none;z-index:5;
+  background:linear-gradient(90deg,var(--bg),transparent);
+}
+.hobbies-shell::after{right:0;left:auto;transform:scaleX(-1)}
+.hobbies-shell::before{left:0}
+.hobby-card{
+  padding:24px 22px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;
+  cursor:default;min-width:260px;max-width:260px;scroll-snap-align:start;
+}
 .hobby-icon-wrap{
   width:52px;height:52px;border-radius:16px;
-  display:grid;place-items:center;font-size:24px;
+  display:grid;place-items:center;
   position:relative;overflow:hidden;
-  transition:transform 0.3s ease;
+  transition:transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
-.hobby-card:hover .hobby-icon-wrap{transform:scale(1.08) rotate(-3deg)}
+.hobby-card:hover .hobby-icon-wrap{transform:scale(1.06) rotate(-2deg);border-color:rgba(124,120,245,0.35);box-shadow:0 8px 24px rgba(124,120,245,0.15)}
 .hobby-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px}
 .hobby-desc{color:var(--muted);font-size:13px;line-height:1.55;font-weight:300}
 .hobby-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
@@ -209,14 +225,19 @@ section{padding:80px 0}
 .dot{width:10px;height:10px;border-radius:50%}.dot.r{background:#ff5f57}.dot.y{background:#ffbd2e}.dot.g{background:#28c840}
 
 /* SKILLS */
-.skills-grid{display:grid;gap:14px}
-.skill-row{display:grid;gap:7px}
-.skill-meta{display:flex;justify-content:space-between;align-items:center}
-.skill-name{font-size:13.5px;font-weight:500;color:rgba(240,240,248,0.85)}
-.skill-pct{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
-.bar-track{height:5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden}
-.bar-fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,rgba(124,120,245,0.9),rgba(94,240,255,0.85));box-shadow:0 0 12px rgba(94,240,255,0.5);transition:width 1.1s cubic-bezier(0.16,1,0.3,1);position:relative}
-.bar-fill::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:var(--sec);box-shadow:0 0 10px var(--sec)}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.skill-card{padding:22px;display:flex;flex-direction:column;gap:12px;min-height:220px}
+.skill-head{display:flex;align-items:center;gap:12px}
+.skill-icon{
+  width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);
+  color:var(--sec);
+}
+.skill-icon svg{width:22px;height:22px}
+.skill-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;letter-spacing:-0.01em}
+.skill-points{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.skill-point{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(240,240,248,0.8);line-height:1.5}
+.skill-point::before{content:'•';color:var(--pri);font-size:18px;line-height:1}
 
 /* ABOUT */
 .about-grid{display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px}
@@ -350,7 +371,7 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
   <div class="sec-label"><h2>What I'm Learning</h2><div class="line"></div><div class="tag">KNOWLEDGE MAP</div></div>
   <div class="learning-grid">
     <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.2)">⚙️</div><div><div class="learn-title">C++ & Systems Programming</div><div class="learn-sub">Udemy · Self-directed</div></div></div>
+      <div class="learn-header"><div class="learn-icon" style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M4.6 9.5 3 7m3.4-2.6L7 3m5 2V3m5.6 3.4L17 3m3.4 6.5L21 7m-2.4 7.1 1.6 2.4m-3.4 2.6L17 21m-5-2v2m-5.6-3.4L7 21m-3.4-6.5L3 17"></path></svg></div><div><div class="learn-title">C++ & Systems Programming</div><div class="learn-sub">Udemy · Self-directed</div></div></div>
       <div class="learn-topics">
         <div class="topic-row">OOP — classes, inheritance, polymorphism, encapsulation</div>
         <div class="topic-row">Memory management — stack vs heap, new / delete[]</div>
@@ -364,7 +385,7 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
       <div class="progress-mini"><div class="mini-bar"><div class="mini-fill" data-w="78"></div></div><span class="mini-label">78%</span></div>
     </article>
     <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(124,120,245,0.1);border:1px solid rgba(124,120,245,0.2)">🧠</div><div><div class="learn-title">AI & Machine Learning</div><div class="learn-sub">IIT Guwahati · Research</div></div></div>
+      <div class="learn-header"><div class="learn-icon" style="background:rgba(124,120,245,0.1);border:1px solid rgba(124,120,245,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 6.5c0-1.7 1.4-3 3.2-3 1.6 0 2.8 1.1 2.8 2.7 0 0 2.5.1 2.5 2.8 0 2-1.7 2.9-1.7 2.9s.7 3.6-2.6 4.3c-3.5.7-5.4-2-4.7-4.3 0 0-2.1-.5-2.1-2.8 0-1.7 1.1-2.5 1.1-2.5"></path><path d="M12 4v16m4-9c1.4 0 2.5 1.2 2.5 2.6 0 1.3-1 2.4-2.3 2.6-.3 0-.6.3-.6.6v.5c0 1-.7 1.8-1.7 2"></path></svg></div><div><div class="learn-title">AI & Machine Learning</div><div class="learn-sub">IIT Guwahati · Research</div></div></div>
       <div class="learn-topics">
         <div class="topic-row">Neural networks — forward/backprop, activation functions</div>
         <div class="topic-row">Supervised &amp; unsupervised learning paradigms</div>
@@ -378,7 +399,7 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
       <div class="progress-mini"><div class="mini-bar"><div class="mini-fill" data-w="88"></div></div><span class="mini-label">88%</span></div>
     </article>
     <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(176,110,243,0.1);border:1px solid rgba(176,110,243,0.2);font-size:17px;font-family:'Syne',sans-serif;font-weight:700;color:var(--tri)">∑</div><div><div class="learn-title">Mathematics for AI</div><div class="learn-sub">IIT Guwahati · Self-study</div></div></div>
+      <div class="learn-header"><div class="learn-icon" style="background:rgba(176,110,243,0.1);border:1px solid rgba(176,110,243,0.2)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5h11L7 19h11"></path><path d="M9.5 8.5h5"></path><path d="M9.5 12h4"></path></svg></div><div><div class="learn-title">Mathematics for AI</div><div class="learn-sub">IIT Guwahati · Self-study</div></div></div>
       <div class="learn-topics">
         <div class="topic-row">Matrix calculus — dy/dx = Aᵀ, d(xᵀx)/dx = 2x proofs</div>
         <div class="topic-row">Jacobian &amp; Hessian matrices</div>
@@ -391,7 +412,7 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
       <div class="progress-mini"><div class="mini-bar"><div class="mini-fill" data-w="82"></div></div><span class="mini-label">82%</span></div>
     </article>
     <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(94,240,255,0.08);border:1px solid rgba(94,240,255,0.15)">📊</div><div><div class="learn-title">Data Science</div><div class="learn-sub">IIT Guwahati · Google Colab</div></div></div>
+      <div class="learn-header"><div class="learn-icon" style="background:rgba(94,240,255,0.08);border:1px solid rgba(94,240,255,0.15)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11v7m5-11v11m5-6v6m4-12v12"></path><path d="M3 20h18"></path></svg></div><div><div class="learn-title">Data Science</div><div class="learn-sub">IIT Guwahati · Google Colab</div></div></div>
       <div class="learn-topics">
         <div class="topic-row">NumPy — vectorized ops, broadcasting, strides</div>
         <div class="topic-row">Pandas — DataFrames, groupby, merge, pivot tables</div>
@@ -417,7 +438,7 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
       <div class="progress-mini"><div class="mini-bar"><div class="mini-fill" data-w="90"></div></div><span class="mini-label">90%</span></div>
     </article>
     <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(255,180,50,0.08);border:1px solid rgba(255,180,50,0.15)">🍎</div><div><div class="learn-title">Swift & macOS Dev</div><div class="learn-sub">Self-directed · Xcode 15+</div></div></div>
+      <div class="learn-header"><div class="learn-icon" style="background:rgba(255,180,50,0.08);border:1px solid rgba(255,180,50,0.15)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5c-.8-.7-2.2-.8-3.1-.1C9.8 5.7 9 7.3 9 9c0 3.2 2.1 6 3 7 .2.3.6.3.8 0 1-1.2 3.2-4.2 3.2-7.1 0-1.2-.4-2.3-1.1-3.1z"></path><path d="M12 4s-.2-1.5 1.3-2"></path><path d="M10.8 6.5c-.8-.6-2-.6-2.9-.1C6.6 7.2 6 8.6 6 10c0 2.3 1.5 4.6 2.3 5.6.2.3.6.3.8 0 .6-.8 1.8-2.6 2.2-4.6"></path></svg></div><div><div class="learn-title">Swift & macOS Dev</div><div class="learn-sub">Self-directed · Xcode 15+</div></div></div>
       <div class="learn-topics">
         <div class="topic-row">SwiftUI — declarative layouts, @State, @Observable</div>
         <div class="topic-row">SwiftData — persistence, migrations, relationships</div>
@@ -436,11 +457,12 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
 <!-- ══ HOBBIES ══ -->
 <section id="hobbies">
   <div class="sec-label"><h2>Beyond the Code</h2><div class="line"></div><div class="tag">HOBBIES</div></div>
-  <div class="hobbies-grid">
+  <div class="hobbies-shell">
+  <div class="hobbies-rail">
 
     <article class="glass hobby-card gs-scale">
       <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.2)">🎨</div>
+      <div class="hobby-icon-wrap" style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.2)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17c0-4.4 3.6-8 8-8 3.2 0 4.7 1.8 4.7 3.4 0 1-.8 1.6-1.7 1.6-.9 0-1.5.7-1.5 1.5 0 .9.7 1.5 1.5 1.5h1c1.7 0 3 .9 3 2.7 0 1.1-.7 2.3-2 2.3H8c-2.2 0-4-1.8-4-4Z"></path><circle cx="9" cy="10" r=".75"></circle><circle cx="6.5" cy="13" r=".75"></circle><circle cx="12" cy="7.5" r=".75"></circle></svg></div>
       <div class="hobby-title">ASCII Art</div>
       <div class="hobby-desc">Crafting visual art using pure text characters — a discipline where constraint breeds creativity. From simple portraits to complex scenes built entirely from printable ASCII.</div>
       <div class="ascii-preview">  /\_____/\
@@ -453,7 +475,7 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
 
     <article class="glass hobby-card gs-scale">
       <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(176,110,243,0.1);border:1px solid rgba(176,110,243,0.2)">✈️</div>
+      <div class="hobby-icon-wrap" style="background:rgba(176,110,243,0.1);border:1px solid rgba(176,110,243,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l8-2m0 0 8-2M11 11l1 9m-1-9L6 5m5 6 5-8"></path><path d="M5 19l3-2.5"></path></svg></div>
       <div class="hobby-title">Solo Travelling</div>
       <div class="hobby-desc">Navigating unknown places alone — planning routes, improvising when plans collapse, finding meaning in being lost. Every solo trip is a systems problem with no documentation.</div>
       <div class="hobby-tags"><span class="hobby-tag">Route Planning</span><span class="hobby-tag">Exploration</span><span class="hobby-tag">Solo Adventures</span></div>
@@ -461,7 +483,7 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
 
     <article class="glass hobby-card gs-scale">
       <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(124,120,245,0.1);border:1px solid rgba(124,120,245,0.2)">📚</div>
+      <div class="hobby-icon-wrap" style="background:rgba(124,120,245,0.1);border:1px solid rgba(124,120,245,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h7.5a2.5 2.5 0 0 1 0 5H5zM5 10h7.5A2.5 2.5 0 0 1 15 12.5V19a2 2 0 0 0-2 2H5z"></path><path d="M19 5h-2v16h2"></path></svg></div>
       <div class="hobby-title">Book Reading</div>
       <div class="hobby-desc">Nonfiction history, science, and biographies. Currently working through technical reads on distributed systems and old classics. Books are the best low-bandwidth, high-density data transfer protocol.</div>
       <div class="hobby-tags"><span class="hobby-tag">Nonfiction</span><span class="hobby-tag">History</span><span class="hobby-tag">Science</span><span class="hobby-tag">Biographies</span></div>
@@ -469,7 +491,7 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
 
     <article class="glass hobby-card gs-scale">
       <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(255,160,50,0.1);border:1px solid rgba(255,160,50,0.2)">✈️</div>
+      <div class="hobby-icon-wrap" style="background:rgba(255,160,50,0.1);border:1px solid rgba(255,160,50,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12.5 11 10l2.8-7.3c.2-.5.8-.7 1.2-.3l2.6 2.6c.3.3.3.8 0 1.1l-4.3 4.4 5.7 1.5c.5.1.7.7.3 1.1l-2 2a1 1 0 0 1-.9.3l-5.3-1.1-3.4 3.9"></path><path d="M6 21c-.7-.9-1.2-2.3-1-3.8.2-1.4 1-2.9 2.5-3.5"></path></svg></div>
       <div class="hobby-title">Aviation Enthusiast</div>
       <div class="hobby-desc">Deeply fascinated by aviation history, incident analysis, and how engineering decisions ripple into catastrophic or miraculous outcomes. Helios Flight 522 is one of the most haunting case studies in systems failure.</div>
       <div class="hobby-tags"><span class="hobby-tag">Aviation History</span><span class="hobby-tag">Incident Analysis</span><span class="hobby-tag">Aerospace</span></div>
@@ -477,7 +499,7 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
 
     <article class="glass hobby-card gs-scale">
       <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.18)">🤖</div>
+      <div class="hobby-icon-wrap" style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.18)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="10" rx="2"></rect><path d="M9 5v2m6-2v2"></path><circle cx="10" cy="12" r="1"></circle><circle cx="14" cy="12" r="1"></circle><path d="M9 15.5h6"></path></svg></div>
       <div class="hobby-title">Local AI Tinkering</div>
       <div class="hobby-desc">Running LLMs locally on an M3 MacBook Air (8GB) — pushing the hardware limits. Testing Gemma 4, GLM-OCR, and Apple's on-device FoundationModels. The constraint of 8GB makes every model choice feel like a puzzle.</div>
       <div class="hobby-tags"><span class="hobby-tag">Ollama</span><span class="hobby-tag">Apple Silicon</span><span class="hobby-tag">Model Quantization</span></div>
@@ -485,12 +507,13 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
 
     <article class="glass hobby-card gs-scale">
       <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(255,80,100,0.1);border:1px solid rgba(255,80,100,0.2)">🏏</div>
+      <div class="hobby-icon-wrap" style="background:rgba(255,80,100,0.1);border:1px solid rgba(255,80,100,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5 19 19"></path><path d="M10 9 7.5 6.5a1.4 1.4 0 0 0-2 2L8 11"></path><path d="M16 15 13 12"></path><path d="M6.5 18.5 9 16"></path><circle cx="17.5" cy="6.5" r="2"></circle></svg></div>
       <div class="hobby-title">Cricket</div>
       <div class="hobby-desc">Loyal KKR fan through every season — through glory and gut-punch defeats. Cricket is the sport where statistics, strategy, and pure chaos coexist most beautifully.</div>
       <div class="hobby-tags"><span class="hobby-tag">KKR</span><span class="hobby-tag">IPL</span><span class="hobby-tag">Cricket Analytics</span></div>
     </article>
 
+  </div>
   </div>
 </section>
 
@@ -498,8 +521,8 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
 <section id="extensions">
   <div class="sec-label"><h2>Extensions</h2><div class="line"></div><div class="tag">CHROME</div></div>
   <div class="two-col">
-    <article class="glass ext-card gs-fade-left"><canvas class="rain-canvas"></canvas><div class="ext-icon">💀</div><h3 class="proj-title">Prank Core</h3><p class="proj-desc">Browser extension — clicking any link triggers a high-impact skull animation. DOM manipulation and psychological operations tool.</p><div class="pills"><span class="pill">Chrome Extension</span><span class="pill">JavaScript</span><span class="pill">DOM Manipulation</span></div></article>
-    <article class="glass ext-card gs-fade-right"><canvas class="rain-canvas"></canvas><div class="ext-icon">📄</div><h3 class="proj-title">PDF Strat</h3><p class="proj-desc">Rapid-fire sequential screenshot capture that auto-compiles frames into a unified PDF dossier via the Canvas API.</p><div class="pills"><span class="pill">Chrome Extension</span><span class="pill">JavaScript</span><span class="pill">Canvas API</span></div></article>
+    <article class="glass ext-card gs-fade-left"><canvas class="rain-canvas"></canvas><div class="ext-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10v18H7z"></path><path d="M9 7h6"></path><path d="M9 11h6"></path><path d="M9 15h4"></path></svg></div><h3 class="proj-title">Prank Core</h3><p class="proj-desc">Browser extension — clicking any link triggers a high-impact skull animation. DOM manipulation and psychological operations tool.</p><div class="pills"><span class="pill">Chrome Extension</span><span class="pill">JavaScript</span><span class="pill">DOM Manipulation</span></div></article>
+    <article class="glass ext-card gs-fade-right"><canvas class="rain-canvas"></canvas><div class="ext-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5"></path><path d="M10 13h6M10 17h6M10 9h2"></path></svg></div><h3 class="proj-title">PDF Strat</h3><p class="proj-desc">Rapid-fire sequential screenshot capture that auto-compiles frames into a unified PDF dossier via the Canvas API.</p><div class="pills"><span class="pill">Chrome Extension</span><span class="pill">JavaScript</span><span class="pill">Canvas API</span></div></article>
   </div>
 </section>
 
@@ -537,20 +560,85 @@ footer{text-align:center;padding:40px 0 28px;color:var(--muted2);font-size:13px;
 
 <!-- ══ SKILLS ══ -->
 <section id="skills">
-  <div class="sec-label"><h2>Skills</h2><div class="line"></div><div class="tag">PROFICIENCY</div></div>
-  <article class="glass gs-fade" style="padding:28px">
-    <canvas class="rain-canvas"></canvas>
-    <div class="skills-grid">
-      <div class="skill-row" data-pct="95"><div class="skill-meta"><span class="skill-name">Python / JavaScript</span><span class="skill-pct">95%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
-      <div class="skill-row" data-pct="90"><div class="skill-meta"><span class="skill-name">Cybersecurity</span><span class="skill-pct">90%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
-      <div class="skill-row" data-pct="88"><div class="skill-meta"><span class="skill-name">AI / ML</span><span class="skill-pct">88%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
-      <div class="skill-row" data-pct="85"><div class="skill-meta"><span class="skill-name">Data Science · NumPy · Pandas</span><span class="skill-pct">85%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
-      <div class="skill-row" data-pct="82"><div class="skill-meta"><span class="skill-name">Mathematics for AI</span><span class="skill-pct">82%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
-      <div class="skill-row" data-pct="80"><div class="skill-meta"><span class="skill-name">C++ / Systems Programming</span><span class="skill-pct">80%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
-      <div class="skill-row" data-pct="75"><div class="skill-meta"><span class="skill-name">Swift / macOS Development</span><span class="skill-pct">75%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
-      <div class="skill-row" data-pct="70"><div class="skill-meta"><span class="skill-name">Cloud · AWS (S3, EC2, SageMaker)</span><span class="skill-pct">70%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
-    </div>
-  </article>
+  <div class="sec-label"><h2>Skills &amp; Expertise</h2><div class="line"></div><div class="tag">CAPABILITIES</div></div>
+  <div class="skills-grid">
+
+    <article class="glass skill-card gs-fade">
+      <canvas class="rain-canvas"></canvas>
+      <div class="skill-head">
+        <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="8" r="2.2"></circle><circle cx="18" cy="8" r="2.2"></circle><circle cx="12" cy="16" r="2.5"></circle><path d="M7.5 9.5 10 13m6.5-3.5-2.5 3.5M6 14h3M15 14h3"></path></svg></div>
+        <div class="skill-title">AI / Machine Learning</div>
+      </div>
+      <div class="skill-points">
+        <div class="skill-point">Built CNN for 7-class vehicle classification with real-time inference</div>
+        <div class="skill-point">Implemented embeddings + cosine similarity search for semantic recall</div>
+        <div class="skill-point">t-SNE/PCA pipelines for dimensionality reduction and visualization</div>
+        <div class="skill-point">Deployed local LLMs on Apple Silicon (Ollama · Gemma) with streaming</div>
+        <div class="skill-point">Fine-tuned prompts + tool-use flows for agentic assistants</div>
+      </div>
+    </article>
+
+    <article class="glass skill-card gs-fade">
+      <canvas class="rain-canvas"></canvas>
+      <div class="skill-head">
+        <div class="skill-icon" style="color:var(--pri)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M8 9h8M8 12h5M8 15h3"></path><circle cx="15.5" cy="15.5" r="1.2"></circle></svg></div>
+        <div class="skill-title">Systems Programming (C++)</div>
+      </div>
+      <div class="skill-points">
+        <div class="skill-point">Worked with pointers, dynamic memory, deep/shallow copy patterns</div>
+        <div class="skill-point">Built multi-level pointer utilities and custom 2D/3D dynamic arrays</div>
+        <div class="skill-point">Implemented copy/move constructors and RAII-safe resource management</div>
+        <div class="skill-point">Performance-tuned sort/merge routines using raw pointers and offset notation</div>
+        <div class="skill-point">Structured code with enums, switch-driven state, and range-based loops</div>
+      </div>
+    </article>
+
+    <article class="glass skill-card gs-fade">
+      <canvas class="rain-canvas"></canvas>
+      <div class="skill-head">
+        <div class="skill-icon" style="color:var(--tri)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v5c0 5 4 8 8 9 4-1 8-4 8-9V7z"></path><path d="M9.5 12.5 11 14l3.5-4"></path></svg></div>
+        <div class="skill-title">Cybersecurity</div>
+      </div>
+      <div class="skill-points">
+        <div class="skill-point">Built OSINT/ethical hacking toolkit for port scans, recon, and reporting</div>
+        <div class="skill-point">Hardened macOS apps with Keychain storage, AES-256-GCM, Secure Enclave</div>
+        <div class="skill-point">Created automated vulnerability enumeration scripts for TCP/UDP surfaces</div>
+        <div class="skill-point">Threat-modeled extensions/CLIs to reduce DOM injection and supply-chain risk</div>
+        <div class="skill-point">Integrated audit-friendly logging for sensitive code paths</div>
+      </div>
+    </article>
+
+    <article class="glass skill-card gs-fade">
+      <canvas class="rain-canvas"></canvas>
+      <div class="skill-head">
+        <div class="skill-icon" style="color:var(--sec)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"></path><path d="M6 16V7m4 9V5m4 11V9m4 7v-4"></path></svg></div>
+        <div class="skill-title">Data Science</div>
+      </div>
+      <div class="skill-points">
+        <div class="skill-point">End-to-end EDA pipelines with NumPy + Pandas (groupby, merge, pivots)</div>
+        <div class="skill-point">Feature engineering/selection and statistical visualization (Matplotlib/Seaborn)</div>
+        <div class="skill-point">Built regression + classification experiments with tuned validation loops</div>
+        <div class="skill-point">Authored cleaning/wrangling utilities for messy real-world datasets</div>
+        <div class="skill-point">Created vectorized operations and stride-aware transformations for speed</div>
+      </div>
+    </article>
+
+    <article class="glass skill-card gs-fade">
+      <canvas class="rain-canvas"></canvas>
+      <div class="skill-head">
+        <div class="skill-icon" style="color:rgba(255,180,50,0.9)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5c1.2-1.6 3.5-1.7 4.8-.2 1.4 1.5 1.3 4.2-.3 6.1C9.7 13.8 7 15 7 17c0 1.5 1.4 2.5 3.2 2.5 1.6 0 2.8-.9 3.8-2.2"></path><path d="M14.5 7.5c.9-1.3 2.7-1.5 3.8-.3.9 1 .7 2.5-.3 3.7-1.8 2.1-4.5 3.2-4.5 5.1 0 .5.2 1 .6 1.5"></path></svg></div>
+        <div class="skill-title">Swift / macOS Development</div>
+      </div>
+      <div class="skill-points">
+        <div class="skill-point">Shipped SwiftUI + SwiftData native apps with MVVM and DI containers</div>
+        <div class="skill-point">Implemented async/await pipelines, actors, and Sendable-safe models</div>
+        <div class="skill-point">Built encrypted backups (AES-256-GCM), Keychain secrets, Secure Enclave use</div>
+        <div class="skill-point">Integrated multi-provider AI (Anthropic, OpenAI, local LLMs) with streaming UI</div>
+        <div class="skill-point">Crafted macOS-native glassmorphism UI with performance-aware animations</div>
+      </div>
+    </article>
+
+  </div>
 </section>
 
 <!-- ══ ABOUT ══ -->
@@ -742,16 +830,6 @@ gsap.utils.toArray('.gs-scale').forEach((el, i) => {
   });
 });
 
-// ── Skill bars ──
-gsap.utils.toArray('.skill-row').forEach(row => {
-  const fill = row.querySelector('.bar-fill');
-  const pct  = row.dataset.pct;
-  ScrollTrigger.create({
-    trigger: row, start:'top 93%', once:true,
-    onEnter:() => gsap.to(fill, { width:pct+'%', duration:1.1, ease:'power3.out', delay:0.1 })
-  });
-});
-
 // ── Mini progress bars in learning cards ──
 gsap.utils.toArray('.mini-fill[data-w]').forEach(fill => {
   ScrollTrigger.create({
@@ -764,6 +842,25 @@ gsap.utils.toArray('.mini-fill[data-w]').forEach(fill => {
 window.addEventListener('load', () => {
   setTimeout(() => ScrollTrigger.refresh(), 400);
 });
+
+/* Hobbies auto-scroll */
+(function(){
+  const rail=document.querySelector('.hobbies-rail');
+  if(!rail)return;
+  let dir=1,paused=false;
+  function step(){
+    if(!paused){
+      const max=rail.scrollWidth-rail.clientWidth;
+      rail.scrollLeft+=0.45*dir;
+      if(rail.scrollLeft<=0)dir=1;
+      else if(rail.scrollLeft>=max-2)dir=-1;
+    }
+    requestAnimationFrame(step);
+  }
+  ['mouseenter','touchstart'].forEach(ev=>rail.addEventListener(ev,()=>{paused=true;},{passive:true}));
+  ['mouseleave','touchend'].forEach(ev=>rail.addEventListener(ev,()=>{paused=false;},{passive:true}));
+  step();
+})();
 
 /* ════════════════════════════════════════════
    RAINDROP GLASS ENGINE
