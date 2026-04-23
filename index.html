@@ -1,999 +1,2774 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rudra — AI Engineer · Builder · macOS Dev</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<!-- Variable font for TextPressure -->
-<style>
-@font-face{
-  font-family:'CompressaVF';
-  src:url('https://res.cloudinary.com/dr6lvwubh/raw/upload/v1529908256/CompressaPRO-GX.woff2') format('woff2');
-  font-style:normal;font-weight:100 900;
-}
-</style>
-<!-- GSAP + ScrollTrigger -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<style>
-:root{
-  --bg:#060610;--pri:#7c78f5;--sec:#5ef0ff;--tri:#b06ef3;
-  --text:#eeeef8;--muted:#7070a0;--muted2:#4a4a70;
-  --card:rgba(255,255,255,0.042);--card-b:rgba(255,255,255,0.09);
-  --radius:20px;--max:1100px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-::selection{background:rgba(124,120,245,0.28)}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
-.container{max-width:1100px;margin:0 auto;padding:0 24px;width:100%}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Rudra — AI Engineer, macOS Developer & Systems Programmer at IIT Guwahati. Building intelligent systems with neural networks, local LLMs on Apple Silicon, and cybersecurity tools.">
+  <meta name="author" content="Rudra">
+  <meta name="keywords"
+    content="AI Engineer, macOS Developer, IIT Guwahati, Machine Learning, SwiftUI, Data Science, Cybersecurity">
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%237c78f5'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'%3ER%3C/text%3E%3C/svg%3E">
+  <meta property="og:title" content="Rudra — AI Engineer · Builder · macOS Dev">
+  <meta property="og:description"
+    content="Building intelligent systems at the intersection of neural networks and security. Native macOS apps, local LLMs on Apple Silicon, systems programming in C++.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rudra-iitg.github.io/rudrajha/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Rudra — AI Engineer · Builder · macOS Dev">
+  <meta name="twitter:description"
+    content="Building intelligent systems at the intersection of neural networks and security. Native macOS apps, local LLMs on Apple Silicon, systems programming in C++.">
+  <link rel="canonical" href="https://rudra-iitg.github.io/rudrajha/">
+  <title>Rudra — AI Engineer · Builder · macOS Dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <!-- Variable font for TextPressure -->
+  <style>
+    @font-face {
+      font-family: 'CompressaVF';
+      src: url('https://res.cloudinary.com/dr6lvwubh/raw/upload/v1529908256/CompressaPRO-GX.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 100 900;
+    }
+  </style>
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --bg: #060610;
+      --pri: #7c78f5;
+      --sec: #5ef0ff;
+      --tri: #b06ef3;
+      --text: #eeeef8;
+      --muted: #7070a0;
+      --muted2: #4a4a70;
+      --card: rgba(255, 255, 255, 0.042);
+      --card-b: rgba(255, 255, 255, 0.09);
+      --radius: 20px;
+      --max: 1100px;
+    }
 
-#dot-canvas{position:fixed;inset:0;pointer-events:none;z-index:0}
-#particle-canvas{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.38}
-.mesh{position:fixed;inset:0;z-index:-1;
-  background:radial-gradient(ellipse 70% 50% at 15% 20%,rgba(124,120,245,0.13) 0%,transparent 60%),
-    radial-gradient(ellipse 55% 40% at 85% 15%,rgba(94,240,255,0.08) 0%,transparent 55%),
-    radial-gradient(ellipse 60% 45% at 50% 85%,rgba(176,110,243,0.09) 0%,transparent 55%);
-  animation:meshDrift 20s ease-in-out infinite alternate}
-@keyframes meshDrift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(8px,-10px) scale(1.015)}100%{transform:translate(-8px,8px) scale(1)}}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-/* CURSOR GLOW — dimmer, wider spread so it looks atmospheric not ball-like */
-#cglow{
-  position:fixed;width:900px;height:900px;
-  border-radius:50%;pointer-events:none;
-  background:radial-gradient(circle,rgba(124,120,245,0.045) 0%,rgba(94,240,255,0.02) 35%,transparent 65%);
-  filter:blur(60px);z-index:1;
-  transform:translate(-450px,-450px);
-}
+    ::selection {
+      background: rgba(124, 120, 245, 0.28)
+    }
 
-/* NAV */
-nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);background:rgba(6,6,16,0.55);border-bottom:1px solid rgba(255,255,255,0.07)}
-.nav-inner{padding:14px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%}
-.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:0.1em;background:linear-gradient(135deg,var(--text),var(--muted));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-links{display:flex;align-items:center;gap:3px}
-.nav-links a{color:var(--muted);font-size:12.5px;font-weight:500;text-decoration:none;padding:6px 10px;border-radius:10px;transition:all 0.2s ease;position:relative}
-.nav-links a:hover,.nav-links a.active{color:var(--text);background:rgba(124,120,245,0.12)}
-.nav-links a.active::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:14px;height:2px;border-radius:999px;background:linear-gradient(90deg,var(--pri),var(--sec))}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
-.hamburger span{width:22px;height:1.5px;background:var(--text);border-radius:4px}
-.wrap{position:relative;z-index:3}
+    html {
+      scroll-behavior: smooth
+    }
 
-/* ── HERO ── */
-.hero{min-height:100vh;display:flex;align-items:center;padding:100px 0 80px}
-.hero-inner{max-width:780px}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(94,240,255,0.08);border:1px solid rgba(94,240,255,0.2);color:var(--sec);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:22px}
-.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--sec);animation:blink 1.8s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh
+    }
 
-/* TextPressure container */
-#tp-wrap{
-  width:100%;height:clamp(70px,13vw,115px);
-  margin-bottom:16px;
-  position:relative;
-}
-#tp-wrap h1{
-  font-family:'CompressaVF','Syne',sans-serif;
-  font-weight:900;
-  text-transform:uppercase;
-  font-size:clamp(60px,13vw,115px);
-  line-height:1;
-  margin:0;
-  user-select:none;
-  white-space:nowrap;
-  display:flex;
-  justify-content:flex-start;
-  gap:0;
-  background:linear-gradient(135deg,#fff 25%,rgba(124,120,245,0.95) 65%,rgba(94,240,255,0.9) 100%);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-#tp-wrap h1 span{
-  display:inline-block;
-  color:transparent; /* overridden by gradient on h1 */
-  will-change:font-variation-settings;
-  transition:font-variation-settings 0.05s linear;
-}
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      width: 100%
+    }
 
-.typewriter-wrap{font-family:'Syne',sans-serif;font-size:clamp(18px,3vw,26px);font-weight:600;color:var(--pri);min-height:34px;margin-bottom:16px}
-.cursor-bar{display:inline-block;width:2px;height:1em;background:var(--sec);margin-left:2px;animation:blink 0.8s step-end infinite;vertical-align:middle}
-.hero-bio{color:var(--muted);font-size:16px;line-height:1.65;max-width:580px;font-weight:300;margin-bottom:32px}
-.hero-bio strong{color:rgba(240,240,248,0.75);font-weight:500}
-.cta-row{display:flex;gap:16px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:999px;font-size:14px;font-weight:500;text-decoration:none;transition:all 0.25s ease;cursor:pointer;border:none;font-family:'DM Sans',sans-serif}
-.btn-primary{background:linear-gradient(135deg,rgba(124,120,245,0.9),rgba(94,240,255,0.7));color:#0a0a1a;font-weight:600;box-shadow:0 0 30px rgba(124,120,245,0.4),0 8px 24px rgba(0,0,0,0.4)}
-.btn-primary:hover{box-shadow:0 0 50px rgba(124,120,245,0.6),0 12px 32px rgba(0,0,0,0.4);transform:translateY(-2px) scale(1.02)}
-.btn-glass{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text);backdrop-filter:blur(12px);box-shadow:0 8px 24px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.08)}
-.btn-glass:hover{background:rgba(255,255,255,0.09);border-color:rgba(124,120,245,0.4);transform:translateY(-2px)}
+    #dot-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0
+    }
 
-section{padding:80px 0}
-.sec-label{display:flex;align-items:center;gap:12px;margin-bottom:32px}
-.sec-label h2{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(22px,4vw,30px);letter-spacing:-0.01em}
-.sec-label .line{flex:1;height:1px;background:linear-gradient(90deg,rgba(124,120,245,0.3),transparent)}
-.sec-label .tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted2);letter-spacing:0.08em}
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.38
+    }
 
-/* GLASS */
-.glass{
-  background:var(--card);border:1px solid var(--card-b);border-radius:var(--radius);
-  backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);
-  box-shadow:0 2px 4px rgba(0,0,0,0.3),0 8px 24px rgba(0,0,0,0.4),0 24px 64px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.08),inset 0 -1px 0 rgba(0,0,0,0.2);
-  position:relative;overflow:hidden;
-  transition:border-color 0.3s ease,box-shadow 0.3s ease;
-  transform-style:preserve-3d;will-change:transform;
-}
-.glass::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,0.07) 0%,transparent 35%);pointer-events:none;z-index:1}
-.glass::after{content:'';position:absolute;top:-50%;left:-70%;width:50%;height:200%;background:linear-gradient(105deg,transparent,rgba(255,255,255,0.04) 40%,rgba(255,255,255,0.08) 50%,rgba(124,120,245,0.04) 60%,transparent);transform:skewX(-15deg) translateX(-100%);transition:none;pointer-events:none;z-index:2}
-.glass:hover::after{transform:skewX(-15deg) translateX(400%);transition:transform 0.7s ease}
-.glass:hover{border-color:rgba(124,120,245,0.3);box-shadow:0 2px 4px rgba(0,0,0,0.3),0 12px 32px rgba(0,0,0,0.5),0 32px 80px rgba(0,0,0,0.4),0 0 60px rgba(124,120,245,0.12),inset 0 1px 0 rgba(255,255,255,0.12)}
-.rain-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;border-radius:inherit}
-.glass > *:not(.rain-canvas){position:relative;z-index:4}
+    .mesh {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(ellipse 70% 50% at 15% 20%, rgba(124, 120, 245, 0.13) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 40% at 85% 15%, rgba(94, 240, 255, 0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 45% at 50% 85%, rgba(176, 110, 243, 0.09) 0%, transparent 55%);
+      animation: meshDrift 20s ease-in-out infinite alternate
+    }
 
-/* PROJECTS */
-.projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
-.proj-card{padding:24px;display:flex;flex-direction:column;gap:16px;cursor:default}
-.proj-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
-.featured-card{grid-column:1/-1;padding:32px;border-color:rgba(124,120,245,0.35)!important;background:linear-gradient(135deg,rgba(124,120,245,0.12),rgba(6,6,16,0.8))!important;box-shadow:0 4px 8px rgba(0,0,0,0.4),0 16px 48px rgba(0,0,0,0.5),0 0 80px rgba(124,120,245,0.18),inset 0 1px 0 rgba(255,255,255,0.1)!important}
-.featured-card .proj-content{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start}
-.feat-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(90deg,rgba(124,120,245,0.85),rgba(94,240,255,0.75));color:#080818;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;animation:glowPulse 2.5s ease-in-out infinite}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 0 0 rgba(124,120,245,0.5)}50%{box-shadow:0 0 0 8px rgba(124,120,245,0)}}
-.status-pill{padding:5px 12px;border-radius:999px;background:rgba(94,240,255,0.08);border:1px solid rgba(94,240,255,0.25);color:var(--sec);font-size:11px;font-family:'JetBrains Mono',monospace}
-.proj-num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted2)}
-.proj-title{font-family:'Syne',sans-serif;font-weight:700;font-size:19px;letter-spacing:-0.01em;margin:0}
-.proj-title.large{font-size:24px}
-.proj-desc{color:var(--muted);font-size:14px;line-height:1.6;font-weight:300}
-.pills{display:flex;flex-wrap:wrap;gap:8px}
-.pill{padding:5px 11px;border-radius:999px;font-size:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);color:rgba(240,240,248,0.7);transition:border-color 0.2s,color 0.2s}
-.pill:hover{border-color:rgba(124,120,245,0.35);color:var(--text)}
-.metrics{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted2);display:flex;flex-wrap:wrap;gap:12px;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px}
-.metrics span::before{content:'↗ ';opacity:0.5}
-.link-row{display:flex;gap:12px}
-.icon-btn{width:36px;height:36px;border-radius:11px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);display:grid;place-items:center;color:var(--muted);text-decoration:none;transition:all 0.2s ease}
-.icon-btn:hover{border-color:rgba(124,120,245,0.45);color:var(--text);background:rgba(124,120,245,0.12);box-shadow:0 6px 20px rgba(124,120,245,0.25);transform:translateY(-2px)}
+    @keyframes meshDrift {
+      0% {
+        transform: translate(0, 0) scale(1)
+      }
 
-/* LEARNING */
-.learning-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
-.learn-card{padding:24px;display:flex;flex-direction:column;gap:16px}
-.learn-header{display:flex;align-items:center;gap:12px}
-.learn-icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex-shrink:0}
-.learn-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px}
-.learn-sub{font-size:12px;color:var(--muted);margin-top:2px}
-.learn-topics{display:flex;flex-direction:column;gap:8px}
-.topic-row{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:rgba(240,240,248,0.78);line-height:1.45}
-.topic-row::before{content:'›';color:var(--pri);font-size:15px;flex-shrink:0;margin-top:-1px}
-.progress-mini{display:flex;align-items:center;gap:8px;margin-top:4px}
-.mini-bar{flex:1;height:3px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden}
-.mini-fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--pri),var(--sec));transition:width 1.2s cubic-bezier(0.16,1,0.3,1)}
-.mini-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted2)}
+      50% {
+        transform: translate(8px, -10px) scale(1.015)
+      }
 
-/* HOBBIES */
-.hobbies-shell{position:relative}
-.hobbies-rail{
-  display:flex;gap:20px;overflow-x:auto;padding:8px 8px 16px;
-  scroll-snap-type:x mandatory;scrollbar-color:rgba(124,120,245,0.4) transparent;
-}
-.hobbies-rail::-webkit-scrollbar{height:8px}
-.hobbies-rail::-webkit-scrollbar-track{background:transparent}
-.hobbies-rail::-webkit-scrollbar-thumb{background:linear-gradient(90deg,rgba(124,120,245,0.45),rgba(94,240,255,0.4));border-radius:999px}
-.hobbies-shell::before,.hobbies-shell::after{
-  content:'';position:absolute;top:0;bottom:0;width:46px;pointer-events:none;z-index:5;
-  background:linear-gradient(90deg,var(--bg),transparent);
-}
-.hobbies-shell::after{right:0;left:auto;transform:scaleX(-1)}
-.hobbies-shell::before{left:0}
-.hobby-card{
-  padding:24px;display:flex;flex-direction:column;align-items:flex-start;gap:16px;
-  cursor:default;min-width:260px;max-width:260px;scroll-snap-align:start;
-}
-.hobby-icon-wrap{
-  width:52px;height:52px;border-radius:16px;
-  display:grid;place-items:center;
-  position:relative;overflow:hidden;
-  transition:transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-.hobby-card:hover .hobby-icon-wrap{transform:scale(1.06) rotate(-2deg);border-color:rgba(124,120,245,0.35);box-shadow:0 8px 24px rgba(124,120,245,0.15)}
-.hobby-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px}
-.hobby-desc{color:var(--muted);font-size:13px;line-height:1.55;font-weight:300}
-.hobby-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
-.hobby-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted2);padding:3px 9px;border-radius:999px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07)}
+      100% {
+        transform: translate(-8px, 8px) scale(1)
+      }
+    }
 
-/* ASCII preview in hobby card */
-.ascii-preview{
-  font-family:'JetBrains Mono',monospace;
-  font-size:9px;line-height:1.25;
-  color:rgba(94,240,255,0.6);
-  white-space:pre;
-  letter-spacing:0.04em;
-  background:rgba(0,0,0,0.3);
-  border-radius:8px;
-  padding:8px 10px;
-  border:1px solid rgba(94,240,255,0.12);
-  width:100%;
-  overflow:hidden;
-}
+    /* CURSOR GLOW — dimmer, wider spread so it looks atmospheric not ball-like */
+    #cglow {
+      position: fixed;
+      width: 900px;
+      height: 900px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(124, 120, 245, 0.045) 0%, rgba(94, 240, 255, 0.02) 35%, transparent 65%);
+      filter: blur(60px);
+      z-index: 1;
+      transform: translate(-450px, -450px);
+    }
 
-/* EXTENSIONS */
-.two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
-.ext-card{padding:24px;display:flex;flex-direction:column;gap:16px}
-.ext-icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:rgba(124,120,245,0.1);border:1px solid rgba(124,120,245,0.2)}
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+      background: rgba(6, 6, 16, 0.55);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07)
+    }
 
-/* TERMINAL */
-.terminal-block{background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;color:#c0c8e8}
-.t-prompt{color:var(--pri)}.t-out{color:var(--sec);opacity:0.85}.t-dim{color:var(--muted2)}
-.dot-row{display:flex;gap:6px;margin-bottom:10px}
-.dot{width:10px;height:10px;border-radius:50%}.dot.r{background:#ff5f57}.dot.y{background:#ffbd2e}.dot.g{background:#28c840}
+    .nav-inner {
+      padding: 14px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: 100%
+    }
 
-/* SKILLS */
-.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
-.skill-card{padding:24px;display:flex;flex-direction:column;gap:16px;min-height:220px}
-.skill-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.skill-icon{
-  width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
-  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);
-  color:var(--sec);
-}
-.skill-icon svg{width:22px;height:22px}
-.skill-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;letter-spacing:-0.01em}
-.skill-rows{display:flex;flex-direction:column;gap:12px;margin-top:4px}
-.skill-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.skill-label{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(240,240,248,0.88);line-height:1.45}
-.skill-label::before{content:'';width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--sec));flex-shrink:0}
-.skill-value{font-size:13px;line-height:1.5;color:var(--muted);text-align:right;max-width:55%}
+    .brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 0.1em;
+      background: linear-gradient(135deg, var(--text), var(--muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
 
-/* ABOUT */
-.about-grid{display:grid;grid-template-columns:1.2fr 0.8fr;gap:24px}
-.about-card{padding:32px}
-.about-text{color:var(--muted);line-height:1.75;font-size:15px;font-weight:300}
-.about-text strong{color:rgba(240,240,248,0.85);font-weight:500}
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:24px}
-.stat-item{text-align:center;padding:16px;border-bottom:1px solid rgba(255,255,255,0.05)}
-.stat-item:nth-last-child(-n+2){border-bottom:none}
-.stat-item:nth-child(odd){border-right:1px solid rgba(255,255,255,0.05)}
-.stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;background:linear-gradient(135deg,var(--pri),var(--sec));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.stat-label{font-size:11.5px;color:var(--muted);margin-top:4px;font-weight:300}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 3px
+    }
 
-/* CONTACT */
-.contact-wrap{max-width:540px;margin:0 auto}
-.input-field{width:100%;padding:13px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:all 0.25s ease;box-shadow:inset 0 2px 6px rgba(0,0,0,0.2)}
-.input-field:focus{border-color:rgba(124,120,245,0.45);background:rgba(124,120,245,0.06);box-shadow:0 0 0 3px rgba(124,120,245,0.1),inset 0 2px 6px rgba(0,0,0,0.2)}
-.input-field::placeholder{color:var(--muted2)}
-textarea.input-field{resize:vertical;min-height:120px}
-.contact-form{display:grid;gap:12px}
-.contact-meta{margin-top:16px;text-align:center;color:var(--muted2);font-size:13px}
-.contact-meta a{color:var(--muted);text-decoration:none;transition:color 0.2s}
-.contact-meta a:hover{color:var(--text)}
+    .nav-links a {
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      position: relative
+    }
 
-footer{text-align:center;padding:32px 0 24px;color:var(--muted2);font-size:13px;border-top:1px solid rgba(255,255,255,0.05)}
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text);
+      background: rgba(124, 120, 245, 0.12)
+    }
 
-/* GSAP controls visibility — no CSS pre-hiding */
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--pri), var(--sec))
+    }
 
-@media(max-width:900px){
-  .nav-links{position:absolute;top:60px;right:16px;background:rgba(10,10,24,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:10px;display:none;flex-direction:column;gap:2px;backdrop-filter:blur(24px);min-width:160px}
-  .nav-links.open{display:flex}
-  .hamburger{display:flex}
-  .projects-grid,.about-grid{grid-template-columns:1fr}
-  .featured-card .proj-content{grid-template-columns:1fr}
-  section{padding:56px 0}
-  #tp-wrap{height:clamp(55px,14vw,90px)}
-  #tp-wrap h1{font-size:clamp(48px,14vw,90px)}
-}
-@media(max-width:480px){.container{padding:0 16px}}
-</style>
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px
+    }
+
+    .hamburger span {
+      width: 22px;
+      height: 1.5px;
+      background: var(--text);
+      border-radius: 4px
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 3
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 0 80px
+    }
+
+    .hero-inner {
+      max-width: 780px
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(94, 240, 255, 0.08);
+      border: 1px solid rgba(94, 240, 255, 0.2);
+      color: var(--sec);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 22px
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--sec);
+      animation: blink 1.8s ease-in-out infinite
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.3
+      }
+    }
+
+    /* TextPressure container */
+    #tp-wrap {
+      width: 100%;
+      height: clamp(70px, 13vw, 115px);
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    #tp-wrap h1 {
+      font-family: 'CompressaVF', 'Syne', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: clamp(60px, 13vw, 115px);
+      line-height: 1;
+      margin: 0;
+      user-select: none;
+      white-space: nowrap;
+      display: flex;
+      justify-content: flex-start;
+      gap: 0;
+      background: linear-gradient(135deg, #fff 25%, rgba(124, 120, 245, 0.95) 65%, rgba(94, 240, 255, 0.9) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    #tp-wrap h1 span {
+      display: inline-block;
+      color: transparent;
+      /* overridden by gradient on h1 */
+      will-change: font-variation-settings;
+      transition: font-variation-settings 0.05s linear;
+    }
+
+    .typewriter-wrap {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(18px, 3vw, 26px);
+      font-weight: 600;
+      color: var(--pri);
+      min-height: 34px;
+      margin-bottom: 16px
+    }
+
+    .cursor-bar {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--sec);
+      margin-left: 2px;
+      animation: blink 0.8s step-end infinite;
+      vertical-align: middle
+    }
+
+    .hero-bio {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      max-width: 580px;
+      font-weight: 300;
+      margin-bottom: 32px
+    }
+
+    .hero-bio strong {
+      color: rgba(240, 240, 248, 0.75);
+      font-weight: 500
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: none;
+      font-family: 'DM Sans', sans-serif
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(124, 120, 245, 0.9), rgba(94, 240, 255, 0.7));
+      color: #0a0a1a;
+      font-weight: 600;
+      box-shadow: 0 0 30px rgba(124, 120, 245, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4)
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 50px rgba(124, 120, 245, 0.6), 0 12px 32px rgba(0, 0, 0, 0.4);
+      transform: translateY(-2px) scale(1.02)
+    }
+
+    .btn-glass {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08)
+    }
+
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(124, 120, 245, 0.4);
+      transform: translateY(-2px)
+    }
+
+    section {
+      padding: 80px 0
+    }
+
+    .sec-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px
+    }
+
+    .sec-label h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: clamp(22px, 4vw, 30px);
+      letter-spacing: -0.01em
+    }
+
+    .sec-label .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(124, 120, 245, 0.3), transparent)
+    }
+
+    .sec-label .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted2);
+      letter-spacing: 0.08em
+    }
+
+    /* GLASS */
+    .glass {
+      background: var(--card);
+      border: 1px solid var(--card-b);
+      border-radius: var(--radius);
+      backdrop-filter: blur(24px) saturate(140%);
+      -webkit-backdrop-filter: blur(24px) saturate(140%);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.4), 0 24px 64px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, transparent 35%);
+      pointer-events: none;
+      z-index: 1
+    }
+
+    .glass::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -70%;
+      width: 50%;
+      height: 200%;
+      background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.04) 40%, rgba(255, 255, 255, 0.08) 50%, rgba(124, 120, 245, 0.04) 60%, transparent);
+      transform: skewX(-15deg) translateX(-100%);
+      transition: none;
+      pointer-events: none;
+      z-index: 2
+    }
+
+    .glass:hover::after {
+      transform: skewX(-15deg) translateX(400%);
+      transition: transform 0.7s ease
+    }
+
+    .glass:hover {
+      border-color: rgba(124, 120, 245, 0.3);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.5), 0 32px 80px rgba(0, 0, 0, 0.4), 0 0 60px rgba(124, 120, 245, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.12)
+    }
+
+    .rain-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+      border-radius: inherit
+    }
+
+    .glass>*:not(.rain-canvas) {
+      position: relative;
+      z-index: 4
+    }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px
+    }
+
+    .proj-card {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      cursor: default
+    }
+
+    .proj-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px
+    }
+
+    .featured-card {
+      grid-column: 1/-1;
+      padding: 32px;
+      border-color: rgba(124, 120, 245, 0.35) !important;
+      background: linear-gradient(135deg, rgba(124, 120, 245, 0.12), rgba(6, 6, 16, 0.8)) !important;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 80px rgba(124, 120, 245, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important
+    }
+
+    .featured-card .proj-content {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start
+    }
+
+    .feat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(124, 120, 245, 0.85), rgba(94, 240, 255, 0.75));
+      color: #080818;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.08em;
+      animation: glowPulse 2.5s ease-in-out infinite
+    }
+
+    @keyframes glowPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(124, 120, 245, 0.5)
+      }
+
+      50% {
+        box-shadow: 0 0 0 8px rgba(124, 120, 245, 0)
+      }
+    }
+
+    .status-pill {
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(94, 240, 255, 0.08);
+      border: 1px solid rgba(94, 240, 255, 0.25);
+      color: var(--sec);
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace
+    }
+
+    .proj-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted2)
+    }
+
+    .proj-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      letter-spacing: -0.01em;
+      margin: 0
+    }
+
+    .proj-title.large {
+      font-size: 24px
+    }
+
+    .proj-desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 300
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px
+    }
+
+    .pill {
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: rgba(240, 240, 248, 0.7);
+      transition: border-color 0.2s, color 0.2s
+    }
+
+    .pill:hover {
+      border-color: rgba(124, 120, 245, 0.35);
+      color: var(--text)
+    }
+
+    .metrics {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--muted2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 16px
+    }
+
+    .metrics span::before {
+      content: '↗ ';
+      opacity: 0.5
+    }
+
+    .link-row {
+      display: flex;
+      gap: 12px
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      text-decoration: none;
+      transition: all 0.2s ease
+    }
+
+    .icon-btn:hover {
+      border-color: rgba(124, 120, 245, 0.45);
+      color: var(--text);
+      background: rgba(124, 120, 245, 0.12);
+      box-shadow: 0 6px 20px rgba(124, 120, 245, 0.25);
+      transform: translateY(-2px)
+    }
+
+    /* LEARNING */
+    .learning-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px
+    }
+
+    .learn-card {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px
+    }
+
+    .learn-header {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .learn-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      flex-shrink: 0
+    }
+
+    .learn-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px
+    }
+
+    .learn-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px
+    }
+
+    .learn-topics {
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .topic-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: rgba(240, 240, 248, 0.78);
+      line-height: 1.45
+    }
+
+    .topic-row::before {
+      content: '›';
+      color: var(--pri);
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: -1px
+    }
+
+    .progress-mini {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px
+    }
+
+    .mini-bar {
+      flex: 1;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      overflow: hidden
+    }
+
+    .mini-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--pri), var(--sec));
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1)
+    }
+
+    .mini-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted2)
+    }
+
+    /* HOBBIES */
+    .hobbies-shell {
+      position: relative
+    }
+
+    .hobbies-rail {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 8px 8px 16px;
+      scroll-snap-type: x mandatory;
+      scrollbar-color: rgba(124, 120, 245, 0.4) transparent;
+    }
+
+    .hobbies-rail::-webkit-scrollbar {
+      height: 8px
+    }
+
+    .hobbies-rail::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    .hobbies-rail::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, rgba(124, 120, 245, 0.45), rgba(94, 240, 255, 0.4));
+      border-radius: 999px
+    }
+
+    .hobbies-shell::before,
+    .hobbies-shell::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 46px;
+      pointer-events: none;
+      z-index: 5;
+      background: linear-gradient(90deg, var(--bg), transparent);
+    }
+
+    .hobbies-shell::after {
+      right: 0;
+      left: auto;
+      transform: scaleX(-1)
+    }
+
+    .hobbies-shell::before {
+      left: 0
+    }
+
+    .hobby-card {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: default;
+      min-width: 260px;
+      max-width: 260px;
+      scroll-snap-align: start;
+    }
+
+    .hobby-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hobby-card:hover .hobby-icon-wrap {
+      transform: scale(1.06) rotate(-2deg);
+      border-color: rgba(124, 120, 245, 0.35);
+      box-shadow: 0 8px 24px rgba(124, 120, 245, 0.15)
+    }
+
+    .hobby-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 17px
+    }
+
+    .hobby-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 300
+    }
+
+    .hobby-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto
+    }
+
+    .hobby-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--muted2);
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07)
+    }
+
+    /* ASCII preview in hobby card */
+    .ascii-preview {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      line-height: 1.25;
+      color: rgba(94, 240, 255, 0.6);
+      white-space: pre;
+      letter-spacing: 0.04em;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 8px 10px;
+      border: 1px solid rgba(94, 240, 255, 0.12);
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* EXTENSIONS */
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px
+    }
+
+    .ext-card {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px
+    }
+
+    .ext-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      background: rgba(124, 120, 245, 0.1);
+      border: 1px solid rgba(124, 120, 245, 0.2)
+    }
+
+    /* TERMINAL */
+    .terminal-block {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #c0c8e8
+    }
+
+    .t-prompt {
+      color: var(--pri)
+    }
+
+    .t-out {
+      color: var(--sec);
+      opacity: 0.85
+    }
+
+    .t-dim {
+      color: var(--muted2)
+    }
+
+    .dot-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%
+    }
+
+    .dot.r {
+      background: #ff5f57
+    }
+
+    .dot.y {
+      background: #ffbd2e
+    }
+
+    .dot.g {
+      background: #28c840
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px
+    }
+
+    .skill-card {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 220px
+    }
+
+    .skill-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px
+    }
+
+    .skill-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: var(--sec);
+    }
+
+    .skill-icon svg {
+      width: 22px;
+      height: 22px
+    }
+
+    .skill-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: -0.01em
+    }
+
+    .skill-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 4px
+    }
+
+    .skill-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap
+    }
+
+    .skill-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: rgba(240, 240, 248, 0.88);
+      line-height: 1.45
+    }
+
+    .skill-label::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--pri), var(--sec));
+      flex-shrink: 0
+    }
+
+    .skill-value {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+      text-align: right;
+      max-width: 55%
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px
+    }
+
+    .about-card {
+      padding: 32px
+    }
+
+    .about-text {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 15px;
+      font-weight: 300
+    }
+
+    .about-text strong {
+      color: rgba(240, 240, 248, 0.85);
+      font-weight: 500
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding: 24px
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05)
+    }
+
+    .stat-item:nth-last-child(-n+2) {
+      border-bottom: none
+    }
+
+    .stat-item:nth-child(odd) {
+      border-right: 1px solid rgba(255, 255, 255, 0.05)
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      background: linear-gradient(135deg, var(--pri), var(--sec));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .stat-label {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      font-weight: 300
+    }
+
+    /* CONTACT */
+    .contact-wrap {
+      max-width: 540px;
+      margin: 0 auto
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 13px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 13px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.25s ease;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.2)
+    }
+
+    .input-field:focus {
+      border-color: rgba(124, 120, 245, 0.45);
+      background: rgba(124, 120, 245, 0.06);
+      box-shadow: 0 0 0 3px rgba(124, 120, 245, 0.1), inset 0 2px 6px rgba(0, 0, 0, 0.2)
+    }
+
+    .input-field::placeholder {
+      color: var(--muted2)
+    }
+
+    textarea.input-field {
+      resize: vertical;
+      min-height: 120px
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 12px
+    }
+
+    .contact-meta {
+      margin-top: 16px;
+      text-align: center;
+      color: var(--muted2);
+      font-size: 13px
+    }
+
+    .contact-meta a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s
+    }
+
+    .contact-meta a:hover {
+      color: var(--text)
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 0 24px;
+      color: var(--muted2);
+      font-size: 13px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05)
+    }
+
+    /* GSAP controls visibility — no CSS pre-hiding */
+
+    @media(max-width:900px) {
+      .nav-links {
+        position: absolute;
+        top: 60px;
+        right: 16px;
+        background: rgba(10, 10, 24, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 10px;
+        display: none;
+        flex-direction: column;
+        gap: 2px;
+        backdrop-filter: blur(24px);
+        min-width: 160px
+      }
+
+      .nav-links.open {
+        display: flex
+      }
+
+      .hamburger {
+        display: flex
+      }
+
+      .projects-grid,
+      .about-grid {
+        grid-template-columns: 1fr
+      }
+
+      .featured-card .proj-content {
+        grid-template-columns: 1fr
+      }
+
+      section {
+        padding: 56px 0
+      }
+
+      #tp-wrap {
+        height: clamp(55px, 14vw, 90px)
+      }
+
+      #tp-wrap h1 {
+        font-size: clamp(48px, 14vw, 90px)
+      }
+    }
+
+    @media(max-width:480px) {
+      .container {
+        padding: 0 16px
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important
+      }
+
+      #dot-canvas,
+      #particle-canvas,
+      #cglow {
+        opacity: 0 !important
+      }
+
+      .mesh {
+        animation: none !important
+      }
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast {
+      position: fixed;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 9999;
+      pointer-events: none;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 60px rgba(124, 120, 245, 0.15);
+      transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      opacity: 0;
+    }
+
+    .toast.show {
+      bottom: 32px;
+      opacity: 1
+    }
+
+    .toast.success {
+      background: rgba(40, 200, 64, 0.15);
+      border: 1px solid rgba(40, 200, 64, 0.35);
+      color: #6fffaa
+    }
+
+    .toast.error {
+      background: rgba(255, 60, 60, 0.15);
+      border: 1px solid rgba(255, 60, 60, 0.35);
+      color: #ff8888
+    }
+
+    .toast.info {
+      background: rgba(124, 120, 245, 0.15);
+      border: 1px solid rgba(124, 120, 245, 0.35);
+      color: #b0b0ff
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important
+    }
+
+    .btn-primary .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(10, 10, 26, 0.3);
+      border-top-color: #0a0a1a;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 6px;
+      vertical-align: middle
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<canvas id="dot-canvas"></canvas>
-<canvas id="particle-canvas"></canvas>
-<div class="mesh"></div>
-<div id="cglow"></div>
+  <canvas id="dot-canvas"></canvas>
+  <canvas id="particle-canvas"></canvas>
+  <div class="mesh"></div>
+  <div id="cglow"></div>
 
-<nav id="main-nav">
-  <div class="nav-inner container">
-    <div class="brand">RUDRA</div>
-    <div class="hamburger" id="hbg"><span></span><span></span><span></span></div>
-    <div class="nav-links" id="navlinks">
-      <a href="#home">Home</a>
-      <a href="#projects">Projects</a>
-      <a href="#learning">Learning</a>
-      <a href="#hobbies">Hobbies</a>
-      <a href="#extensions">Extensions</a>
-      <a href="#ai-lab">AI Lab</a>
-      <a href="#tools">Tools</a>
-      <a href="#skills">Skills</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </div>
-</nav>
-
-<div class="wrap">
-
-<!-- ══ HERO ══ -->
-<section id="home">
-  <div class="container">
-    <div class="hero">
-      <div class="hero-inner">
-        <div class="eyebrow" id="hero-eyebrow">IIT Guwahati · BSc Data Science &amp; AI</div>
-
-        <!-- TextPressure name -->
-        <div id="tp-wrap">
-          <h1 id="tp-title"></h1>
-        </div>
-
-        <div class="typewriter-wrap" id="hero-tw"><span id="tw"></span><span class="cursor-bar"></span></div>
-        <p class="hero-bio" id="hero-bio">
-          Building <strong>intelligent systems</strong> at the intersection of <strong>neural networks</strong> and <strong>security</strong>.
-          Native macOS apps, local LLMs on Apple Silicon, systems programming in C++ — shipping things that matter.
-        </p>
-        <div class="cta-row" id="hero-cta">
-          <a class="btn btn-primary" href="#projects">View Projects ↓</a>
-          <a class="btn btn-glass" href="https://github.com/rudra-iitg" target="_blank" rel="noopener">GitHub ↗</a>
-        </div>
+  <nav id="main-nav">
+    <div class="nav-inner container">
+      <div class="brand">RUDRA</div>
+      <div class="hamburger" id="hbg"><span></span><span></span><span></span></div>
+      <div class="nav-links" id="navlinks">
+        <a href="#home">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#learning">Learning</a>
+        <a href="#hobbies">Hobbies</a>
+        <a href="#extensions">Extensions</a>
+        <a href="#ai-lab">AI Lab</a>
+        <a href="#tools">Tools</a>
+        <a href="#skills">Skills</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
       </div>
     </div>
-  </div>
-</section>
+  </nav>
 
-<!-- ══ PROJECTS ══ -->
-<section id="projects">
-  <div class="container">
-    <div class="sec-label"><h2>Projects</h2><div class="line"></div><div class="tag">SELECTED WORKS</div></div>
-    <div class="projects-grid">
+  <div class="wrap">
 
-    <article class="glass featured-card proj-card gs-fade">
-      <canvas class="rain-canvas"></canvas>
-      <div class="proj-top"><span class="feat-badge">★ FEATURED</span><span class="status-pill">ACTIVE BUILD</span></div>
-      <div class="proj-content">
-        <div style="display:flex;flex-direction:column;gap:16px">
-          <h3 class="proj-title large">Jiano — Native macOS AI Workstation</h3>
-          <p class="proj-desc">A premium macOS app built with <strong style="color:rgba(240,240,248,0.8)">SwiftUI + SwiftData</strong>. Connects 11+ AI providers through a single glassmorphic interface with real-time provider comparison, semantic vector search, t-SNE embeddings, AES-256-GCM encrypted S3 backups, a full code assistant with plugin system, and a system health observability dashboard. Clean MVVM architecture, protocol-oriented design, zero external networking dependencies.</p>
-          <div class="pills"><span class="pill">SwiftUI</span><span class="pill">SwiftData</span><span class="pill">Swift</span><span class="pill">Anthropic</span><span class="pill">OpenAI</span><span class="pill">Ollama</span><span class="pill">AWS S3</span><span class="pill">macOS Sonoma</span><span class="pill">MVVM</span><span class="pill">SSE Streaming</span></div>
-          <div class="metrics"><span>11 Providers</span><span>Vision API</span><span>AES-256-GCM</span><span>t-SNE Embeddings</span><span>K-Means Clustering</span><span>PCA</span></div>
-          <div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg/OpusNative" target="_blank" aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a></div>
-        </div>
-        <div style="display:grid;gap:12px;min-width:185px">
-          <div class="glass" style="padding:16px;background:rgba(124,120,245,0.07)"><div style="font-size:11px;color:var(--muted2);font-family:'JetBrains Mono',monospace;margin-bottom:6px">PROVIDERS</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:26px;color:var(--pri)">11+</div></div>
-          <div class="glass" style="padding:16px;background:rgba(94,240,255,0.05)"><div style="font-size:11px;color:var(--muted2);font-family:'JetBrains Mono',monospace;margin-bottom:6px">ENCRYPTION</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--sec)">AES-256-GCM</div></div>
-          <div class="glass" style="padding:16px;background:rgba(176,110,243,0.06)"><div style="font-size:11px;color:var(--muted2);font-family:'JetBrains Mono',monospace;margin-bottom:6px">ARCHITECTURE</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--tri)">MVVM + DI</div></div>
+    <!-- ══ HERO ══ -->
+    <section id="home">
+      <div class="container">
+        <div class="hero">
+          <div class="hero-inner">
+            <div class="eyebrow" id="hero-eyebrow">IIT Guwahati · BSc Data Science &amp; AI</div>
+
+            <!-- TextPressure name -->
+            <div id="tp-wrap">
+              <h1 id="tp-title"></h1>
+            </div>
+
+            <div class="typewriter-wrap" id="hero-tw"><span id="tw"></span><span class="cursor-bar"></span></div>
+            <p class="hero-bio" id="hero-bio">
+              Building <strong>intelligent systems</strong> at the intersection of <strong>neural networks</strong> and
+              <strong>security</strong>.
+              Native macOS apps, local LLMs on Apple Silicon, systems programming in C++ — shipping things that matter.
+            </p>
+            <div class="cta-row" id="hero-cta">
+              <a class="btn btn-primary" href="#projects">View Projects ↓</a>
+              <a class="btn btn-glass" href="https://github.com/rudra-iitg" target="_blank" rel="noopener">GitHub ↗</a>
+            </div>
+          </div>
         </div>
       </div>
-    </article>
+    </section>
 
-    <article class="glass proj-card gs-fade-left"><canvas class="rain-canvas"></canvas><div class="proj-top"><span class="proj-num">#02</span></div><h3 class="proj-title">Fit Circuit</h3><p class="proj-desc">AI-powered fitness assistant using <strong style="color:rgba(240,240,248,0.75)">Graph Theory</strong> for route optimization and <strong style="color:rgba(240,240,248,0.75)">ML regression</strong> for calorie prediction. Integrates Google Maps API for real-world path data.</p><div class="pills"><span class="pill">React</span><span class="pill">Node.js</span><span class="pill">Maps API</span><span class="pill">Graph Theory</span><span class="pill">ML</span></div><div class="metrics"><span>42ms Latency</span><span>98.2% Accuracy</span><span>Live Routes</span></div><div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg" target="_blank" aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a></div></article>
+    <!-- ══ PROJECTS ══ -->
+    <section id="projects">
+      <div class="container">
+        <div class="sec-label">
+          <h2>Projects</h2>
+          <div class="line"></div>
+          <div class="tag">SELECTED WORKS</div>
+        </div>
+        <div class="projects-grid">
 
-    <article class="glass proj-card gs-fade-right"><canvas class="rain-canvas"></canvas><div class="proj-top"><span class="proj-num">#03</span></div><h3 class="proj-title">Vehicle Classifier</h3><p class="proj-desc">Real-time CV model classifying 7 vehicle types from live video using a custom CNN architecture. Stable 60 FPS on consumer hardware.</p><div class="pills"><span class="pill">Python</span><span class="pill">OpenCV</span><span class="pill">Keras</span><span class="pill">TensorFlow</span><span class="pill">CNN</span></div><div class="metrics"><span>60 FPS</span><span>7 Classes</span><span>Real-time</span></div></article>
+          <article class="glass featured-card proj-card gs-fade">
+            <canvas class="rain-canvas"></canvas>
+            <div class="proj-top"><span class="feat-badge"><svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="currentColor" stroke="none">
+                  <polygon
+                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+                </svg> FEATURED</span><span class="status-pill">ACTIVE BUILD</span></div>
+            <div class="proj-content">
+              <div style="display:flex;flex-direction:column;gap:16px">
+                <h3 class="proj-title large">Jiano — Native macOS AI Workstation</h3>
+                <p class="proj-desc">A premium macOS app built with <strong style="color:rgba(240,240,248,0.8)">SwiftUI
+                    + SwiftData</strong>. Connects 11+ AI providers through a single glassmorphic interface with
+                  real-time provider comparison, semantic vector search, t-SNE embeddings, AES-256-GCM encrypted S3
+                  backups, a full code assistant with plugin system, and a system health observability dashboard. Clean
+                  MVVM architecture, protocol-oriented design, zero external networking dependencies.</p>
+                <div class="pills"><span class="pill">SwiftUI</span><span class="pill">SwiftData</span><span
+                    class="pill">Swift</span><span class="pill">Anthropic</span><span class="pill">OpenAI</span><span
+                    class="pill">Ollama</span><span class="pill">AWS S3</span><span class="pill">macOS
+                    Sonoma</span><span class="pill">MVVM</span><span class="pill">SSE Streaming</span></div>
+                <div class="metrics"><span>11 Providers</span><span>Vision API</span><span>AES-256-GCM</span><span>t-SNE
+                    Embeddings</span><span>K-Means Clustering</span><span>PCA</span></div>
+                <div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg/OpusNative"
+                    target="_blank" aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                    </svg></a></div>
+              </div>
+              <div style="display:grid;gap:12px;min-width:185px">
+                <div class="glass" style="padding:16px;background:rgba(124,120,245,0.07)">
+                  <div
+                    style="font-size:11px;color:var(--muted2);font-family:'JetBrains Mono',monospace;margin-bottom:6px">
+                    PROVIDERS</div>
+                  <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:26px;color:var(--pri)">11+</div>
+                </div>
+                <div class="glass" style="padding:16px;background:rgba(94,240,255,0.05)">
+                  <div
+                    style="font-size:11px;color:var(--muted2);font-family:'JetBrains Mono',monospace;margin-bottom:6px">
+                    ENCRYPTION</div>
+                  <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--sec)">AES-256-GCM
+                  </div>
+                </div>
+                <div class="glass" style="padding:16px;background:rgba(176,110,243,0.06)">
+                  <div
+                    style="font-size:11px;color:var(--muted2);font-family:'JetBrains Mono',monospace;margin-bottom:6px">
+                    ARCHITECTURE</div>
+                  <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--tri)">MVVM + DI
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
 
-    <article class="glass proj-card gs-fade-left"><canvas class="rain-canvas"></canvas><div class="proj-top"><span class="proj-num">#04</span></div><h3 class="proj-title">Cyber Recon Toolkit</h3><p class="proj-desc">Comprehensive CLI for OSINT &amp; ethical hacking. Automated vulnerability scanning, port enumeration, network mapping and reconnaissance reporting.</p><div class="pills"><span class="pill">Python</span><span class="pill">Bash</span><span class="pill">Linux</span><span class="pill">Networking</span><span class="pill">OSINT</span></div><div class="metrics"><span>Kali Linux</span><span>TCP/UDP</span><span>OSINT Automated</span></div></article>
+          <article class="glass proj-card gs-fade-left"><canvas class="rain-canvas"></canvas>
+            <div class="proj-top"><span class="proj-num">#02</span></div>
+            <h3 class="proj-title">Fit Circuit</h3>
+            <p class="proj-desc">AI-powered fitness assistant using <strong style="color:rgba(240,240,248,0.75)">Graph
+                Theory</strong> for route optimization and <strong style="color:rgba(240,240,248,0.75)">ML
+                regression</strong> for calorie prediction. Integrates Google Maps API for real-world path data.</p>
+            <div class="pills"><span class="pill">React</span><span class="pill">Node.js</span><span class="pill">Maps
+                API</span><span class="pill">Graph Theory</span><span class="pill">ML</span></div>
+            <div class="metrics"><span>42ms Latency</span><span>98.2% Accuracy</span><span>Live Routes</span></div>
+            <div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg" target="_blank"
+                aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg></a></div>
+          </article>
 
-    <article class="glass proj-card gs-fade-right"><canvas class="rain-canvas"></canvas><div class="proj-top"><span class="proj-num">#05</span></div><h3 class="proj-title">Semantic Vector Engine</h3><p class="proj-desc">NL → high-dimensional embeddings via <strong style="color:rgba(240,240,248,0.75)">Gemma on Ollama</strong> locally on Apple Silicon M3. Real-time t-SNE and cosine similarity matrices.</p><div class="pills"><span class="pill">Python</span><span class="pill">Ollama</span><span class="pill">Gemma</span><span class="pill">t-SNE</span><span class="pill">Apple Silicon</span></div><div class="metrics"><span>Local LLM</span><span>Cosine Similarity</span><span>Real-time Viz</span></div><div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg" target="_blank" aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a></div></article>
+          <article class="glass proj-card gs-fade-right"><canvas class="rain-canvas"></canvas>
+            <div class="proj-top"><span class="proj-num">#03</span></div>
+            <h3 class="proj-title">Vehicle Classifier</h3>
+            <p class="proj-desc">Real-time CV model classifying 7 vehicle types from live video using a custom CNN
+              architecture. Stable 60 FPS on consumer hardware.</p>
+            <div class="pills"><span class="pill">Python</span><span class="pill">OpenCV</span><span
+                class="pill">Keras</span><span class="pill">TensorFlow</span><span class="pill">CNN</span></div>
+            <div class="metrics"><span>60 FPS</span><span>7 Classes</span><span>Real-time</span></div>
+            <div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg" target="_blank"
+                aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg></a></div>
+          </article>
 
-    </div>
-  </div>
-</section>
+          <article class="glass proj-card gs-fade-left"><canvas class="rain-canvas"></canvas>
+            <div class="proj-top"><span class="proj-num">#04</span></div>
+            <h3 class="proj-title">Cyber Recon Toolkit</h3>
+            <p class="proj-desc">Comprehensive CLI for OSINT &amp; ethical hacking. Automated vulnerability scanning,
+              port enumeration, network mapping and reconnaissance reporting.</p>
+            <div class="pills"><span class="pill">Python</span><span class="pill">Bash</span><span
+                class="pill">Linux</span><span class="pill">Networking</span><span class="pill">OSINT</span></div>
+            <div class="metrics"><span>Kali Linux</span><span>TCP/UDP</span><span>OSINT Automated</span></div>
+            <div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg" target="_blank"
+                aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg></a></div>
+          </article>
 
-<!-- ══ LEARNING ══ -->
-<section id="learning">
-  <div class="container">
-    <div class="sec-label"><h2>What I'm Learning</h2><div class="line"></div><div class="tag">KNOWLEDGE MAP</div></div>
-    <div class="learning-grid">
-    <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M4.6 9.5 3 7m3.4-2.6L7 3m5 2V3m5.6 3.4L17 3m3.4 6.5L21 7m-2.4 7.1 1.6 2.4m-3.4 2.6L17 21m-5-2v2m-5.6-3.4L7 21m-3.4-6.5L3 17"></path></svg></div><div><div class="learn-title">C++ & Systems Programming</div><div class="learn-sub">Udemy · Self-directed</div></div></div>
-      <div class="learn-topics">
-        <div class="topic-row">OOP — classes, inheritance, polymorphism, encapsulation</div>
-        <div class="topic-row">Memory management — stack vs heap, new / delete[]</div>
-        <div class="topic-row">Multi-level pointers — **, ***, pointer arithmetic</div>
-        <div class="topic-row">Dynamic 2D/3D arrays with raw pointers</div>
-        <div class="topic-row">Copy constructors — deep vs shallow copy</div>
-        <div class="topic-row">Bubble sort &amp; array merging with raw pointers</div>
-        <div class="topic-row">Offset notation *(array+i), size_t indexing</div>
-        <div class="topic-row">Range-based loops, enums, switch statements</div>
+          <article class="glass proj-card gs-fade-right"><canvas class="rain-canvas"></canvas>
+            <div class="proj-top"><span class="proj-num">#05</span></div>
+            <h3 class="proj-title">Semantic Vector Engine</h3>
+            <p class="proj-desc">NL → high-dimensional embeddings via <strong style="color:rgba(240,240,248,0.75)">Gemma
+                on Ollama</strong> locally on Apple Silicon M3. Real-time t-SNE and cosine similarity matrices.</p>
+            <div class="pills"><span class="pill">Python</span><span class="pill">Ollama</span><span
+                class="pill">Gemma</span><span class="pill">t-SNE</span><span class="pill">Apple Silicon</span></div>
+            <div class="metrics"><span>Local LLM</span><span>Cosine Similarity</span><span>Real-time Viz</span></div>
+            <div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg" target="_blank"
+                aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg></a></div>
+          </article>
+
+        </div>
       </div>
-      <div class="progress-mini"><div class="mini-bar"><div class="mini-fill" data-w="78"></div></div><span class="mini-label">78%</span></div>
-    </article>
-    <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(124,120,245,0.1);border:1px solid rgba(124,120,245,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 6.5c0-1.7 1.4-3 3.2-3 1.6 0 2.8 1.1 2.8 2.7 0 0 2.5.1 2.5 2.8 0 2-1.7 2.9-1.7 2.9s.7 3.6-2.6 4.3c-3.5.7-5.4-2-4.7-4.3 0 0-2.1-.5-2.1-2.8 0-1.7 1.1-2.5 1.1-2.5"></path><path d="M12 4v16m4-9c1.4 0 2.5 1.2 2.5 2.6 0 1.3-1 2.4-2.3 2.6-.3 0-.6.3-.6.6v.5c0 1-.7 1.8-1.7 2"></path></svg></div><div><div class="learn-title">AI & Machine Learning</div><div class="learn-sub">IIT Guwahati · Research</div></div></div>
-      <div class="learn-topics">
-        <div class="topic-row">Neural networks — forward/backprop, activation functions</div>
-        <div class="topic-row">Supervised &amp; unsupervised learning paradigms</div>
-        <div class="topic-row">CNN architectures for computer vision tasks</div>
-        <div class="topic-row">Local LLM deployment — Ollama, Gemma 4, GLM-OCR</div>
-        <div class="topic-row">Embeddings, vector stores, semantic search</div>
-        <div class="topic-row">t-SNE, K-Means, PCA, anomaly detection</div>
-        <div class="topic-row">On-device AI — Apple Silicon, FoundationModels API</div>
-        <div class="topic-row">Agentic AI — Relevance AI, Cursor, tool-use patterns</div>
+    </section>
+
+    <!-- ══ LEARNING ══ -->
+    <section id="learning">
+      <div class="container">
+        <div class="sec-label">
+          <h2>What I'm Learning</h2>
+          <div class="line"></div>
+          <div class="tag">KNOWLEDGE MAP</div>
+        </div>
+        <div class="learning-grid">
+          <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
+            <div class="learn-header">
+              <div class="learn-icon" style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.2)"><svg
+                  width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path
+                    d="M4.6 9.5 3 7m3.4-2.6L7 3m5 2V3m5.6 3.4L17 3m3.4 6.5L21 7m-2.4 7.1 1.6 2.4m-3.4 2.6L17 21m-5-2v2m-5.6-3.4L7 21m-3.4-6.5L3 17">
+                  </path>
+                </svg></div>
+              <div>
+                <div class="learn-title">C++ & Systems Programming</div>
+                <div class="learn-sub">Udemy · Self-directed</div>
+              </div>
+            </div>
+            <div class="learn-topics">
+              <div class="topic-row">OOP — classes, inheritance, polymorphism, encapsulation</div>
+              <div class="topic-row">Memory management — stack vs heap, new / delete[]</div>
+              <div class="topic-row">Multi-level pointers — **, ***, pointer arithmetic</div>
+              <div class="topic-row">Dynamic 2D/3D arrays with raw pointers</div>
+              <div class="topic-row">Copy constructors — deep vs shallow copy</div>
+              <div class="topic-row">Bubble sort &amp; array merging with raw pointers</div>
+              <div class="topic-row">Offset notation *(array+i), size_t indexing</div>
+              <div class="topic-row">Range-based loops, enums, switch statements</div>
+            </div>
+            <div class="progress-mini">
+              <div class="mini-bar">
+                <div class="mini-fill" data-w="78"></div>
+              </div><span class="mini-label">78%</span>
+            </div>
+          </article>
+          <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
+            <div class="learn-header">
+              <div class="learn-icon" style="background:rgba(124,120,245,0.1);border:1px solid rgba(124,120,245,0.2)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M8.5 6.5c0-1.7 1.4-3 3.2-3 1.6 0 2.8 1.1 2.8 2.7 0 0 2.5.1 2.5 2.8 0 2-1.7 2.9-1.7 2.9s.7 3.6-2.6 4.3c-3.5.7-5.4-2-4.7-4.3 0 0-2.1-.5-2.1-2.8 0-1.7 1.1-2.5 1.1-2.5">
+                  </path>
+                  <path d="M12 4v16m4-9c1.4 0 2.5 1.2 2.5 2.6 0 1.3-1 2.4-2.3 2.6-.3 0-.6.3-.6.6v.5c0 1-.7 1.8-1.7 2">
+                  </path>
+                </svg></div>
+              <div>
+                <div class="learn-title">AI & Machine Learning</div>
+                <div class="learn-sub">IIT Guwahati · Research</div>
+              </div>
+            </div>
+            <div class="learn-topics">
+              <div class="topic-row">Neural networks — forward/backprop, activation functions</div>
+              <div class="topic-row">Supervised &amp; unsupervised learning paradigms</div>
+              <div class="topic-row">CNN architectures for computer vision tasks</div>
+              <div class="topic-row">Local LLM deployment — Ollama, Gemma 4, GLM-OCR</div>
+              <div class="topic-row">Embeddings, vector stores, semantic search</div>
+              <div class="topic-row">t-SNE, K-Means, PCA, anomaly detection</div>
+              <div class="topic-row">On-device AI — Apple Silicon, FoundationModels API</div>
+              <div class="topic-row">Agentic AI — Relevance AI, Cursor, tool-use patterns</div>
+            </div>
+            <div class="progress-mini">
+              <div class="mini-bar">
+                <div class="mini-fill" data-w="88"></div>
+              </div><span class="mini-label">88%</span>
+            </div>
+          </article>
+          <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
+            <div class="learn-header">
+              <div class="learn-icon" style="background:rgba(176,110,243,0.1);border:1px solid rgba(176,110,243,0.2)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 5h11L7 19h11"></path>
+                  <path d="M9.5 8.5h5"></path>
+                  <path d="M9.5 12h4"></path>
+                </svg></div>
+              <div>
+                <div class="learn-title">Mathematics for AI</div>
+                <div class="learn-sub">IIT Guwahati · Self-study</div>
+              </div>
+            </div>
+            <div class="learn-topics">
+              <div class="topic-row">Matrix calculus — dy/dx = Aᵀ, d(xᵀx)/dx = 2x proofs</div>
+              <div class="topic-row">Jacobian &amp; Hessian matrices</div>
+              <div class="topic-row">Kronecker delta notation &amp; index calculus</div>
+              <div class="topic-row">DFT &amp; FFT — signal processing foundations</div>
+              <div class="topic-row">Bloom filters — probabilistic data structures</div>
+              <div class="topic-row">Linear algebra — eigenvalues, SVD, decompositions</div>
+              <div class="topic-row">Probability theory &amp; statistical inference</div>
+            </div>
+            <div class="progress-mini">
+              <div class="mini-bar">
+                <div class="mini-fill" data-w="82"></div>
+              </div><span class="mini-label">82%</span>
+            </div>
+          </article>
+          <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
+            <div class="learn-header">
+              <div class="learn-icon" style="background:rgba(94,240,255,0.08);border:1px solid rgba(94,240,255,0.15)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 11v7m5-11v11m5-6v6m4-12v12"></path>
+                  <path d="M3 20h18"></path>
+                </svg></div>
+              <div>
+                <div class="learn-title">Data Science</div>
+                <div class="learn-sub">IIT Guwahati · Google Colab</div>
+              </div>
+            </div>
+            <div class="learn-topics">
+              <div class="topic-row">NumPy — vectorized ops, broadcasting, strides</div>
+              <div class="topic-row">Pandas — DataFrames, groupby, merge, pivot tables</div>
+              <div class="topic-row">Data wrangling, cleaning, full EDA pipelines</div>
+              <div class="topic-row">Matplotlib / Seaborn — statistical visualizations</div>
+              <div class="topic-row">Feature engineering &amp; selection techniques</div>
+              <div class="topic-row">Model eval — ROC, AUC, confusion matrices, F1</div>
+              <div class="topic-row">Colab environments, kernel debugging, GPU access</div>
+            </div>
+            <div class="progress-mini">
+              <div class="mini-bar">
+                <div class="mini-fill" data-w="85"></div>
+              </div><span class="mini-label">85%</span>
+            </div>
+          </article>
+          <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
+            <div class="learn-header">
+              <div class="learn-icon" style="background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.15)"><svg
+                  width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg></div>
+              <div>
+                <div class="learn-title">Cybersecurity</div>
+                <div class="learn-sub">Self-study · Kali Linux</div>
+              </div>
+            </div>
+            <div class="learn-topics">
+              <div class="topic-row">OSINT techniques &amp; reconnaissance automation</div>
+              <div class="topic-row">Network scanning — TCP/UDP, Nmap, port enumeration</div>
+              <div class="topic-row">Penetration testing methodologies</div>
+              <div class="topic-row">Vulnerability assessment &amp; report writing</div>
+              <div class="topic-row">Linux CLI &amp; Bash scripting for automation</div>
+              <div class="topic-row">API security — Keychain, credential management</div>
+              <div class="topic-row">AWS security — S3 policies, SigV4, billing audits</div>
+            </div>
+            <div class="progress-mini">
+              <div class="mini-bar">
+                <div class="mini-fill" data-w="90"></div>
+              </div><span class="mini-label">90%</span>
+            </div>
+          </article>
+          <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
+            <div class="learn-header">
+              <div class="learn-icon" style="background:rgba(255,180,50,0.08);border:1px solid rgba(255,180,50,0.15)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M14.5 4.5c-.8-.7-2.2-.8-3.1-.1C9.8 5.7 9 7.3 9 9c0 3.2 2.1 6 3 7 .2.3.6.3.8 0 1-1.2 3.2-4.2 3.2-7.1 0-1.2-.4-2.3-1.1-3.1z">
+                  </path>
+                  <path d="M12 4s-.2-1.5 1.3-2"></path>
+                  <path
+                    d="M10.8 6.5c-.8-.6-2-.6-2.9-.1C6.6 7.2 6 8.6 6 10c0 2.3 1.5 4.6 2.3 5.6.2.3.6.3.8 0 .6-.8 1.8-2.6 2.2-4.6">
+                  </path>
+                </svg></div>
+              <div>
+                <div class="learn-title">Swift & macOS Dev</div>
+                <div class="learn-sub">Self-directed · Xcode 15+</div>
+              </div>
+            </div>
+            <div class="learn-topics">
+              <div class="topic-row">SwiftUI — declarative layouts, @State, @Observable</div>
+              <div class="topic-row">SwiftData — persistence, migrations, relationships</div>
+              <div class="topic-row">Swift Concurrency — async/await, actors, Sendable</div>
+              <div class="topic-row">Protocol-oriented programming patterns</div>
+              <div class="topic-row">MVVM + Dependency Injection (AppDIContainer)</div>
+              <div class="topic-row">SSE &amp; NDJSON streaming for LLM APIs</div>
+              <div class="topic-row">macOS Keychain, AES-256-GCM, Secure Enclave</div>
+              <div class="topic-row">Apple FoundationModels API — on-device AI</div>
+            </div>
+            <div class="progress-mini">
+              <div class="mini-bar">
+                <div class="mini-fill" data-w="75"></div>
+              </div><span class="mini-label">75%</span>
+            </div>
+          </article>
+        </div>
       </div>
-      <div class="progress-mini"><div class="mini-bar"><div class="mini-fill" data-w="88"></div></div><span class="mini-label">88%</span></div>
-    </article>
-    <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(176,110,243,0.1);border:1px solid rgba(176,110,243,0.2)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5h11L7 19h11"></path><path d="M9.5 8.5h5"></path><path d="M9.5 12h4"></path></svg></div><div><div class="learn-title">Mathematics for AI</div><div class="learn-sub">IIT Guwahati · Self-study</div></div></div>
-      <div class="learn-topics">
-        <div class="topic-row">Matrix calculus — dy/dx = Aᵀ, d(xᵀx)/dx = 2x proofs</div>
-        <div class="topic-row">Jacobian &amp; Hessian matrices</div>
-        <div class="topic-row">Kronecker delta notation &amp; index calculus</div>
-        <div class="topic-row">DFT &amp; FFT — signal processing foundations</div>
-        <div class="topic-row">Bloom filters — probabilistic data structures</div>
-        <div class="topic-row">Linear algebra — eigenvalues, SVD, decompositions</div>
-        <div class="topic-row">Probability theory &amp; statistical inference</div>
+    </section>
+
+    <!-- ══ HOBBIES ══ -->
+    <section id="hobbies">
+      <div class="container">
+        <div class="sec-label">
+          <h2>Beyond the Code</h2>
+          <div class="line"></div>
+          <div class="tag">HOBBIES</div>
+        </div>
+        <div class="hobbies-shell">
+          <div class="hobbies-rail">
+
+            <article class="glass hobby-card gs-scale">
+              <canvas class="rain-canvas"></canvas>
+              <div class="hobby-icon-wrap"
+                style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.2)"><svg width="24"
+                  height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M4 17c0-4.4 3.6-8 8-8 3.2 0 4.7 1.8 4.7 3.4 0 1-.8 1.6-1.7 1.6-.9 0-1.5.7-1.5 1.5 0 .9.7 1.5 1.5 1.5h1c1.7 0 3 .9 3 2.7 0 1.1-.7 2.3-2 2.3H8c-2.2 0-4-1.8-4-4Z">
+                  </path>
+                  <circle cx="9" cy="10" r=".75"></circle>
+                  <circle cx="6.5" cy="13" r=".75"></circle>
+                  <circle cx="12" cy="7.5" r=".75"></circle>
+                </svg></div>
+              <div class="hobby-title">ASCII Art</div>
+              <div class="hobby-desc">Crafting visual art using pure text characters — a discipline where constraint
+                breeds creativity. From simple portraits to complex scenes built entirely from printable ASCII.</div>
+              <div class="ascii-preview"> /\_____/\
+                ( o o )
+                ( =^= )
+                ( )
+                (______)</div>
+              <div class="hobby-tags"><span class="hobby-tag">Terminal Art</span><span class="hobby-tag">Creative
+                  Coding</span><span class="hobby-tag">Text Rendering</span></div>
+            </article>
+
+            <article class="glass hobby-card gs-scale">
+              <canvas class="rain-canvas"></canvas>
+              <div class="hobby-icon-wrap"
+                style="background:rgba(176,110,243,0.1);border:1px solid rgba(176,110,243,0.2)"><svg width="22"
+                  height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 13l8-2m0 0 8-2M11 11l1 9m-1-9L6 5m5 6 5-8"></path>
+                  <path d="M5 19l3-2.5"></path>
+                </svg></div>
+              <div class="hobby-title">Solo Travelling</div>
+              <div class="hobby-desc">Navigating unknown places alone — planning routes, improvising when plans
+                collapse, finding meaning in being lost. Every solo trip is a systems problem with no documentation.
+              </div>
+              <div class="hobby-tags"><span class="hobby-tag">Route Planning</span><span
+                  class="hobby-tag">Exploration</span><span class="hobby-tag">Solo Adventures</span></div>
+            </article>
+
+            <article class="glass hobby-card gs-scale">
+              <canvas class="rain-canvas"></canvas>
+              <div class="hobby-icon-wrap"
+                style="background:rgba(124,120,245,0.1);border:1px solid rgba(124,120,245,0.2)"><svg width="22"
+                  height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 5h7.5a2.5 2.5 0 0 1 0 5H5zM5 10h7.5A2.5 2.5 0 0 1 15 12.5V19a2 2 0 0 0-2 2H5z"></path>
+                  <path d="M19 5h-2v16h2"></path>
+                </svg></div>
+              <div class="hobby-title">Book Reading</div>
+              <div class="hobby-desc">Nonfiction history, science, and biographies. Currently working through technical
+                reads on distributed systems and old classics. Books are the best low-bandwidth, high-density data
+                transfer protocol.</div>
+              <div class="hobby-tags"><span class="hobby-tag">Nonfiction</span><span
+                  class="hobby-tag">History</span><span class="hobby-tag">Science</span><span
+                  class="hobby-tag">Biographies</span></div>
+            </article>
+
+            <article class="glass hobby-card gs-scale">
+              <canvas class="rain-canvas"></canvas>
+              <div class="hobby-icon-wrap"
+                style="background:rgba(255,160,50,0.1);border:1px solid rgba(255,160,50,0.2)"><svg width="22"
+                  height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M2.5 12.5 11 10l2.8-7.3c.2-.5.8-.7 1.2-.3l2.6 2.6c.3.3.3.8 0 1.1l-4.3 4.4 5.7 1.5c.5.1.7.7.3 1.1l-2 2a1 1 0 0 1-.9.3l-5.3-1.1-3.4 3.9">
+                  </path>
+                  <path d="M6 21c-.7-.9-1.2-2.3-1-3.8.2-1.4 1-2.9 2.5-3.5"></path>
+                </svg></div>
+              <div class="hobby-title">Aviation Enthusiast</div>
+              <div class="hobby-desc">Deeply fascinated by aviation history, incident analysis, and how engineering
+                decisions ripple into catastrophic or miraculous outcomes. Helios Flight 522 is one of the most haunting
+                case studies in systems failure.</div>
+              <div class="hobby-tags"><span class="hobby-tag">Aviation History</span><span class="hobby-tag">Incident
+                  Analysis</span><span class="hobby-tag">Aerospace</span></div>
+            </article>
+
+            <article class="glass hobby-card gs-scale">
+              <canvas class="rain-canvas"></canvas>
+              <div class="hobby-icon-wrap"
+                style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.18)"><svg width="22"
+                  height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="7" width="14" height="10" rx="2"></rect>
+                  <path d="M9 5v2m6-2v2"></path>
+                  <circle cx="10" cy="12" r="1"></circle>
+                  <circle cx="14" cy="12" r="1"></circle>
+                  <path d="M9 15.5h6"></path>
+                </svg></div>
+              <div class="hobby-title">Local AI Tinkering</div>
+              <div class="hobby-desc">Running LLMs locally on an M3 MacBook Air (8GB) — pushing the hardware limits.
+                Testing Gemma 4, GLM-OCR, and Apple's on-device FoundationModels. The constraint of 8GB makes every
+                model choice feel like a puzzle.</div>
+              <div class="hobby-tags"><span class="hobby-tag">Ollama</span><span class="hobby-tag">Apple
+                  Silicon</span><span class="hobby-tag">Model Quantization</span></div>
+            </article>
+
+            <article class="glass hobby-card gs-scale">
+              <canvas class="rain-canvas"></canvas>
+              <div class="hobby-icon-wrap"
+                style="background:rgba(255,80,100,0.1);border:1px solid rgba(255,80,100,0.2)"><svg width="22"
+                  height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 4.5 19 19"></path>
+                  <path d="M10 9 7.5 6.5a1.4 1.4 0 0 0-2 2L8 11"></path>
+                  <path d="M16 15 13 12"></path>
+                  <path d="M6.5 18.5 9 16"></path>
+                  <circle cx="17.5" cy="6.5" r="2"></circle>
+                </svg></div>
+              <div class="hobby-title">Cricket</div>
+              <div class="hobby-desc">Loyal KKR fan through every season — through glory and gut-punch defeats. Cricket
+                is the sport where statistics, strategy, and pure chaos coexist most beautifully.</div>
+              <div class="hobby-tags"><span class="hobby-tag">KKR</span><span class="hobby-tag">IPL</span><span
+                  class="hobby-tag">Cricket Analytics</span></div>
+            </article>
+
+          </div>
+        </div>
       </div>
-      <div class="progress-mini"><div class="mini-bar"><div class="mini-fill" data-w="82"></div></div><span class="mini-label">82%</span></div>
-    </article>
-    <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(94,240,255,0.08);border:1px solid rgba(94,240,255,0.15)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11v7m5-11v11m5-6v6m4-12v12"></path><path d="M3 20h18"></path></svg></div><div><div class="learn-title">Data Science</div><div class="learn-sub">IIT Guwahati · Google Colab</div></div></div>
-      <div class="learn-topics">
-        <div class="topic-row">NumPy — vectorized ops, broadcasting, strides</div>
-        <div class="topic-row">Pandas — DataFrames, groupby, merge, pivot tables</div>
-        <div class="topic-row">Data wrangling, cleaning, full EDA pipelines</div>
-        <div class="topic-row">Matplotlib / Seaborn — statistical visualizations</div>
-        <div class="topic-row">Feature engineering &amp; selection techniques</div>
-        <div class="topic-row">Model eval — ROC, AUC, confusion matrices, F1</div>
-        <div class="topic-row">Colab environments, kernel debugging, GPU access</div>
+    </section>
+
+    <!-- ══ EXTENSIONS ══ -->
+    <section id="extensions">
+      <div class="container">
+        <div class="sec-label">
+          <h2>Extensions</h2>
+          <div class="line"></div>
+          <div class="tag">CHROME</div>
+        </div>
+        <div class="two-col">
+          <article class="glass ext-card gs-fade-left"><canvas class="rain-canvas"></canvas>
+            <div class="ext-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 3h10v18H7z"></path>
+                <path d="M9 7h6"></path>
+                <path d="M9 11h6"></path>
+                <path d="M9 15h4"></path>
+              </svg></div>
+            <h3 class="proj-title">Prank Core</h3>
+            <p class="proj-desc">Browser extension — clicking any link triggers a high-impact skull animation. DOM
+              manipulation and psychological operations tool.</p>
+            <div class="pills"><span class="pill">Chrome Extension</span><span class="pill">JavaScript</span><span
+                class="pill">DOM Manipulation</span></div>
+          </article>
+          <article class="glass ext-card gs-fade-right"><canvas class="rain-canvas"></canvas>
+            <div class="ext-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 3h7l5 5v13H7z"></path>
+                <path d="M14 3v5h5"></path>
+                <path d="M10 13h6M10 17h6M10 9h2"></path>
+              </svg></div>
+            <h3 class="proj-title">PDF Strat</h3>
+            <p class="proj-desc">Rapid-fire sequential screenshot capture that auto-compiles frames into a unified PDF
+              dossier via the Canvas API.</p>
+            <div class="pills"><span class="pill">Chrome Extension</span><span class="pill">JavaScript</span><span
+                class="pill">Canvas API</span></div>
+          </article>
+        </div>
       </div>
-      <div class="progress-mini"><div class="mini-bar"><div class="mini-fill" data-w="85"></div></div><span class="mini-label">85%</span></div>
-    </article>
-    <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.15)">🔐</div><div><div class="learn-title">Cybersecurity</div><div class="learn-sub">Self-study · Kali Linux</div></div></div>
-      <div class="learn-topics">
-        <div class="topic-row">OSINT techniques &amp; reconnaissance automation</div>
-        <div class="topic-row">Network scanning — TCP/UDP, Nmap, port enumeration</div>
-        <div class="topic-row">Penetration testing methodologies</div>
-        <div class="topic-row">Vulnerability assessment &amp; report writing</div>
-        <div class="topic-row">Linux CLI &amp; Bash scripting for automation</div>
-        <div class="topic-row">API security — Keychain, credential management</div>
-        <div class="topic-row">AWS security — S3 policies, SigV4, billing audits</div>
+    </section>
+
+    <!-- ══ AI LAB ══ -->
+    <section id="ai-lab">
+      <div class="container">
+        <div class="sec-label">
+          <h2>AI Lab</h2>
+          <div class="line"></div>
+          <div class="tag">RESEARCH DIRECTION</div>
+        </div>
+        <article class="glass proj-card gs-fade" style="padding:32px">
+          <canvas class="rain-canvas"></canvas>
+          <h3 class="proj-title">On-Device AI Research Pipeline</h3>
+          <p class="proj-desc" style="max-width:680px">Exploring the frontier of running AI entirely on-device — no
+            cloud, no API keys, no latency. Current focus: building custom RAG pipelines with local embeddings, semantic
+            memory systems for autonomous agents, and benchmarking Apple's FoundationModels API against quantized
+            open-source models on 8GB Apple Silicon. The goal is privacy-first AI that works offline.</p>
+          <div class="pills"><span class="pill">FoundationModels API</span><span class="pill">RAG Pipelines</span><span
+              class="pill">Semantic Memory</span><span class="pill">Model Quantization</span><span
+              class="pill">On-Device Inference</span><span class="pill">Privacy-First AI</span><span class="pill">Apple
+              Silicon M3</span></div>
+          <div class="metrics"><span>8GB Constrained</span><span>Zero Cloud</span><span>Offline-First</span><span>Active
+              Research</span></div>
+          <div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg" target="_blank"
+              aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+              </svg></a></div>
+        </article>
       </div>
-      <div class="progress-mini"><div class="mini-bar"><div class="mini-fill" data-w="90"></div></div><span class="mini-label">90%</span></div>
-    </article>
-    <article class="glass learn-card gs-fade"><canvas class="rain-canvas"></canvas>
-      <div class="learn-header"><div class="learn-icon" style="background:rgba(255,180,50,0.08);border:1px solid rgba(255,180,50,0.15)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5c-.8-.7-2.2-.8-3.1-.1C9.8 5.7 9 7.3 9 9c0 3.2 2.1 6 3 7 .2.3.6.3.8 0 1-1.2 3.2-4.2 3.2-7.1 0-1.2-.4-2.3-1.1-3.1z"></path><path d="M12 4s-.2-1.5 1.3-2"></path><path d="M10.8 6.5c-.8-.6-2-.6-2.9-.1C6.6 7.2 6 8.6 6 10c0 2.3 1.5 4.6 2.3 5.6.2.3.6.3.8 0 .6-.8 1.8-2.6 2.2-4.6"></path></svg></div><div><div class="learn-title">Swift & macOS Dev</div><div class="learn-sub">Self-directed · Xcode 15+</div></div></div>
-      <div class="learn-topics">
-        <div class="topic-row">SwiftUI — declarative layouts, @State, @Observable</div>
-        <div class="topic-row">SwiftData — persistence, migrations, relationships</div>
-        <div class="topic-row">Swift Concurrency — async/await, actors, Sendable</div>
-        <div class="topic-row">Protocol-oriented programming patterns</div>
-        <div class="topic-row">MVVM + Dependency Injection (AppDIContainer)</div>
-        <div class="topic-row">SSE &amp; NDJSON streaming for LLM APIs</div>
-        <div class="topic-row">macOS Keychain, AES-256-GCM, Secure Enclave</div>
-        <div class="topic-row">Apple FoundationModels API — on-device AI</div>
+    </section>
+
+    <!-- ══ TOOLS ══ -->
+    <section id="tools">
+      <div class="container">
+        <div class="sec-label">
+          <h2>Terminal Tools</h2>
+          <div class="line"></div>
+          <div class="tag">CLI</div>
+        </div>
+        <article class="glass proj-card gs-fade" style="padding:24px">
+          <canvas class="rain-canvas"></canvas>
+          <h3 class="proj-title">TimeNow CLI</h3>
+          <p class="proj-desc">Global temporal synchronization tool. Retrieves real-time local date and time for any
+            location on the planet — timezone-aware, coordinate-precise.</p>
+          <div class="terminal-block">
+            <div class="dot-row">
+              <div class="dot r"></div>
+              <div class="dot y"></div>
+              <div class="dot g"></div>
+            </div>
+            <div><span class="t-dim">rudra@dev</span><span class="t-prompt"> ~/tools/timenow</span> $</div>
+            <div style="margin-top:4px">timenow --location <span style="color:#b5f5b0">"Tokyo"</span></div>
+            <div class="t-out" style="margin-top:6px">▸ Fetching temporal data...</div>
+            <div class="t-out">▸ 03:45:12 AM JST &nbsp;|&nbsp; 35.67°N 139.65°E</div>
+            <div class="t-out">▸ Date: Tuesday, April 21 2026</div>
+          </div>
+          <div class="pills"><span class="pill">Python</span><span class="pill">CLI</span><span
+              class="pill">GeoPy</span></div>
+          <div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg" target="_blank"
+              aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+              </svg></a></div>
+        </article>
       </div>
-      <div class="progress-mini"><div class="mini-bar"><div class="mini-fill" data-w="75"></div></div><span class="mini-label">75%</span></div>
-    </article>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ══ HOBBIES ══ -->
-<section id="hobbies">
-  <div class="container">
-    <div class="sec-label"><h2>Beyond the Code</h2><div class="line"></div><div class="tag">HOBBIES</div></div>
-    <div class="hobbies-shell">
-    <div class="hobbies-rail">
+    <!-- ══ SKILLS ══ -->
+    <section id="skills">
+      <div class="container">
+        <div class="sec-label">
+          <h2>Skills &amp; Expertise</h2>
+          <div class="line"></div>
+          <div class="tag">CAPABILITIES</div>
+        </div>
+        <div class="skills-grid">
 
-    <article class="glass hobby-card gs-scale">
-      <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.2)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17c0-4.4 3.6-8 8-8 3.2 0 4.7 1.8 4.7 3.4 0 1-.8 1.6-1.7 1.6-.9 0-1.5.7-1.5 1.5 0 .9.7 1.5 1.5 1.5h1c1.7 0 3 .9 3 2.7 0 1.1-.7 2.3-2 2.3H8c-2.2 0-4-1.8-4-4Z"></path><circle cx="9" cy="10" r=".75"></circle><circle cx="6.5" cy="13" r=".75"></circle><circle cx="12" cy="7.5" r=".75"></circle></svg></div>
-      <div class="hobby-title">ASCII Art</div>
-      <div class="hobby-desc">Crafting visual art using pure text characters — a discipline where constraint breeds creativity. From simple portraits to complex scenes built entirely from printable ASCII.</div>
-      <div class="ascii-preview">  /\_____/\
- (  o   o  )
- (  =^=   )
-  (        )
-   (______)</div>
-      <div class="hobby-tags"><span class="hobby-tag">Terminal Art</span><span class="hobby-tag">Creative Coding</span><span class="hobby-tag">Text Rendering</span></div>
-    </article>
+          <article class="glass skill-card gs-fade">
+            <canvas class="rain-canvas"></canvas>
+            <div class="skill-header">
+              <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="6" cy="8" r="2.2"></circle>
+                  <circle cx="18" cy="8" r="2.2"></circle>
+                  <circle cx="12" cy="16" r="2.5"></circle>
+                  <path d="M7.5 9.5 10 13m6.5-3.5-2.5 3.5M6 14h3M15 14h3"></path>
+                </svg></div>
+              <div class="skill-title">AI / Machine Learning</div>
+            </div>
+            <div class="skill-rows">
+              <div class="skill-row"><span class="skill-label">CNNs</span><span class="skill-value">7-class real-time
+                  classifier</span></div>
+              <div class="skill-row"><span class="skill-label">Embeddings</span><span class="skill-value">Cosine
+                  similarity recall</span></div>
+              <div class="skill-row"><span class="skill-label">Dimensionality</span><span class="skill-value">t-SNE
+                  &amp; PCA pipelines</span></div>
+              <div class="skill-row"><span class="skill-label">Local LLMs</span><span class="skill-value">Ollama + Gemma
+                  streaming</span></div>
+              <div class="skill-row"><span class="skill-label">Agentic flows</span><span class="skill-value">Prompt +
+                  tool-use refinement</span></div>
+            </div>
+          </article>
 
-    <article class="glass hobby-card gs-scale">
-      <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(176,110,243,0.1);border:1px solid rgba(176,110,243,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l8-2m0 0 8-2M11 11l1 9m-1-9L6 5m5 6 5-8"></path><path d="M5 19l3-2.5"></path></svg></div>
-      <div class="hobby-title">Solo Travelling</div>
-      <div class="hobby-desc">Navigating unknown places alone — planning routes, improvising when plans collapse, finding meaning in being lost. Every solo trip is a systems problem with no documentation.</div>
-      <div class="hobby-tags"><span class="hobby-tag">Route Planning</span><span class="hobby-tag">Exploration</span><span class="hobby-tag">Solo Adventures</span></div>
-    </article>
+          <article class="glass skill-card gs-fade">
+            <canvas class="rain-canvas"></canvas>
+            <div class="skill-header">
+              <div class="skill-icon" style="color:var(--pri)"><svg viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                  <path d="M8 9h8M8 12h5M8 15h3"></path>
+                  <circle cx="15.5" cy="15.5" r="1.2"></circle>
+                </svg></div>
+              <div class="skill-title">Systems Programming (C++)</div>
+            </div>
+            <div class="skill-rows">
+              <div class="skill-row"><span class="skill-label">Memory</span><span class="skill-value">Pointers, dynamic
+                  allocation, copy semantics</span></div>
+              <div class="skill-row"><span class="skill-label">Pointers</span><span class="skill-value">Multi-level
+                  utilities, 2D/3D arrays</span></div>
+              <div class="skill-row"><span class="skill-label">RAII</span><span class="skill-value">Copy/move
+                  constructors, safe lifetimes</span></div>
+              <div class="skill-row"><span class="skill-label">Performance</span><span class="skill-value">Pointer-tuned
+                  sort/merge routines</span></div>
+              <div class="skill-row"><span class="skill-label">Structure</span><span class="skill-value">Enums,
+                  switch-driven state, range loops</span></div>
+            </div>
+          </article>
 
-    <article class="glass hobby-card gs-scale">
-      <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(124,120,245,0.1);border:1px solid rgba(124,120,245,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h7.5a2.5 2.5 0 0 1 0 5H5zM5 10h7.5A2.5 2.5 0 0 1 15 12.5V19a2 2 0 0 0-2 2H5z"></path><path d="M19 5h-2v16h2"></path></svg></div>
-      <div class="hobby-title">Book Reading</div>
-      <div class="hobby-desc">Nonfiction history, science, and biographies. Currently working through technical reads on distributed systems and old classics. Books are the best low-bandwidth, high-density data transfer protocol.</div>
-      <div class="hobby-tags"><span class="hobby-tag">Nonfiction</span><span class="hobby-tag">History</span><span class="hobby-tag">Science</span><span class="hobby-tag">Biographies</span></div>
-    </article>
+          <article class="glass skill-card gs-fade">
+            <canvas class="rain-canvas"></canvas>
+            <div class="skill-header">
+              <div class="skill-icon" style="color:var(--tri)"><svg viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3 4 7v5c0 5 4 8 8 9 4-1 8-4 8-9V7z"></path>
+                  <path d="M9.5 12.5 11 14l3.5-4"></path>
+                </svg></div>
+              <div class="skill-title">Cybersecurity</div>
+            </div>
+            <div class="skill-rows">
+              <div class="skill-row"><span class="skill-label">Toolkit</span><span class="skill-value">OSINT + recon CLI
+                  with reports</span></div>
+              <div class="skill-row"><span class="skill-label">Hardening</span><span class="skill-value">Keychain,
+                  AES-256-GCM, Secure Enclave</span></div>
+              <div class="skill-row"><span class="skill-label">Vuln scans</span><span class="skill-value">Automated
+                  TCP/UDP enumeration</span></div>
+              <div class="skill-row"><span class="skill-label">Threat modeling</span><span class="skill-value">DOM
+                  injection &amp; supply chain defense</span></div>
+              <div class="skill-row"><span class="skill-label">Audit</span><span class="skill-value">Audit-friendly
+                  logging paths</span></div>
+            </div>
+          </article>
 
-    <article class="glass hobby-card gs-scale">
-      <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(255,160,50,0.1);border:1px solid rgba(255,160,50,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12.5 11 10l2.8-7.3c.2-.5.8-.7 1.2-.3l2.6 2.6c.3.3.3.8 0 1.1l-4.3 4.4 5.7 1.5c.5.1.7.7.3 1.1l-2 2a1 1 0 0 1-.9.3l-5.3-1.1-3.4 3.9"></path><path d="M6 21c-.7-.9-1.2-2.3-1-3.8.2-1.4 1-2.9 2.5-3.5"></path></svg></div>
-      <div class="hobby-title">Aviation Enthusiast</div>
-      <div class="hobby-desc">Deeply fascinated by aviation history, incident analysis, and how engineering decisions ripple into catastrophic or miraculous outcomes. Helios Flight 522 is one of the most haunting case studies in systems failure.</div>
-      <div class="hobby-tags"><span class="hobby-tag">Aviation History</span><span class="hobby-tag">Incident Analysis</span><span class="hobby-tag">Aerospace</span></div>
-    </article>
+          <article class="glass skill-card gs-fade">
+            <canvas class="rain-canvas"></canvas>
+            <div class="skill-header">
+              <div class="skill-icon" style="color:var(--sec)"><svg viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19h16"></path>
+                  <path d="M6 16V7m4 9V5m4 11V9m4 7v-4"></path>
+                </svg></div>
+              <div class="skill-title">Data Science</div>
+            </div>
+            <div class="skill-rows">
+              <div class="skill-row"><span class="skill-label">EDA</span><span class="skill-value">NumPy/Pandas
+                  pipelines</span></div>
+              <div class="skill-row"><span class="skill-label">Features</span><span class="skill-value">Engineering
+                  &amp; viz with Matplotlib/Seaborn</span></div>
+              <div class="skill-row"><span class="skill-label">Modeling</span><span
+                  class="skill-value">Regression/classification loops</span></div>
+              <div class="skill-row"><span class="skill-label">Wrangling</span><span class="skill-value">Cleaning
+                  utilities for messy data</span></div>
+              <div class="skill-row"><span class="skill-label">Vectorization</span><span
+                  class="skill-value">Stride-aware vector operations</span></div>
+            </div>
+          </article>
 
-    <article class="glass hobby-card gs-scale">
-      <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(94,240,255,0.1);border:1px solid rgba(94,240,255,0.18)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="10" rx="2"></rect><path d="M9 5v2m6-2v2"></path><circle cx="10" cy="12" r="1"></circle><circle cx="14" cy="12" r="1"></circle><path d="M9 15.5h6"></path></svg></div>
-      <div class="hobby-title">Local AI Tinkering</div>
-      <div class="hobby-desc">Running LLMs locally on an M3 MacBook Air (8GB) — pushing the hardware limits. Testing Gemma 4, GLM-OCR, and Apple's on-device FoundationModels. The constraint of 8GB makes every model choice feel like a puzzle.</div>
-      <div class="hobby-tags"><span class="hobby-tag">Ollama</span><span class="hobby-tag">Apple Silicon</span><span class="hobby-tag">Model Quantization</span></div>
-    </article>
+          <article class="glass skill-card gs-fade">
+            <canvas class="rain-canvas"></canvas>
+            <div class="skill-header">
+              <div class="skill-icon" style="color:rgba(255,180,50,0.9)"><svg viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M8 5c1.2-1.6 3.5-1.7 4.8-.2 1.4 1.5 1.3 4.2-.3 6.1C9.7 13.8 7 15 7 17c0 1.5 1.4 2.5 3.2 2.5 1.6 0 2.8-.9 3.8-2.2">
+                  </path>
+                  <path d="M14.5 7.5c.9-1.3 2.7-1.5 3.8-.3.9 1 .7 2.5-.3 3.7-1.8 2.1-4.5 3.2-4.5 5.1 0 .5.2 1 .6 1.5">
+                  </path>
+                </svg></div>
+              <div class="skill-title">Swift / macOS Development</div>
+            </div>
+            <div class="skill-rows">
+              <div class="skill-row"><span class="skill-label">Apps</span><span class="skill-value">SwiftUI + SwiftData
+                  with MVVM/DI</span></div>
+              <div class="skill-row"><span class="skill-label">Concurrency</span><span class="skill-value">Async/await,
+                  actors, Sendable models</span></div>
+              <div class="skill-row"><span class="skill-label">Security</span><span class="skill-value">AES-256-GCM,
+                  Keychain, Secure Enclave</span></div>
+              <div class="skill-row"><span class="skill-label">AI integration</span><span
+                  class="skill-value">Multi-provider streaming UI</span></div>
+              <div class="skill-row"><span class="skill-label">UX</span><span class="skill-value">macOS glass UI,
+                  perf-conscious animations</span></div>
+            </div>
+          </article>
 
-    <article class="glass hobby-card gs-scale">
-      <canvas class="rain-canvas"></canvas>
-      <div class="hobby-icon-wrap" style="background:rgba(255,80,100,0.1);border:1px solid rgba(255,80,100,0.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5 19 19"></path><path d="M10 9 7.5 6.5a1.4 1.4 0 0 0-2 2L8 11"></path><path d="M16 15 13 12"></path><path d="M6.5 18.5 9 16"></path><circle cx="17.5" cy="6.5" r="2"></circle></svg></div>
-      <div class="hobby-title">Cricket</div>
-      <div class="hobby-desc">Loyal KKR fan through every season — through glory and gut-punch defeats. Cricket is the sport where statistics, strategy, and pure chaos coexist most beautifully.</div>
-      <div class="hobby-tags"><span class="hobby-tag">KKR</span><span class="hobby-tag">IPL</span><span class="hobby-tag">Cricket Analytics</span></div>
-    </article>
-
-    </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ EXTENSIONS ══ -->
-<section id="extensions">
-  <div class="container">
-    <div class="sec-label"><h2>Extensions</h2><div class="line"></div><div class="tag">CHROME</div></div>
-    <div class="two-col">
-    <article class="glass ext-card gs-fade-left"><canvas class="rain-canvas"></canvas><div class="ext-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10v18H7z"></path><path d="M9 7h6"></path><path d="M9 11h6"></path><path d="M9 15h4"></path></svg></div><h3 class="proj-title">Prank Core</h3><p class="proj-desc">Browser extension — clicking any link triggers a high-impact skull animation. DOM manipulation and psychological operations tool.</p><div class="pills"><span class="pill">Chrome Extension</span><span class="pill">JavaScript</span><span class="pill">DOM Manipulation</span></div></article>
-    <article class="glass ext-card gs-fade-right"><canvas class="rain-canvas"></canvas><div class="ext-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5"></path><path d="M10 13h6M10 17h6M10 9h2"></path></svg></div><h3 class="proj-title">PDF Strat</h3><p class="proj-desc">Rapid-fire sequential screenshot capture that auto-compiles frames into a unified PDF dossier via the Canvas API.</p><div class="pills"><span class="pill">Chrome Extension</span><span class="pill">JavaScript</span><span class="pill">Canvas API</span></div></article>
-    </div>
-  </div>
-</section>
-
-<!-- ══ AI LAB ══ -->
-<section id="ai-lab">
-  <div class="container">
-    <div class="sec-label"><h2>AI Lab</h2><div class="line"></div><div class="tag">EXPERIMENTS</div></div>
-    <article class="glass proj-card gs-fade" style="padding:32px">
-      <canvas class="rain-canvas"></canvas>
-      <h3 class="proj-title">Semantic Vector Engine</h3>
-      <p class="proj-desc" style="max-width:680px">Transforms natural language into high-dimensional vectors using Gemma locally via Ollama on Apple Silicon M3. Includes real-time t-SNE dimensionality reduction, cosine similarity matrices, and an exploratory analysis workspace. A stepping stone toward custom RAG pipelines and semantic memory systems for local AI agents.</p>
-      <div class="pills"><span class="pill">Python</span><span class="pill">Ollama</span><span class="pill">Gemma</span><span class="pill">t-SNE</span><span class="pill">Cosine Similarity</span><span class="pill">Local LLM</span><span class="pill">Apple Silicon</span></div>
-      <div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg" target="_blank" aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a></div>
-    </article>
-  </div>
-</section>
-
-<!-- ══ TOOLS ══ -->
-<section id="tools">
-  <div class="container">
-    <div class="sec-label"><h2>Terminal Tools</h2><div class="line"></div><div class="tag">CLI</div></div>
-    <article class="glass proj-card gs-fade" style="padding:24px">
-      <canvas class="rain-canvas"></canvas>
-      <h3 class="proj-title">TimeNow CLI</h3>
-      <p class="proj-desc">Global temporal synchronization tool. Retrieves real-time local date and time for any location on the planet — timezone-aware, coordinate-precise.</p>
-      <div class="terminal-block">
-        <div class="dot-row"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
-        <div><span class="t-dim">rudra@dev</span><span class="t-prompt"> ~/tools/timenow</span> $</div>
-        <div style="margin-top:4px">timenow --location <span style="color:#b5f5b0">"Tokyo"</span></div>
-        <div class="t-out" style="margin-top:6px">▸ Fetching temporal data...</div>
-        <div class="t-out">▸ 03:45:12 AM JST &nbsp;|&nbsp; 35.67°N 139.65°E</div>
-        <div class="t-out">▸ Date: Tuesday, April 21 2026</div>
+        </div>
       </div>
-      <div class="pills"><span class="pill">Python</span><span class="pill">CLI</span><span class="pill">GeoPy</span></div>
-      <div class="link-row"><a class="icon-btn" href="https://github.com/rudra-iitg" target="_blank" aria-label="GitHub"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 9.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a></div>
-    </article>
-  </div>
-</section>
+    </section>
 
-<!-- ══ SKILLS ══ -->
-<section id="skills">
-  <div class="container">
-    <div class="sec-label"><h2>Skills &amp; Expertise</h2><div class="line"></div><div class="tag">CAPABILITIES</div></div>
-    <div class="skills-grid">
-
-      <article class="glass skill-card gs-fade">
-        <canvas class="rain-canvas"></canvas>
-        <div class="skill-header">
-          <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="8" r="2.2"></circle><circle cx="18" cy="8" r="2.2"></circle><circle cx="12" cy="16" r="2.5"></circle><path d="M7.5 9.5 10 13m6.5-3.5-2.5 3.5M6 14h3M15 14h3"></path></svg></div>
-          <div class="skill-title">AI / Machine Learning</div>
+    <!-- ══ ABOUT ══ -->
+    <section id="about">
+      <div class="container">
+        <div class="sec-label">
+          <h2>About</h2>
+          <div class="line"></div>
+          <div class="tag">ORIGIN</div>
         </div>
-        <div class="skill-rows">
-          <div class="skill-row"><span class="skill-label">CNNs</span><span class="skill-value">7-class real-time classifier</span></div>
-          <div class="skill-row"><span class="skill-label">Embeddings</span><span class="skill-value">Cosine similarity recall</span></div>
-          <div class="skill-row"><span class="skill-label">Dimensionality</span><span class="skill-value">t-SNE &amp; PCA pipelines</span></div>
-          <div class="skill-row"><span class="skill-label">Local LLMs</span><span class="skill-value">Ollama + Gemma streaming</span></div>
-          <div class="skill-row"><span class="skill-label">Agentic flows</span><span class="skill-value">Prompt + tool-use refinement</span></div>
+        <div class="about-grid">
+          <article class="glass about-card gs-fade-left">
+            <canvas class="rain-canvas"></canvas>
+            <p class="about-text">
+              I'm <strong>Rudra</strong> — a second-year <strong>Data Science &amp; AI</strong> student at <strong>IIT
+                Guwahati</strong>
+              building at the intersection of neural networks and security.<br><br>
+              I build <strong>native macOS apps</strong> in SwiftUI, deploy <strong>local LLMs</strong> on Apple Silicon
+              M3,
+              write systems code in <strong>C++</strong>, and explore AI research through arXiv papers and hands-on
+              implementation.<br><br>
+              My stack spans Python, Swift, C++, Bash, and everything in between. Passionate about
+              <strong>on-device AI</strong>, clean architecture, and tools that solve real problems rather than
+              demo-ware.<br><br>
+              Currently seeking <strong>internship opportunities</strong> in AI/ML and systems engineering.
+            </p>
+          </article>
+          <article class="glass stat-grid gs-fade-right">
+            <canvas class="rain-canvas"></canvas>
+            <div class="stat-item">
+              <div class="stat-num">5+</div>
+              <div class="stat-label">Projects Shipped</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">11+</div>
+              <div class="stat-label">AI Providers in Jiano</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">6</div>
+              <div class="stat-label">Languages &amp; Stacks</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">2nd</div>
+              <div class="stat-label">Year @ IIT Guwahati</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">M3</div>
+              <div class="stat-label">MacBook Air 8GB</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">∞</div>
+              <div class="stat-label">Curiosity</div>
+            </div>
+          </article>
         </div>
-      </article>
-
-      <article class="glass skill-card gs-fade">
-        <canvas class="rain-canvas"></canvas>
-        <div class="skill-header">
-          <div class="skill-icon" style="color:var(--pri)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M8 9h8M8 12h5M8 15h3"></path><circle cx="15.5" cy="15.5" r="1.2"></circle></svg></div>
-          <div class="skill-title">Systems Programming (C++)</div>
-        </div>
-        <div class="skill-rows">
-          <div class="skill-row"><span class="skill-label">Memory</span><span class="skill-value">Pointers, dynamic allocation, copy semantics</span></div>
-          <div class="skill-row"><span class="skill-label">Pointers</span><span class="skill-value">Multi-level utilities, 2D/3D arrays</span></div>
-          <div class="skill-row"><span class="skill-label">RAII</span><span class="skill-value">Copy/move constructors, safe lifetimes</span></div>
-          <div class="skill-row"><span class="skill-label">Performance</span><span class="skill-value">Pointer-tuned sort/merge routines</span></div>
-          <div class="skill-row"><span class="skill-label">Structure</span><span class="skill-value">Enums, switch-driven state, range loops</span></div>
-        </div>
-      </article>
-
-      <article class="glass skill-card gs-fade">
-        <canvas class="rain-canvas"></canvas>
-        <div class="skill-header">
-          <div class="skill-icon" style="color:var(--tri)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v5c0 5 4 8 8 9 4-1 8-4 8-9V7z"></path><path d="M9.5 12.5 11 14l3.5-4"></path></svg></div>
-          <div class="skill-title">Cybersecurity</div>
-        </div>
-        <div class="skill-rows">
-          <div class="skill-row"><span class="skill-label">Toolkit</span><span class="skill-value">OSINT + recon CLI with reports</span></div>
-          <div class="skill-row"><span class="skill-label">Hardening</span><span class="skill-value">Keychain, AES-256-GCM, Secure Enclave</span></div>
-          <div class="skill-row"><span class="skill-label">Vuln scans</span><span class="skill-value">Automated TCP/UDP enumeration</span></div>
-          <div class="skill-row"><span class="skill-label">Threat modeling</span><span class="skill-value">DOM injection &amp; supply chain defense</span></div>
-          <div class="skill-row"><span class="skill-label">Audit</span><span class="skill-value">Audit-friendly logging paths</span></div>
-        </div>
-      </article>
-
-      <article class="glass skill-card gs-fade">
-        <canvas class="rain-canvas"></canvas>
-        <div class="skill-header">
-          <div class="skill-icon" style="color:var(--sec)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"></path><path d="M6 16V7m4 9V5m4 11V9m4 7v-4"></path></svg></div>
-          <div class="skill-title">Data Science</div>
-        </div>
-        <div class="skill-rows">
-          <div class="skill-row"><span class="skill-label">EDA</span><span class="skill-value">NumPy/Pandas pipelines</span></div>
-          <div class="skill-row"><span class="skill-label">Features</span><span class="skill-value">Engineering &amp; viz with Matplotlib/Seaborn</span></div>
-          <div class="skill-row"><span class="skill-label">Modeling</span><span class="skill-value">Regression/classification loops</span></div>
-          <div class="skill-row"><span class="skill-label">Wrangling</span><span class="skill-value">Cleaning utilities for messy data</span></div>
-          <div class="skill-row"><span class="skill-label">Vectorization</span><span class="skill-value">Stride-aware vector operations</span></div>
-        </div>
-      </article>
-
-      <article class="glass skill-card gs-fade">
-        <canvas class="rain-canvas"></canvas>
-        <div class="skill-header">
-          <div class="skill-icon" style="color:rgba(255,180,50,0.9)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5c1.2-1.6 3.5-1.7 4.8-.2 1.4 1.5 1.3 4.2-.3 6.1C9.7 13.8 7 15 7 17c0 1.5 1.4 2.5 3.2 2.5 1.6 0 2.8-.9 3.8-2.2"></path><path d="M14.5 7.5c.9-1.3 2.7-1.5 3.8-.3.9 1 .7 2.5-.3 3.7-1.8 2.1-4.5 3.2-4.5 5.1 0 .5.2 1 .6 1.5"></path></svg></div>
-          <div class="skill-title">Swift / macOS Development</div>
-        </div>
-        <div class="skill-rows">
-          <div class="skill-row"><span class="skill-label">Apps</span><span class="skill-value">SwiftUI + SwiftData with MVVM/DI</span></div>
-          <div class="skill-row"><span class="skill-label">Concurrency</span><span class="skill-value">Async/await, actors, Sendable models</span></div>
-          <div class="skill-row"><span class="skill-label">Security</span><span class="skill-value">AES-256-GCM, Keychain, Secure Enclave</span></div>
-          <div class="skill-row"><span class="skill-label">AI integration</span><span class="skill-value">Multi-provider streaming UI</span></div>
-          <div class="skill-row"><span class="skill-label">UX</span><span class="skill-value">macOS glass UI, perf-conscious animations</span></div>
-        </div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══ ABOUT ══ -->
-<section id="about">
-  <div class="container">
-    <div class="sec-label"><h2>About</h2><div class="line"></div><div class="tag">ORIGIN</div></div>
-    <div class="about-grid">
-      <article class="glass about-card gs-fade-left">
-        <canvas class="rain-canvas"></canvas>
-        <p class="about-text">
-          I'm <strong>Rudra</strong> — a second-year <strong>Data Science &amp; AI</strong> student at <strong>IIT Guwahati</strong>
-          building at the intersection of neural networks and security.<br><br>
-          I build <strong>native macOS apps</strong> in SwiftUI, deploy <strong>local LLMs</strong> on Apple Silicon M3,
-          write systems code in <strong>C++</strong>, and explore AI research through arXiv papers and hands-on implementation.<br><br>
-          My stack spans Python, Swift, C++, Bash, and everything in between. Passionate about
-          <strong>on-device AI</strong>, clean architecture, and tools that solve real problems rather than demo-ware.<br><br>
-          Currently seeking <strong>internship opportunities</strong> in AI/ML and systems engineering.
-        </p>
-      </article>
-      <article class="glass stat-grid gs-fade-right">
-        <canvas class="rain-canvas"></canvas>
-        <div class="stat-item"><div class="stat-num">5+</div><div class="stat-label">Projects Shipped</div></div>
-        <div class="stat-item"><div class="stat-num">11+</div><div class="stat-label">AI Providers in Jiano</div></div>
-        <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">Languages &amp; Stacks</div></div>
-        <div class="stat-item"><div class="stat-num">2nd</div><div class="stat-label">Year @ IIT Guwahati</div></div>
-        <div class="stat-item"><div class="stat-num">M3</div><div class="stat-label">MacBook Air 8GB</div></div>
-        <div class="stat-item"><div class="stat-num">∞</div><div class="stat-label">Curiosity</div></div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ══ CONTACT ══ -->
-<section id="contact">
-  <div class="container">
-    <div class="sec-label"><h2>Contact</h2><div class="line"></div><div class="tag">LET'S TALK</div></div>
-    <article class="glass gs-fade" style="padding:32px">
-      <canvas class="rain-canvas"></canvas>
-      <div class="contact-wrap">
-        <div class="contact-form">
-          <input class="input-field" type="text" placeholder="Name">
-          <input class="input-field" type="email" placeholder="Email">
-          <textarea class="input-field" placeholder="Message"></textarea>
-          <button class="btn btn-primary" type="button" style="width:100%;justify-content:center">Send Message →</button>
-        </div>
-        <div class="contact-meta">contact@rudra.dev · <a href="https://github.com/rudra-iitg" target="_blank" rel="noopener">GitHub ↗</a></div>
       </div>
-    </article>
+    </section>
+
+    <!-- ══ CONTACT ══ -->
+    <section id="contact">
+      <div class="container">
+        <div class="sec-label">
+          <h2>Contact</h2>
+          <div class="line"></div>
+          <div class="tag">LET'S TALK</div>
+        </div>
+        <article class="glass gs-fade" style="padding:32px">
+          <canvas class="rain-canvas"></canvas>
+          <div class="contact-wrap">
+            <form class="contact-form" id="contact-form">
+              <label for="contact-name" class="sr-only">Name</label>
+              <input id="contact-name" class="input-field" type="text" placeholder="Name" required>
+              <label for="contact-email" class="sr-only">Email</label>
+              <input id="contact-email" class="input-field" type="email" placeholder="Email" required>
+              <label for="contact-msg" class="sr-only">Message</label>
+              <textarea id="contact-msg" class="input-field" placeholder="Message" required></textarea>
+              <button class="btn btn-primary" type="submit" id="contact-btn"
+                style="width:100%;justify-content:center">Send Message →</button>
+            </form>
+            <div class="contact-meta"><a href="mailto:rudrarajjha2004@gmail.com">rudrarajjha2004@gmail.com</a> · <a
+                href="https://github.com/rudra-iitg" target="_blank" rel="noopener">GitHub ↗</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">© <span id="footer-year">2026</span> Rudra · Built with intent · IIT Guwahati</div>
+    </footer>
   </div>
-</section>
 
-<footer><div class="container">© 2025 Rudra · Built with intent · IIT Guwahati</div></footer>
-</div>
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
 
-<script>
-/* ════════════════════════════════════════════
-   TEXT PRESSURE — "RUDRA" hero effect
-   Vanilla JS port of the React Bits component.
-   Variable font axes: wght 100–900, wdth 5–200, ital 0–1
-════════════════════════════════════════════ */
-(function(){
-  const TEXT = 'RUDRA';
-  const container = document.getElementById('tp-wrap');
-  const title = document.getElementById('tp-title');
+  <script>
+    /* ════════════════════════════════════════════
+       TEXT PRESSURE — "RUDRA" hero effect
+       Vanilla JS port of the React Bits component.
+       Variable font axes: wght 100–900, wdth 5–200, ital 0–1
+    ════════════════════════════════════════════ */
+    (function () {
+      const TEXT = 'RUDRA';
+      const container = document.getElementById('tp-wrap');
+      const title = document.getElementById('tp-title');
 
-  // Build spans
-  TEXT.split('').forEach(ch => {
-    const s = document.createElement('span');
-    s.textContent = ch;
-    s.dataset.char = ch;
-    title.appendChild(s);
-  });
+      // Build spans
+      TEXT.split('').forEach(ch => {
+        const s = document.createElement('span');
+        s.textContent = ch;
+        s.dataset.char = ch;
+        title.appendChild(s);
+      });
 
-  const spans = Array.from(title.querySelectorAll('span'));
-  const mouse = { x: 0, y: 0 };
-  const cursor = { x: 0, y: 0 };
+      const spans = Array.from(title.querySelectorAll('span'));
+      const mouse = { x: 0, y: 0 };
+      const cursor = { x: 0, y: 0 };
 
-  function lerp(a, b, t){ return a + (b - a) * t; }
+      function lerp(a, b, t) { return a + (b - a) * t; }
 
-  function getAttr(dist, maxD, minV, maxV){
-    const v = maxV - Math.abs((maxV * dist) / maxD);
-    return Math.max(minV, v + minV);
-  }
-
-  window.addEventListener('mousemove', e => {
-    cursor.x = e.clientX;
-    cursor.y = e.clientY;
-  });
-
-  // Center init
-  const r = container.getBoundingClientRect();
-  mouse.x = r.left + r.width / 2;
-  mouse.y = r.top + r.height / 2;
-  cursor.x = mouse.x;
-  cursor.y = mouse.y;
-
-  function animTP(){
-    mouse.x += (cursor.x - mouse.x) / 12;
-    mouse.y += (cursor.y - mouse.y) / 12;
-
-    const titleRect = title.getBoundingClientRect();
-    const maxDist = titleRect.width / 2;
-
-    spans.forEach(span => {
-      const sr = span.getBoundingClientRect();
-      const cx = sr.x + sr.width / 2;
-      const cy = sr.y + sr.height / 2;
-      const dx = mouse.x - cx;
-      const dy = mouse.y - cy;
-      const d = Math.sqrt(dx*dx + dy*dy);
-
-      const wdth = Math.floor(getAttr(d, maxDist, 5, 200));
-      const wght = Math.floor(getAttr(d, maxDist, 100, 900));
-      const ital = getAttr(d, maxDist, 0, 1).toFixed(2);
-
-      const fvs = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${ital}`;
-      if(span.style.fontVariationSettings !== fvs){
-        span.style.fontVariationSettings = fvs;
+      function getAttr(dist, maxD, minV, maxV) {
+        const v = maxV - Math.abs((maxV * dist) / maxD);
+        return Math.max(minV, v + minV);
       }
+
+      window.addEventListener('mousemove', e => {
+        cursor.x = e.clientX;
+        cursor.y = e.clientY;
+      });
+
+      // Center init
+      const r = container.getBoundingClientRect();
+      mouse.x = r.left + r.width / 2;
+      mouse.y = r.top + r.height / 2;
+      cursor.x = mouse.x;
+      cursor.y = mouse.y;
+
+      function animTP() {
+        mouse.x += (cursor.x - mouse.x) / 12;
+        mouse.y += (cursor.y - mouse.y) / 12;
+
+        const titleRect = title.getBoundingClientRect();
+        const maxDist = titleRect.width / 2;
+
+        spans.forEach(span => {
+          const sr = span.getBoundingClientRect();
+          const cx = sr.x + sr.width / 2;
+          const cy = sr.y + sr.height / 2;
+          const dx = mouse.x - cx;
+          const dy = mouse.y - cy;
+          const d = Math.sqrt(dx * dx + dy * dy);
+
+          const wdth = Math.floor(getAttr(d, maxDist, 5, 200));
+          const wght = Math.floor(getAttr(d, maxDist, 100, 900));
+          const ital = getAttr(d, maxDist, 0, 1).toFixed(2);
+
+          const fvs = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${ital}`;
+          if (span.style.fontVariationSettings !== fvs) {
+            span.style.fontVariationSettings = fvs;
+          }
+        });
+        requestAnimationFrame(animTP);
+      }
+      animTP();
+    })();
+
+
+
+    /* ════════════════════════════════════════════
+       GSAP SCROLL ANIMATIONS
+       Key fix: use gsap.set() for initial states
+       so elements are visible if JS/GSAP fails,
+       and ScrollTrigger.refresh() after page load.
+    ════════════════════════════════════════════ */
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ── Set initial hidden states via JS (not CSS) ──
+    gsap.set('.gs-fade', { opacity: 0, y: 50 });
+    gsap.set('.gs-fade-left', { opacity: 0, x: -50 });
+    gsap.set('.gs-fade-right', { opacity: 0, x: 50 });
+    gsap.set('.gs-scale', { opacity: 0, scale: 0.9, y: 24 });
+    gsap.set('.sec-label', { opacity: 0, x: -36 });
+
+    // ── Hero entrance (no ScrollTrigger — fires immediately) ──
+    gsap.set(['#hero-eyebrow', '#tp-wrap', '#hero-tw', '#hero-bio', '#hero-cta'], { opacity: 0, y: 22 });
+    gsap.timeline({ delay: 0.15 })
+      .to('#hero-eyebrow', { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' })
+      .to('#tp-wrap', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.3')
+      .to('#hero-tw', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4')
+      .to('#hero-bio', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.35')
+      .to('#hero-cta', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.35');
+
+    // ── Section labels slide in ──
+    gsap.utils.toArray('.sec-label').forEach(el => {
+      gsap.to(el, {
+        scrollTrigger: { trigger: el, start: 'top 92%', once: true },
+        opacity: 1, x: 0, duration: 0.7, ease: 'power3.out'
+      });
     });
-    requestAnimationFrame(animTP);
-  }
-  animTP();
-})();
 
+    // ── Fade up cards ──
+    gsap.utils.toArray('.gs-fade').forEach((el, i) => {
+      gsap.to(el, {
+        scrollTrigger: { trigger: el, start: 'top 92%', once: true },
+        opacity: 1, y: 0, duration: 0.75, ease: 'power3.out',
+        delay: (i % 3) * 0.07
+      });
+    });
 
+    // ── Fade from left ──
+    gsap.utils.toArray('.gs-fade-left').forEach((el, i) => {
+      gsap.to(el, {
+        scrollTrigger: { trigger: el, start: 'top 92%', once: true },
+        opacity: 1, x: 0, duration: 0.75, ease: 'power3.out',
+        delay: i * 0.06
+      });
+    });
 
-/* ════════════════════════════════════════════
-   GSAP SCROLL ANIMATIONS
-   Key fix: use gsap.set() for initial states
-   so elements are visible if JS/GSAP fails,
-   and ScrollTrigger.refresh() after page load.
-════════════════════════════════════════════ */
-gsap.registerPlugin(ScrollTrigger);
+    // ── Fade from right ──
+    gsap.utils.toArray('.gs-fade-right').forEach((el, i) => {
+      gsap.to(el, {
+        scrollTrigger: { trigger: el, start: 'top 92%', once: true },
+        opacity: 1, x: 0, duration: 0.75, ease: 'power3.out',
+        delay: i * 0.06
+      });
+    });
 
-// ── Set initial hidden states via JS (not CSS) ──
-gsap.set('.gs-fade',       { opacity:0, y:50 });
-gsap.set('.gs-fade-left',  { opacity:0, x:-50 });
-gsap.set('.gs-fade-right', { opacity:0, x:50 });
-gsap.set('.gs-scale',      { opacity:0, scale:0.9, y:24 });
-gsap.set('.sec-label',     { opacity:0, x:-36 });
+    // ── Scale pop (hobbies) ──
+    gsap.utils.toArray('.gs-scale').forEach((el, i) => {
+      gsap.to(el, {
+        scrollTrigger: { trigger: el, start: 'top 92%', once: true },
+        opacity: 1, scale: 1, y: 0, duration: 0.7, ease: 'back.out(1.3)',
+        delay: (i % 3) * 0.09
+      });
+    });
 
-// ── Hero entrance (no ScrollTrigger — fires immediately) ──
-gsap.set(['#hero-eyebrow','#tp-wrap','#hero-tw','#hero-bio','#hero-cta'], { opacity:0, y:22 });
-gsap.timeline({ delay:0.15 })
-  .to('#hero-eyebrow', { opacity:1, y:0, duration:0.65, ease:'power3.out' })
-  .to('#tp-wrap',      { opacity:1, y:0, duration:0.8,  ease:'power3.out' }, '-=0.3')
-  .to('#hero-tw',      { opacity:1, y:0, duration:0.6,  ease:'power3.out' }, '-=0.4')
-  .to('#hero-bio',     { opacity:1, y:0, duration:0.6,  ease:'power3.out' }, '-=0.35')
-  .to('#hero-cta',     { opacity:1, y:0, duration:0.6,  ease:'power3.out' }, '-=0.35');
+    // ── Mini progress bars in learning cards ──
+    gsap.utils.toArray('.mini-fill[data-w]').forEach(fill => {
+      ScrollTrigger.create({
+        trigger: fill, start: 'top 93%', once: true,
+        onEnter: () => gsap.to(fill, { width: fill.dataset.w + '%', duration: 1.1, ease: 'power3.out', delay: 0.2 })
+      });
+    });
 
-// ── Section labels slide in ──
-gsap.utils.toArray('.sec-label').forEach(el => {
-  gsap.to(el, {
-    scrollTrigger:{ trigger:el, start:'top 92%', once:true },
-    opacity:1, x:0, duration:0.7, ease:'power3.out'
-  });
-});
+    // ── Refresh after all canvases init (they change layout) ──
+    window.addEventListener('load', () => {
+      setTimeout(() => ScrollTrigger.refresh(), 400);
+    });
 
-// ── Fade up cards ──
-gsap.utils.toArray('.gs-fade').forEach((el, i) => {
-  gsap.to(el, {
-    scrollTrigger:{ trigger:el, start:'top 92%', once:true },
-    opacity:1, y:0, duration:0.75, ease:'power3.out',
-    delay:(i % 3) * 0.07
-  });
-});
+    /* Hobbies auto-scroll */
+    (function () {
+      const rail = document.querySelector('.hobbies-rail');
+      if (!rail) return;
+      let dir = 1, paused = false;
+      function step() {
+        if (!paused) {
+          const max = rail.scrollWidth - rail.clientWidth;
+          rail.scrollLeft += 0.45 * dir;
+          if (rail.scrollLeft <= 0) dir = 1;
+          else if (rail.scrollLeft >= max - 2) dir = -1;
+        }
+        requestAnimationFrame(step);
+      }
+      ['mouseenter', 'touchstart'].forEach(ev => rail.addEventListener(ev, () => { paused = true; }, { passive: true }));
+      ['mouseleave', 'touchend'].forEach(ev => rail.addEventListener(ev, () => { paused = false; }, { passive: true }));
+      step();
+    })();
 
-// ── Fade from left ──
-gsap.utils.toArray('.gs-fade-left').forEach((el, i) => {
-  gsap.to(el, {
-    scrollTrigger:{ trigger:el, start:'top 92%', once:true },
-    opacity:1, x:0, duration:0.75, ease:'power3.out',
-    delay: i * 0.06
-  });
-});
-
-// ── Fade from right ──
-gsap.utils.toArray('.gs-fade-right').forEach((el, i) => {
-  gsap.to(el, {
-    scrollTrigger:{ trigger:el, start:'top 92%', once:true },
-    opacity:1, x:0, duration:0.75, ease:'power3.out',
-    delay: i * 0.06
-  });
-});
-
-// ── Scale pop (hobbies) ──
-gsap.utils.toArray('.gs-scale').forEach((el, i) => {
-  gsap.to(el, {
-    scrollTrigger:{ trigger:el, start:'top 92%', once:true },
-    opacity:1, scale:1, y:0, duration:0.7, ease:'back.out(1.3)',
-    delay:(i % 3) * 0.09
-  });
-});
-
-// ── Mini progress bars in learning cards ──
-gsap.utils.toArray('.mini-fill[data-w]').forEach(fill => {
-  ScrollTrigger.create({
-    trigger: fill, start:'top 93%', once:true,
-    onEnter:() => gsap.to(fill, { width:fill.dataset.w+'%', duration:1.1, ease:'power3.out', delay:0.2 })
-  });
-});
-
-// ── Refresh after all canvases init (they change layout) ──
-window.addEventListener('load', () => {
-  setTimeout(() => ScrollTrigger.refresh(), 400);
-});
-
-/* Hobbies auto-scroll */
-(function(){
-  const rail=document.querySelector('.hobbies-rail');
-  if(!rail)return;
-  let dir=1,paused=false;
-  function step(){
-    if(!paused){
-      const max=rail.scrollWidth-rail.clientWidth;
-      rail.scrollLeft+=0.45*dir;
-      if(rail.scrollLeft<=0)dir=1;
-      else if(rail.scrollLeft>=max-2)dir=-1;
+    /* ════════════════════════════════════════════
+       RAINDROP GLASS ENGINE
+    ════════════════════════════════════════════ */
+    class Drop {
+      constructor(W, H, init) { this.W = W; this.H = H; this.reset(init); }
+      reset(init) {
+        this.x = Math.random() * this.W; this.y = init ? Math.random() * this.H : -12;
+        this.r = Math.random() * 3.8 + 1.4; this.vy = Math.random() * 0.55 + 0.12;
+        this.vx = (Math.random() - 0.5) * 0.07; this.alpha = Math.random() * 0.45 + 0.2;
+        this.wobble = Math.random() * Math.PI * 2; this.wobbleV = Math.random() * 0.035 + 0.008;
+        this.tail = this.r > 3.2; this.tailLen = this.r * (Math.random() * 5 + 3);
+        this.life = 0; this.maxLife = Math.floor(Math.random() * 500 + 250);
+      }
+      step() { this.life++; this.wobble += this.wobbleV; this.x += this.vx + Math.sin(this.wobble) * 0.14; this.y += this.vy * (1 + this.r * 0.16); if (this.y > this.H + 20 || this.life > this.maxLife) this.reset(false); }
+      paint(ctx) {
+        ctx.save();
+        const g = ctx.createRadialGradient(this.x - this.r * 0.28, this.y - this.r * 0.38, this.r * 0.08, this.x, this.y, this.r);
+        g.addColorStop(0, `rgba(255,255,255,${this.alpha * 0.9})`);
+        g.addColorStop(0.35, `rgba(195,210,255,${this.alpha * 0.45})`);
+        g.addColorStop(1, `rgba(110,130,220,${this.alpha * 0.06})`);
+        ctx.beginPath(); ctx.ellipse(this.x, this.y, this.r, this.r * 1.3, 0, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+        if (this.tail) { const tg = ctx.createLinearGradient(this.x, this.y, this.x, this.y - this.tailLen); tg.addColorStop(0, `rgba(190,205,255,${this.alpha * 0.5})`); tg.addColorStop(1, `rgba(190,205,255,0)`); ctx.beginPath(); ctx.moveTo(this.x - this.r * 0.28, this.y); ctx.lineTo(this.x + this.r * 0.28, this.y); ctx.lineTo(this.x + this.r * 0.09, this.y - this.tailLen); ctx.lineTo(this.x - this.r * 0.09, this.y - this.tailLen); ctx.closePath(); ctx.fillStyle = tg; ctx.fill(); }
+        ctx.beginPath(); ctx.ellipse(this.x, this.y + this.r * 0.65, this.r * 0.75, this.r * 0.22, 0, 0, Math.PI * 2); ctx.fillStyle = `rgba(0,0,40,${this.alpha * 0.22})`; ctx.fill();
+        ctx.restore();
+      }
     }
-    requestAnimationFrame(step);
-  }
-  ['mouseenter','touchstart'].forEach(ev=>rail.addEventListener(ev,()=>{paused=true;},{passive:true}));
-  ['mouseleave','touchend'].forEach(ev=>rail.addEventListener(ev,()=>{paused=false;},{passive:true}));
-  step();
-})();
+    class Rivulet {
+      constructor(x, W, H) { this.x = x + (Math.random() - 0.5) * 8; this.y = Math.random() * H * 0.7; this.len = Math.random() * 50 + 15; this.w = Math.random() * 1.8 + 0.4; this.alpha = Math.random() * 0.28 + 0.08; this.vy = Math.random() * 0.35 + 0.08; this.wobble = Math.random() * Math.PI * 2; this.H = H; this.life = 0; this.maxLife = Math.floor(Math.random() * 400 + 180); }
+      step() { this.y += this.vy; this.wobble += 0.025; this.x += Math.sin(this.wobble) * 0.28; this.life++; return this.y < this.H + this.len && this.life < this.maxLife; }
+      paint(ctx) { ctx.save(); const g = ctx.createLinearGradient(this.x, this.y - this.len, this.x, this.y); g.addColorStop(0, `rgba(200,215,255,0)`); g.addColorStop(0.3, `rgba(200,215,255,${this.alpha})`); g.addColorStop(1, `rgba(200,215,255,0)`); ctx.beginPath(); ctx.moveTo(this.x - this.w, this.y - this.len); ctx.quadraticCurveTo(this.x + Math.sin(this.wobble * 1.8) * 4, this.y - this.len / 2, this.x + this.w, this.y); ctx.lineWidth = this.w; ctx.strokeStyle = g; ctx.stroke(); ctx.restore(); }
+    }
+    function bootRain(canvas) {
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const parent = canvas.parentElement;
+      let W = 0, H = 0, drops = [], rivs = [], frame = 0, running = false, rafId = null;
+      function resize() { const b = parent.getBoundingClientRect(); W = canvas.width = b.width; H = canvas.height = b.height; const n = Math.max(3, Math.floor(W * H / 13000)); drops = []; for (let i = 0; i < n; i++)drops.push(new Drop(W, H, true)); }
+      function tick() { if (!running) return; ctx.clearRect(0, 0, W, H); frame++; if (frame % 80 === 0 && drops.length) { const d = drops[Math.floor(Math.random() * drops.length)]; if (d.tail) rivs.push(new Rivulet(d.x, W, H)); } rivs = rivs.filter(r => { const a = r.step(); if (a) r.paint(ctx); return a; }); drops.forEach(d => { d.step(); d.paint(ctx); }); rafId = requestAnimationFrame(tick); }
+      function start() { if (!running) { running = true; rafId = requestAnimationFrame(tick); } }
+      function stop() { running = false; if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
+      new ResizeObserver(resize).observe(parent); resize();
+      const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) start(); else stop(); }); }, { threshold: 0.05 });
+      obs.observe(parent);
+    }
+    /* Boot rain on NON-project cards only — project cards get enhanced effect */
+    document.querySelectorAll('.rain-canvas').forEach(c => {
+      const inProjects = c.closest('#projects');
+      if (!inProjects) bootRain(c);
+    });
 
-/* ════════════════════════════════════════════
-   RAINDROP GLASS ENGINE
-════════════════════════════════════════════ */
-class Drop {
-  constructor(W,H,init){ this.W=W; this.H=H; this.reset(init); }
-  reset(init){
-    this.x=Math.random()*this.W; this.y=init?Math.random()*this.H:-12;
-    this.r=Math.random()*3.8+1.4; this.vy=Math.random()*0.55+0.12;
-    this.vx=(Math.random()-0.5)*0.07; this.alpha=Math.random()*0.45+0.2;
-    this.wobble=Math.random()*Math.PI*2; this.wobbleV=Math.random()*0.035+0.008;
-    this.tail=this.r>3.2; this.tailLen=this.r*(Math.random()*5+3);
-    this.life=0; this.maxLife=Math.floor(Math.random()*500+250);
-  }
-  step(){ this.life++; this.wobble+=this.wobbleV; this.x+=this.vx+Math.sin(this.wobble)*0.14; this.y+=this.vy*(1+this.r*0.16); if(this.y>this.H+20||this.life>this.maxLife)this.reset(false); }
-  paint(ctx){
-    ctx.save();
-    const g=ctx.createRadialGradient(this.x-this.r*0.28,this.y-this.r*0.38,this.r*0.08,this.x,this.y,this.r);
-    g.addColorStop(0,`rgba(255,255,255,${this.alpha*0.9})`);
-    g.addColorStop(0.35,`rgba(195,210,255,${this.alpha*0.45})`);
-    g.addColorStop(1,`rgba(110,130,220,${this.alpha*0.06})`);
-    ctx.beginPath(); ctx.ellipse(this.x,this.y,this.r,this.r*1.3,0,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
-    if(this.tail){ const tg=ctx.createLinearGradient(this.x,this.y,this.x,this.y-this.tailLen); tg.addColorStop(0,`rgba(190,205,255,${this.alpha*0.5})`); tg.addColorStop(1,`rgba(190,205,255,0)`); ctx.beginPath(); ctx.moveTo(this.x-this.r*0.28,this.y); ctx.lineTo(this.x+this.r*0.28,this.y); ctx.lineTo(this.x+this.r*0.09,this.y-this.tailLen); ctx.lineTo(this.x-this.r*0.09,this.y-this.tailLen); ctx.closePath(); ctx.fillStyle=tg; ctx.fill(); }
-    ctx.beginPath(); ctx.ellipse(this.x,this.y+this.r*0.65,this.r*0.75,this.r*0.22,0,0,Math.PI*2); ctx.fillStyle=`rgba(0,0,40,${this.alpha*0.22})`; ctx.fill();
-    ctx.restore();
-  }
-}
-class Rivulet {
-  constructor(x,W,H){ this.x=x+(Math.random()-0.5)*8; this.y=Math.random()*H*0.7; this.len=Math.random()*50+15; this.w=Math.random()*1.8+0.4; this.alpha=Math.random()*0.28+0.08; this.vy=Math.random()*0.35+0.08; this.wobble=Math.random()*Math.PI*2; this.H=H; this.life=0; this.maxLife=Math.floor(Math.random()*400+180); }
-  step(){ this.y+=this.vy; this.wobble+=0.025; this.x+=Math.sin(this.wobble)*0.28; this.life++; return this.y<this.H+this.len&&this.life<this.maxLife; }
-  paint(ctx){ ctx.save(); const g=ctx.createLinearGradient(this.x,this.y-this.len,this.x,this.y); g.addColorStop(0,`rgba(200,215,255,0)`); g.addColorStop(0.3,`rgba(200,215,255,${this.alpha})`); g.addColorStop(1,`rgba(200,215,255,0)`); ctx.beginPath(); ctx.moveTo(this.x-this.w,this.y-this.len); ctx.quadraticCurveTo(this.x+Math.sin(this.wobble*1.8)*4,this.y-this.len/2,this.x+this.w,this.y); ctx.lineWidth=this.w; ctx.strokeStyle=g; ctx.stroke(); ctx.restore(); }
-}
-function bootRain(canvas){
-  if(!canvas)return;
-  const ctx=canvas.getContext('2d');
-  const parent=canvas.parentElement;
-  let W=0,H=0,drops=[],rivs=[],frame=0;
-  function resize(){ const b=parent.getBoundingClientRect(); W=canvas.width=b.width; H=canvas.height=b.height; const n=Math.max(3,Math.floor(W*H/13000)); drops=[]; for(let i=0;i<n;i++)drops.push(new Drop(W,H,true)); }
-  function tick(){ ctx.clearRect(0,0,W,H); frame++; if(frame%80===0&&drops.length){ const d=drops[Math.floor(Math.random()*drops.length)]; if(d.tail)rivs.push(new Rivulet(d.x,W,H)); } rivs=rivs.filter(r=>{const a=r.step();if(a)r.paint(ctx);return a;}); drops.forEach(d=>{d.step();d.paint(ctx);}); requestAnimationFrame(tick); }
-  new ResizeObserver(resize).observe(parent); resize(); tick();
-}
-document.querySelectorAll('.rain-canvas').forEach(c=>bootRain(c));
+    /* ════════════════════════════════════════════
+       DOTFIELD
+    ════════════════════════════════════════════ */
+    (function () {
+      const dc = document.getElementById('dot-canvas');
+      const dctx = dc.getContext('2d');
+      const R = 3, SP = 13, CR = 500, CF = 0.57, BS = 67, GR = 160;
+      const GF = { r: 168, g: 85, b: 247, a: 0.35 }, GT = { r: 180, g: 151, b: 207, a: 0.25 };
+      const BC = 'rgba(255,255,255,0.11)';
+      let DW, DH, dots = [], mx = -9999, my = -9999;
+      function lerp(a, b, t) { return a + (b - a) * t }
+      function build() { DW = dc.width = window.innerWidth; DH = dc.height = window.innerHeight; const c = Math.ceil(DW / SP) + 2, r = Math.ceil(DH / SP) + 2; dots = []; for (let rr = 0; rr < r; rr++)for (let cc = 0; cc < c; cc++)dots.push({ ox: cc * SP, oy: rr * SP, dx: 0, dy: 0 }); }
+      function draw() { dctx.clearRect(0, 0, DW, DH); for (let i = 0; i < dots.length; i++) { const d = dots[i]; const vx = (d.ox + d.dx) - mx, vy = (d.oy + d.dy) - my, dist = Math.sqrt(vx * vx + vy * vy); let ox = 0, oy = 0; if (dist < CR && dist > 0) { const n = dist / CR, s = (1 - n) * (1 - n) * BS * CF; ox = (vx / dist) * s; oy = (vy / dist) * s; } d.dx = lerp(d.dx, ox, 0.12); d.dy = lerp(d.dy, oy, 0.12); const fx = d.ox + d.dx, fy = d.oy + d.dy, dd = Math.sqrt((fx - mx) ** 2 + (fy - my) ** 2); let col = BC; if (dd < GR) { const t = 1 - dd / GR; const rr = Math.round(lerp(GT.r, GF.r, t)), gg = Math.round(lerp(GT.g, GF.g, t)), bb = Math.round(lerp(GT.b, GF.b, t)); col = `rgba(${rr},${gg},${bb},${Math.min(lerp(GT.a, GF.a, t) + 0.08, 1)})`; } const r2 = dd < GR ? R * (1 + (1 - dd / GR) * 0.6) : R; dctx.beginPath(); dctx.arc(fx, fy, r2, 0, Math.PI * 2); dctx.fillStyle = col; dctx.fill(); } requestAnimationFrame(draw); }
+      window.addEventListener('resize', build); window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY }); build(); requestAnimationFrame(draw);
+    })();
 
-/* ════════════════════════════════════════════
-   DOTFIELD
-════════════════════════════════════════════ */
-(function(){
-  const dc=document.getElementById('dot-canvas');
-  const dctx=dc.getContext('2d');
-  const R=3,SP=13,CR=500,CF=0.57,BS=67,GR=160;
-  const GF={r:168,g:85,b:247,a:0.35},GT={r:180,g:151,b:207,a:0.25};
-  const BC='rgba(255,255,255,0.11)';
-  let DW,DH,dots=[],mx=-9999,my=-9999;
-  function lerp(a,b,t){return a+(b-a)*t}
-  function build(){ DW=dc.width=window.innerWidth; DH=dc.height=window.innerHeight; const c=Math.ceil(DW/SP)+2,r=Math.ceil(DH/SP)+2; dots=[]; for(let rr=0;rr<r;rr++)for(let cc=0;cc<c;cc++)dots.push({ox:cc*SP,oy:rr*SP,dx:0,dy:0}); }
-  function draw(){ dctx.clearRect(0,0,DW,DH); for(let i=0;i<dots.length;i++){const d=dots[i];const vx=(d.ox+d.dx)-mx,vy=(d.oy+d.dy)-my,dist=Math.sqrt(vx*vx+vy*vy);let ox=0,oy=0;if(dist<CR&&dist>0){const n=dist/CR,s=(1-n)*(1-n)*BS*CF;ox=(vx/dist)*s;oy=(vy/dist)*s;}d.dx=lerp(d.dx,ox,0.12);d.dy=lerp(d.dy,oy,0.12);const fx=d.ox+d.dx,fy=d.oy+d.dy,dd=Math.sqrt((fx-mx)**2+(fy-my)**2);let col=BC;if(dd<GR){const t=1-dd/GR;const rr=Math.round(lerp(GT.r,GF.r,t)),gg=Math.round(lerp(GT.g,GF.g,t)),bb=Math.round(lerp(GT.b,GF.b,t));col=`rgba(${rr},${gg},${bb},${Math.min(lerp(GT.a,GF.a,t)+0.08,1)})`;}const r2=dd<GR?R*(1+(1-dd/GR)*0.6):R;dctx.beginPath();dctx.arc(fx,fy,r2,0,Math.PI*2);dctx.fillStyle=col;dctx.fill();} requestAnimationFrame(draw); }
-  window.addEventListener('resize',build); window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY}); build(); requestAnimationFrame(draw);
-})();
+    /* ════════════════════════════════════════════
+       PARTICLES
+    ════════════════════════════════════════════ */
+    const pc = document.getElementById('particle-canvas'), pctx = pc.getContext('2d');
+    let PW, PH, parts = [], pm = { x: -9999, y: -9999 };
+    function rsz() { PW = pc.width = window.innerWidth; PH = pc.height = window.innerHeight; }
+    rsz(); window.addEventListener('resize', rsz);
+    class P {
+      constructor() { this.rst(true) }
+      rst(i) { this.x = Math.random() * PW; this.y = i ? Math.random() * PH : PH + 10; this.s = Math.random() * 1.3 + 0.3; this.vx = (Math.random() - 0.5) * 0.26; this.vy = -(Math.random() * 0.4 + 0.1); this.al = Math.random() * 0.38 + 0.08; this.h = Math.random() < 0.5 ? '124,120,245' : Math.random() < 0.5 ? '94,240,255' : '176,110,243'; this.li = 0; this.ml = Math.random() * 300 + 200; this.ts = Math.random() * 0.02 + 0.005; this.to = Math.random() * Math.PI * 2; }
+      upd() { this.li++; const dx = this.x - pm.x, dy = this.y - pm.y, d = Math.sqrt(dx * dx + dy * dy); if (d < 100) { const f = (100 - d) / 100 * 0.3; this.x += (dx / d) * f; this.y += (dy / d) * f; } this.x += this.vx; this.y += this.vy; const tw = Math.sin(this.li * this.ts + this.to) * 0.3 + 0.7; const lr = this.li / this.ml; const fd = lr < 0.1 ? lr / 0.1 : lr > 0.8 ? (1 - lr) / 0.2 : 1; this.ca = this.al * tw * fd; if (this.li > this.ml || this.y < -10) this.rst(false); }
+      drw() { pctx.beginPath(); pctx.arc(this.x, this.y, this.s, 0, Math.PI * 2); pctx.fillStyle = `rgba(${this.h},${this.ca})`; pctx.fill(); if (this.s > 1) { pctx.beginPath(); pctx.arc(this.x, this.y, this.s * 2.5, 0, Math.PI * 2); pctx.fillStyle = `rgba(${this.h},${this.ca * 0.1})`; pctx.fill(); } }
+    }
+    for (let i = 0; i < 110; i++)parts.push(new P());
+    function aniP() {
+      pctx.clearRect(0, 0, PW, PH);
+      for (let i = 0; i < parts.length; i++) { for (let j = i + 1; j < parts.length; j++) { const dx = parts[i].x - parts[j].x, dy = parts[i].y - parts[j].y, d = Math.sqrt(dx * dx + dy * dy); if (d < 72) { pctx.beginPath(); pctx.moveTo(parts[i].x, parts[i].y); pctx.lineTo(parts[j].x, parts[j].y); pctx.strokeStyle = `rgba(124,120,245,${(1 - d / 72) * 0.065})`; pctx.lineWidth = 0.5; pctx.stroke(); } } parts[i].upd(); parts[i].drw(); }
+      requestAnimationFrame(aniP);
+    }
+    aniP();
+    window.addEventListener('mousemove', e => { pm.x = e.clientX; pm.y = e.clientY });
 
-/* ════════════════════════════════════════════
-   PARTICLES
-════════════════════════════════════════════ */
-const pc=document.getElementById('particle-canvas'),pctx=pc.getContext('2d');
-let PW,PH,parts=[],pm={x:-9999,y:-9999};
-function rsz(){PW=pc.width=window.innerWidth;PH=pc.height=window.innerHeight;}
-rsz();window.addEventListener('resize',rsz);
-class P{
-  constructor(){this.rst(true)}
-  rst(i){this.x=Math.random()*PW;this.y=i?Math.random()*PH:PH+10;this.s=Math.random()*1.3+0.3;this.vx=(Math.random()-0.5)*0.26;this.vy=-(Math.random()*0.4+0.1);this.al=Math.random()*0.38+0.08;this.h=Math.random()<0.5?'124,120,245':Math.random()<0.5?'94,240,255':'176,110,243';this.li=0;this.ml=Math.random()*300+200;this.ts=Math.random()*0.02+0.005;this.to=Math.random()*Math.PI*2;}
-  upd(){this.li++;const dx=this.x-pm.x,dy=this.y-pm.y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){const f=(100-d)/100*0.3;this.x+=(dx/d)*f;this.y+=(dy/d)*f;}this.x+=this.vx;this.y+=this.vy;const tw=Math.sin(this.li*this.ts+this.to)*0.3+0.7;const lr=this.li/this.ml;const fd=lr<0.1?lr/0.1:lr>0.8?(1-lr)/0.2:1;this.ca=this.al*tw*fd;if(this.li>this.ml||this.y<-10)this.rst(false);}
-  drw(){pctx.beginPath();pctx.arc(this.x,this.y,this.s,0,Math.PI*2);pctx.fillStyle=`rgba(${this.h},${this.ca})`;pctx.fill();if(this.s>1){pctx.beginPath();pctx.arc(this.x,this.y,this.s*2.5,0,Math.PI*2);pctx.fillStyle=`rgba(${this.h},${this.ca*0.1})`;pctx.fill();}}
-}
-for(let i=0;i<110;i++)parts.push(new P());
-function aniP(){
-  pctx.clearRect(0,0,PW,PH);
-  for(let i=0;i<parts.length;i++){for(let j=i+1;j<parts.length;j++){const dx=parts[i].x-parts[j].x,dy=parts[i].y-parts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<72){pctx.beginPath();pctx.moveTo(parts[i].x,parts[i].y);pctx.lineTo(parts[j].x,parts[j].y);pctx.strokeStyle=`rgba(124,120,245,${(1-d/72)*0.065})`;pctx.lineWidth=0.5;pctx.stroke();}}parts[i].upd();parts[i].drw();}
-  requestAnimationFrame(aniP);
-}
-aniP();
-window.addEventListener('mousemove',e=>{pm.x=e.clientX;pm.y=e.clientY});
+    /* CURSOR GLOW — wider, dimmer, no ball feel */
+    const cg = document.getElementById('cglow');
+    let tx = 300, ty = 300, cx2 = 300, cy2 = 300;
+    document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY });
+    (function lb() { cx2 += (tx - cx2) * 0.06; cy2 += (ty - cy2) * 0.06; cg.style.transform = `translate(${cx2 - 450}px,${cy2 - 450}px)`; requestAnimationFrame(lb) })();
 
-/* CURSOR GLOW — wider, dimmer, no ball feel */
-const cg=document.getElementById('cglow');
-let tx=300,ty=300,cx2=300,cy2=300;
-document.addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY});
-(function lb(){cx2+=(tx-cx2)*0.06;cy2+=(ty-cy2)*0.06;cg.style.transform=`translate(${cx2-450}px,${cy2-450}px)`;requestAnimationFrame(lb)})();
+    /* TYPEWRITER */
+    const roles = ["AI Engineer", "Data Scientist", "Builder", "macOS Developer", "Cybersecurity", "Systems Programmer"];
+    const twEl = document.getElementById('tw');
+    let ri = 0, ci = 0, del = false;
+    function tw() { const cur = roles[ri]; twEl.textContent = del ? cur.slice(0, ci--) : cur.slice(0, ++ci); if (!del && ci === cur.length) setTimeout(() => { del = true }, 1400); else if (del && ci === 0) { del = false; ri = (ri + 1) % roles.length; } setTimeout(tw, del ? 55 : 115); }
+    tw();
 
-/* TYPEWRITER */
-const roles=["AI Engineer","Data Scientist","Builder","macOS Developer","Cybersecurity","Systems Programmer"];
-const twEl=document.getElementById('tw');
-let ri=0,ci=0,del=false;
-function tw(){const cur=roles[ri];twEl.textContent=del?cur.slice(0,ci--):cur.slice(0,++ci);if(!del&&ci===cur.length)setTimeout(()=>{del=true},1400);else if(del&&ci===0){del=false;ri=(ri+1)%roles.length;}setTimeout(tw,del?55:115);}
-tw();
+    /* 3D TILT */
+    document.querySelectorAll('.glass').forEach(card => {
+      card.addEventListener('mousemove', e => { const b = card.getBoundingClientRect(); const x = (e.clientX - b.left) / b.width - 0.5, y = (e.clientY - b.top) / b.height - 0.5; card.style.transform = `perspective(900px) rotateY(${x * 7}deg) rotateX(${-y * 7}deg) translateZ(8px)`; });
+      card.addEventListener('mouseleave', () => { card.style.transition = 'transform 0.55s cubic-bezier(0.16,1,0.3,1),border-color 0.3s,box-shadow 0.3s'; card.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg) translateZ(0)'; setTimeout(() => { card.style.transition = ''; }, 550); });
+    });
 
-/* 3D TILT */
-document.querySelectorAll('.glass').forEach(card=>{
-  card.addEventListener('mousemove',e=>{const b=card.getBoundingClientRect();const x=(e.clientX-b.left)/b.width-0.5,y=(e.clientY-b.top)/b.height-0.5;card.style.transform=`perspective(900px) rotateY(${x*7}deg) rotateX(${-y*7}deg) translateZ(8px)`;});
-  card.addEventListener('mouseleave',()=>{card.style.transition='transform 0.55s cubic-bezier(0.16,1,0.3,1),border-color 0.3s,box-shadow 0.3s';card.style.transform='perspective(900px) rotateY(0deg) rotateX(0deg) translateZ(0)';setTimeout(()=>{card.style.transition='';},550);});
-});
+    /* ACTIVE NAV */
+    const secs = document.querySelectorAll('section[id]');
+    const navAs = document.querySelectorAll('.nav-links a');
+    const nObs = new IntersectionObserver(e => { e.forEach(en => { if (en.isIntersecting) navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id)); }); }, { threshold: 0.3 });
+    secs.forEach(s => nObs.observe(s));
 
-/* ACTIVE NAV */
-const secs=document.querySelectorAll('section[id]');
-const navAs=document.querySelectorAll('.nav-links a');
-const nObs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)navAs.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+en.target.id));});},{threshold:0.3});
-secs.forEach(s=>nObs.observe(s));
+    /* HAMBURGER */
+    const hbg = document.getElementById('hbg'), nl = document.getElementById('navlinks');
+    hbg.addEventListener('click', () => nl.classList.toggle('open'));
+    navAs.forEach(a => a.addEventListener('click', () => nl.classList.remove('open')));
 
-/* HAMBURGER */
-const hbg=document.getElementById('hbg'),nl=document.getElementById('navlinks');
-hbg.addEventListener('click',()=>nl.classList.toggle('open'));
-navAs.forEach(a=>a.addEventListener('click',()=>nl.classList.remove('open')));
-</script>
+    /* ════════════════════════════════════════════
+       GLASS CONDENSATION — Photorealistic Droplets
+       3D refraction, specular highlights, dark rims,
+       mostly static with occasional slow slide
+    ════════════════════════════════════════════ */
+    function initRaindropEffect(cardElement) {
+      const canvas = cardElement.querySelector('.rain-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let W = 0, H = 0, running = false, rafId = null, hovered = false;
+      const drops = [];
+      const lightAngle = -0.7; /* top-left light source */
+
+      function makeDrop(placed) {
+        const r = Math.random();
+        /* Size distribution: many tiny, some medium, few large */
+        let radius;
+        if (r < 0.45) radius = Math.random() * 4 + 2;       /* tiny 2-6 */
+        else if (r < 0.8) radius = Math.random() * 8 + 6;   /* medium 6-14 */
+        else radius = Math.random() * 12 + 14;               /* large 14-26 */
+
+        const squish = 0.75 + Math.random() * 0.25; /* flattened at bottom like real condensation */
+        return {
+          x: Math.random() * W,
+          y: placed ? Math.random() * H : -(radius * 2),
+          r: radius,
+          squish: squish,
+          /* Most droplets are static condensation; only ~20% slide */
+          sliding: !placed || Math.random() < 0.2,
+          vy: Math.random() * 0.08 + 0.01,  /* very slow */
+          wobble: Math.random() * Math.PI * 2,
+          /* opacity: bigger = more visible */
+          opacity: Math.min(0.3 + radius * 0.025, 0.65),
+          /* per-drop light offset for variety */
+          lightOff: (Math.random() - 0.5) * 0.3,
+          trail: [],
+          age: 0,
+          maxAge: placed ? Infinity : Math.floor(Math.random() * 3000 + 1500)
+        };
+      }
+
+      function dropCount() {
+        return Math.max(18, Math.floor((W * H) / 8000));
+      }
+
+      function resize() {
+        const b = cardElement.getBoundingClientRect();
+        W = canvas.width = b.width; H = canvas.height = b.height;
+        drops.length = 0;
+        const n = dropCount();
+        for (let i = 0; i < n; i++) drops.push(makeDrop(true));
+      }
+
+      function drawDrop(d) {
+        const { x, y, r } = d;
+        const rh = r * d.squish; /* vertical radius (squished) */
+        ctx.save();
+
+        /* ── 1. Shadow / caustic beneath ── */
+        const shadowG = ctx.createRadialGradient(x + r * 0.1, y + rh * 0.5, 0, x + r * 0.1, y + rh * 0.5, r * 1.3);
+        shadowG.addColorStop(0, `rgba(0,0,20,${d.opacity * 0.35})`);
+        shadowG.addColorStop(0.6, `rgba(0,0,20,${d.opacity * 0.12})`);
+        shadowG.addColorStop(1, 'rgba(0,0,20,0)');
+        ctx.beginPath(); ctx.ellipse(x + r * 0.1, y + rh * 0.5, r * 1.1, rh * 0.5, 0, 0, Math.PI * 2);
+        ctx.fillStyle = shadowG; ctx.fill();
+
+        /* ── 2. Dark outer rim (surface tension edge) ── */
+        const rimG = ctx.createRadialGradient(x, y, r * 0.6, x, y, r * 1.05);
+        rimG.addColorStop(0, 'rgba(0,0,0,0)');
+        rimG.addColorStop(0.7, 'rgba(0,0,0,0)');
+        rimG.addColorStop(0.88, `rgba(10,15,40,${d.opacity * 0.6})`);
+        rimG.addColorStop(1, `rgba(5,8,25,${d.opacity * 0.25})`);
+        ctx.beginPath(); ctx.ellipse(x, y, r, rh, 0, 0, Math.PI * 2);
+        ctx.fillStyle = rimG; ctx.fill();
+
+        /* ── 3. Main body — refractive glass fill ── */
+        const lx = x + Math.cos(lightAngle + d.lightOff) * r * 0.35;
+        const ly = y + Math.sin(lightAngle + d.lightOff) * rh * 0.35;
+        const bodyG = ctx.createRadialGradient(lx, ly, r * 0.05, x, y, r);
+        bodyG.addColorStop(0, `rgba(200,215,255,${d.opacity * 0.5})`);
+        bodyG.addColorStop(0.25, `rgba(160,180,230,${d.opacity * 0.3})`);
+        bodyG.addColorStop(0.55, `rgba(100,120,180,${d.opacity * 0.12})`);
+        bodyG.addColorStop(0.8, `rgba(60,80,140,${d.opacity * 0.06})`);
+        bodyG.addColorStop(1, `rgba(40,50,100,${d.opacity * 0.02})`);
+        ctx.beginPath(); ctx.ellipse(x, y, r * 0.95, rh * 0.95, 0, 0, Math.PI * 2);
+        ctx.fillStyle = bodyG; ctx.fill();
+
+        /* ── 4. Inner light ring (refraction caustic) ── */
+        ctx.beginPath(); ctx.ellipse(x, y, r * 0.85, rh * 0.85, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(180,200,255,${d.opacity * 0.2})`;
+        ctx.lineWidth = Math.max(0.5, r * 0.06);
+        ctx.stroke();
+
+        /* ── 5. Primary specular highlight (top-left crescent) ── */
+        const hx = x + Math.cos(lightAngle + d.lightOff) * r * 0.38;
+        const hy = y + Math.sin(lightAngle + d.lightOff) * rh * 0.38;
+        const specR = r * 0.35;
+        const specG = ctx.createRadialGradient(hx, hy, 0, hx, hy, specR);
+        specG.addColorStop(0, `rgba(255,255,255,${Math.min(d.opacity * 1.8, 0.95)})`);
+        specG.addColorStop(0.4, `rgba(255,255,255,${d.opacity * 0.5})`);
+        specG.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.beginPath(); ctx.arc(hx, hy, specR, 0, Math.PI * 2);
+        ctx.fillStyle = specG; ctx.fill();
+
+        /* ── 6. Secondary highlight (bottom-right — reflected light) ── */
+        if (r > 8) {
+          const h2x = x + Math.cos(lightAngle + Math.PI + d.lightOff) * r * 0.3;
+          const h2y = y + Math.sin(lightAngle + Math.PI + d.lightOff) * rh * 0.25;
+          const h2r = r * 0.15;
+          const h2G = ctx.createRadialGradient(h2x, h2y, 0, h2x, h2y, h2r);
+          h2G.addColorStop(0, `rgba(200,220,255,${d.opacity * 0.45})`);
+          h2G.addColorStop(1, 'rgba(200,220,255,0)');
+          ctx.beginPath(); ctx.arc(h2x, h2y, h2r, 0, Math.PI * 2);
+          ctx.fillStyle = h2G; ctx.fill();
+        }
+
+        /* ── 7. Bright rim highlight on light-facing edge ── */
+        if (r > 5) {
+          ctx.beginPath();
+          const rimStart = lightAngle + d.lightOff - 0.6;
+          const rimEnd = lightAngle + d.lightOff + 0.6;
+          ctx.ellipse(x, y, r * 0.92, rh * 0.92, 0, rimStart, rimEnd);
+          ctx.strokeStyle = `rgba(255,255,255,${d.opacity * 0.5})`;
+          ctx.lineWidth = Math.max(0.8, r * 0.08);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      function drawTrail(d) {
+        if (d.trail.length < 2 || !d.sliding) return;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(d.trail[0].x, d.trail[0].y);
+        for (let i = 1; i < d.trail.length; i++) {
+          ctx.lineTo(d.trail[i].x, d.trail[i].y);
+        }
+        const tg = ctx.createLinearGradient(d.x, d.trail[0].y, d.x, d.y);
+        tg.addColorStop(0, 'rgba(180,200,255,0)');
+        tg.addColorStop(0.5, `rgba(180,200,255,${d.opacity * 0.08})`);
+        tg.addColorStop(1, `rgba(180,200,255,${d.opacity * 0.15})`);
+        ctx.strokeStyle = tg;
+        ctx.lineWidth = Math.max(1.5, d.r * 0.25);
+        ctx.lineCap = 'round';
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function tryMerge() {
+        for (let i = 0; i < drops.length; i++) {
+          for (let j = i + 1; j < drops.length; j++) {
+            const dx = drops[i].x - drops[j].x, dy = drops[i].y - drops[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const touchDist = (drops[i].r + drops[j].r) * 0.75;
+            if (dist < touchDist) {
+              /* Absorb smaller into larger */
+              const big = drops[i].r >= drops[j].r ? i : j;
+              const small = big === i ? j : i;
+              drops[big].r = Math.min(drops[big].r + drops[small].r * 0.3, 28);
+              drops[big].opacity = Math.min(drops[big].opacity + 0.03, 0.65);
+              drops[big].sliding = true;
+              drops[big].vy = Math.max(drops[big].vy, 0.04 + drops[big].r * 0.003);
+              drops.splice(small, 1);
+              return;
+            }
+          }
+        }
+      }
+
+      let frame = 0;
+      function tick() {
+        if (!running) return;
+        ctx.clearRect(0, 0, W, H);
+        frame++;
+
+        /* Spawn new condensation droplets periodically */
+        if (frame % 90 === 0 && drops.length < dropCount()) {
+          drops.push(makeDrop(true));
+        }
+        /* Occasionally start one sliding */
+        if (frame % 300 === 0) {
+          const statics = drops.filter(d => !d.sliding);
+          if (statics.length > 0) {
+            const pick = statics[Math.floor(Math.random() * statics.length)];
+            pick.sliding = true;
+            pick.vy = 0.02 + pick.r * 0.003;
+          }
+        }
+        /* Merge check */
+        if (frame % 60 === 0) tryMerge();
+
+        /* Update & draw */
+        const speed = hovered ? 1.6 : 1;
+        for (let i = drops.length - 1; i >= 0; i--) {
+          const d = drops[i];
+          d.age++;
+
+          if (d.sliding) {
+            d.wobble += 0.015;
+            d.x += Math.sin(d.wobble) * 0.08;
+            d.y += d.vy * speed;
+            d.trail.push({ x: d.x, y: d.y });
+            if (d.trail.length > 50) d.trail.shift();
+          }
+
+          /* Remove if off-screen or expired */
+          if (d.y > H + d.r * 2 || (d.maxAge !== Infinity && d.age > d.maxAge)) {
+            drops.splice(i, 1);
+            if (drops.length < dropCount()) drops.push(makeDrop(true));
+            continue;
+          }
+
+          drawTrail(d);
+          drawDrop(d);
+        }
+
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function start() { if (!running) { running = true; rafId = requestAnimationFrame(tick); } }
+      function stop() { running = false; if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
+
+      new ResizeObserver(resize).observe(cardElement); resize();
+      const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) start(); else stop(); }); }, { threshold: 0.05 });
+      obs.observe(cardElement);
+      cardElement.addEventListener('mouseenter', () => { hovered = true; }, { passive: true });
+      cardElement.addEventListener('mouseleave', () => { hovered = false; }, { passive: true });
+    }
+    /* Init glass condensation on all project cards */
+    document.querySelectorAll('#projects .proj-card').forEach(card => initRaindropEffect(card));
+
+    /* ════════════════════════════════════════════
+       TOAST NOTIFICATION
+    ════════════════════════════════════════════ */
+    function showToast(message, type) {
+      const t = document.getElementById('toast');
+      t.textContent = message;
+      t.className = 'toast ' + type;
+      requestAnimationFrame(() => { t.classList.add('show'); });
+      setTimeout(() => { t.classList.remove('show'); }, 4000);
+    }
+
+    /* ════════════════════════════════════════════
+       CONTACT FORM — Google Sheets Database
+       ────────────────────────────────────
+       HOW TO SET UP:
+       1. Go to https://sheets.google.com → Create a new spreadsheet
+       2. Name it "Portfolio Contacts"
+       3. In row 1, add headers: timestamp | name | email | message
+       4. Go to Extensions → Apps Script
+       5. Delete any code and paste the script from setup-guide below
+       6. Click Deploy → New deployment → Web app
+       7. Set "Who has access" to "Anyone"
+       8. Copy the deployment URL
+       9. Replace APPS_SCRIPT_URL below with your URL
+    ════════════════════════════════════════════ */
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVU8ihTIeu6fhivdf01xCsOyNPvKPJ-ulx1wnzYj_SjtfF0S9rFHizUuwBkJDO_oZZlw/exec';
+
+    (function () {
+      const form = document.getElementById('contact-form');
+      const btn = document.getElementById('contact-btn');
+      if (!form || !btn) return;
+
+      const originalText = btn.innerHTML;
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const name = document.getElementById('contact-name').value.trim();
+        const email = document.getElementById('contact-email').value.trim();
+        const msg = document.getElementById('contact-msg').value.trim();
+        if (!name || !email || !msg) return;
+
+        /* Check if Apps Script URL is configured */
+        if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
+          /* Fallback to mailto if not configured */
+          const subject = encodeURIComponent('Portfolio Contact from ' + name);
+          const body = encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + msg);
+          window.location.href = 'mailto:rudrarajjha2004@gmail.com?subject=' + subject + '&body=' + body;
+          showToast('Opening mail client...', 'info');
+          return;
+        }
+
+        /* Disable button + show spinner */
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span>Sending...';
+
+        try {
+          const res = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              timestamp: new Date().toISOString(),
+              name: name,
+              email: email,
+              message: msg
+            })
+          });
+          /* no-cors means we can't read the response, but if fetch didn't throw, it was sent */
+          showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
+          form.reset();
+        } catch (err) {
+          console.error('Form submission error:', err);
+          showToast('Something went wrong. Trying email fallback...', 'error');
+          /* Fallback to mailto */
+          setTimeout(() => {
+            const subject = encodeURIComponent('Portfolio Contact from ' + name);
+            const body = encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + msg);
+            window.location.href = 'mailto:rudrarajjha2004@gmail.com?subject=' + subject + '&body=' + body;
+          }, 1500);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+      });
+    })();
+
+    /* DYNAMIC FOOTER YEAR */
+    (function () { const y = document.getElementById('footer-year'); if (y) y.textContent = new Date().getFullYear(); })();
+  </script>
 </body>
+
 </html>
